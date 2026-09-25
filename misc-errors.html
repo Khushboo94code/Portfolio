@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error & Exit Codes — Reference — Khushboo</title>
+<meta name="description" content="The numbers that show up in logs at 2am. Shell exit codes, system errno values, and PostgreSQL SQLSTATEs worth recognising on sight.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>Error &amp; Exit Codes</h1>
+  <p>The numbers that show up in logs at 2am. Shell exit codes, system errno values, and PostgreSQL SQLSTATEs worth recognising on sight.</p>
+
+  <div class="pillnav"><a href="misc-http.html">HTTP Codes</a> <a href="misc-errors.html" style="border-color:var(--accent);color:var(--accent);">Error Codes</a> <a href="misc-shell.html">Shell</a> <a href="misc-python.html">Python &amp; Django</a> <a href="misc-redis.html">Redis</a> <a href="misc-sdlc.html">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 32 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Shell exit codes</h3>
+    <p class="note">Anything above 128 means the process was killed by signal N &minus; 128.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Typical cause</th></tr></thead>
+        <tbody>
+        <tr><td><code>0</code></td><td>Success</td><td>—</td></tr>
+        <tr><td><code>1</code></td><td>General error</td><td>Catch-all failure</td></tr>
+        <tr><td><code>2</code></td><td>Misuse of builtin</td><td>Bad shell syntax or arguments</td></tr>
+        <tr><td><code>126</code></td><td>Not executable</td><td>Permission denied on the file</td></tr>
+        <tr><td><code>127</code></td><td>Command not found</td><td>Typo, or binary not on <code>PATH</code></td></tr>
+        <tr><td><code>130</code></td><td>SIGINT (2)</td><td>You pressed Ctrl-C</td></tr>
+        <tr><td><code>137</code></td><td>SIGKILL (9)</td><td><strong>OOM killer</strong> — the usual container culprit</td></tr>
+        <tr><td><code>139</code></td><td>SIGSEGV (11)</td><td>Segmentation fault</td></tr>
+        <tr><td><code>143</code></td><td>SIGTERM (15)</td><td>Graceful shutdown requested (deploy, <code>docker stop</code>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Network &amp; system errno</h3>
+    <p class="note">These surface as Python <code>OSError</code> subclasses and in <code>strace</code> output.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Error</th><th>Meaning</th><th>What to check</th></tr></thead>
+        <tbody>
+        <tr><td><code>ECONNREFUSED</code></td><td>Nothing listening</td><td>Wrong port, or the service is down</td></tr>
+        <tr><td><code>ECONNRESET</code></td><td>Peer closed abruptly</td><td>Upstream crashed or a proxy timed out</td></tr>
+        <tr><td><code>ETIMEDOUT</code></td><td>No response in time</td><td>Firewall dropping packets, or an overloaded host</td></tr>
+        <tr><td><code>EADDRINUSE</code></td><td>Port already bound</td><td>Old process still running — <code>lsof -i :8000</code></td></tr>
+        <tr><td><code>EPIPE</code></td><td>Write to a closed socket</td><td>Client hung up before you finished responding</td></tr>
+        <tr><td><code>ENOENT</code></td><td>No such file or directory</td><td>Bad path — the most common error in existence</td></tr>
+        <tr><td><code>EACCES</code></td><td>Permission denied</td><td>File mode or ownership; binding a port under 1024</td></tr>
+        <tr><td><code>EMFILE</code></td><td>Too many open files</td><td>File-descriptor limit — raise <code>ulimit -n</code> or leaking sockets</td></tr>
+        <tr><td><code>ENOSPC</code></td><td>No space left on device</td><td>Disk full, or inotify watch limit reached</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>PostgreSQL SQLSTATE</h3>
+    <p class="note">Django raises these as <code>IntegrityError</code> and friends; the code tells you which constraint actually failed.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Name</th><th>Meaning</th></tr></thead>
+        <tbody>
+        <tr><td><code>23505</code></td><td>unique_violation</td><td>Duplicate value for a unique constraint</td></tr>
+        <tr><td><code>23503</code></td><td>foreign_key_violation</td><td>Referenced row does not exist, or is still referenced</td></tr>
+        <tr><td><code>23502</code></td><td>not_null_violation</td><td>NULL into a NOT NULL column</td></tr>
+        <tr><td><code>23514</code></td><td>check_violation</td><td>A <code>CheckConstraint</code> rejected the row</td></tr>
+        <tr><td><code>40001</code></td><td>serialization_failure</td><td>Concurrent transaction conflict — safe to retry</td></tr>
+        <tr><td><code>40P01</code></td><td>deadlock_detected</td><td>Two transactions waiting on each other; one was killed</td></tr>
+        <tr><td><code>53300</code></td><td>too_many_connections</td><td>Connection limit hit — you need a pooler</td></tr>
+        <tr><td><code>57014</code></td><td>query_canceled</td><td>Statement timeout exceeded</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Docker container exit codes</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Typical cause</th></tr></thead>
+        <tbody>
+        <tr><td><code>0</code></td><td>Clean exit</td><td>Main process finished — often a missing long-running CMD</td></tr>
+        <tr><td><code>125</code></td><td>Docker daemon error</td><td>Bad <code>docker run</code> flags</td></tr>
+        <tr><td><code>126</code></td><td>Command not executable</td><td>Entrypoint script missing the execute bit</td></tr>
+        <tr><td><code>127</code></td><td>Command not found</td><td>Binary not present in the image</td></tr>
+        <tr><td><code>137</code></td><td>Killed (OOM)</td><td>Container exceeded its memory limit</td></tr>
+        <tr><td><code>143</code></td><td>Terminated</td><td>Received SIGTERM during shutdown</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="misc-http.html">← HTTP Codes</a>
+    <a href="misc-shell.html">Shell →</a>
+    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

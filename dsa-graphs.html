@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trees & Graphs — DSA — Khushboo</title>
+<meta name="description" content="Traversal, ordering and connectivity — the largest single group, and the one that shows up most in harder rounds.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html" class="here">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dsa.html">← DSA Roadmap</a>
+  <h1>Trees &amp; Graphs</h1>
+  <p>Traversal, ordering and connectivity — the largest single group, and the one that shows up most in harder rounds.</p>
+
+  <div class="pillnav"><a href="dsa-foundations.html">Foundations</a> <a href="dsa-patterns.html">Core Patterns</a> <a href="dsa-structures.html">Linear Structures</a> <a href="dsa-graphs.html" style="border-color:var(--accent);color:var(--accent);">Trees &amp; Graphs</a> <a href="dsa-algorithms.html">Algorithms</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="graphs">
+  <h2>Trees &amp; Graphs <span class="count">— 7 topics</span></h2>
+
+<ol class="timeline">
+
+    <li>
+      <h3>Binary tree traversal</h3>
+      <p>
+        DFS in three orders (pre, in, post) and BFS level by level. Nearly every tree question is one
+        of these with a small twist, and the recursive solution is usually short — the skill is
+        deciding what each call should return up to its parent.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://visualgo.net/en/bst">VisuAlgo — binary tree traversal</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — trees</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/tree/">Tech Interview Handbook — trees</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/">Maximum Depth of Binary Tree</a></li>
+            <li><a href="https://leetcode.com/problems/invert-binary-tree/">Invert Binary Tree</a></li>
+            <li><a href="https://leetcode.com/problems/binary-tree-level-order-traversal/">Binary Tree Level Order Traversal</a></li>
+            <li><a href="https://leetcode.com/problems/diameter-of-binary-tree/">Diameter of Binary Tree</a></li>
+            <li><a href="https://leetcode.com/problems/binary-tree-right-side-view/">Binary Tree Right Side View</a></li>
+            <li><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/">Lowest Common Ancestor of a Binary Tree</a></li>
+            <li><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/">Binary Tree Maximum Path Sum</a></li>
+            <li><a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/">Serialize and Deserialize Binary Tree</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Binary search tree</h3>
+      <p>
+        A tree with an ordering invariant, which makes an in-order traversal produce sorted output —
+        the fact that most BST problems hinge on. Know why a degenerate BST becomes a linked list,
+        and what balancing (AVL, red-black) exists to prevent that.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://visualgo.net/en/bst">VisuAlgo — BST &amp; AVL</a> — watch a rotation happen</li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — trees</a></li>
+            <li><a href="https://cp-algorithms.com/data_structures/segment_tree.html">cp-algorithms — segment tree</a> — the range-query cousin</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/validate-binary-search-tree/">Validate Binary Search Tree</a></li>
+            <li><a href="https://leetcode.com/problems/kth-smallest-element-in-a-bst/">Kth Smallest Element in a BST</a></li>
+            <li><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/">Lowest Common Ancestor of a BST</a></li>
+            <li><a href="https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/">Convert Sorted Array to BST</a></li>
+            <li><a href="https://leetcode.com/problems/insert-into-a-binary-search-tree/">Insert into a Binary Search Tree</a></li>
+            <li><a href="https://leetcode.com/problems/delete-node-in-a-bst/">Delete Node in a BST</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Trie (prefix tree)</h3>
+      <p>
+        A tree keyed by character, so prefix lookup costs the length of the prefix rather than a scan
+        of the dictionary. Directly underpins autocomplete — which makes this the topic that links
+        straight to the typeahead system design.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Trie">Trie — Wikipedia</a> — structure and complexity</li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — tries</a></li>
+            <li><a href="https://cp-algorithms.com/string/aho_corasick.html">cp-algorithms — Aho-Corasick</a> — where tries go next</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/implement-trie-prefix-tree/">Implement Trie (Prefix Tree)</a></li>
+            <li><a href="https://leetcode.com/problems/design-add-and-search-words-data-structure/">Design Add and Search Words Data Structure</a></li>
+            <li><a href="https://leetcode.com/problems/replace-words/">Replace Words</a></li>
+            <li><a href="https://leetcode.com/problems/search-suggestions-system/">Search Suggestions System</a></li>
+            <li><a href="https://leetcode.com/problems/longest-word-in-dictionary/">Longest Word in Dictionary</a></li>
+            <li><a href="https://leetcode.com/problems/word-search-ii/">Word Search II</a> — trie + backtracking</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Graph traversal — BFS &amp; DFS</h3>
+      <p>
+        Once you see a grid, a set of dependencies or a network as a graph, traversal solves it. BFS
+        gives shortest path in an unweighted graph and is the right choice for "minimum steps"; DFS
+        suits connectivity and exhaustive exploration. Always track visited.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/graph/breadth-first-search.html">cp-algorithms — BFS</a></li>
+            <li><a href="https://cp-algorithms.com/graph/depth-first-search.html">cp-algorithms — DFS</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — graphs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/number-of-islands/">Number of Islands</a></li>
+            <li><a href="https://leetcode.com/problems/clone-graph/">Clone Graph</a></li>
+            <li><a href="https://leetcode.com/problems/max-area-of-island/">Max Area of Island</a></li>
+            <li><a href="https://leetcode.com/problems/rotting-oranges/">Rotting Oranges</a> — multi-source BFS</li>
+            <li><a href="https://leetcode.com/problems/pacific-atlantic-water-flow/">Pacific Atlantic Water Flow</a></li>
+            <li><a href="https://leetcode.com/problems/surrounded-regions/">Surrounded Regions</a></li>
+            <li><a href="https://leetcode.com/problems/word-ladder/">Word Ladder</a></li>
+            <li><a href="https://leetcode.com/problems/01-matrix/">01 Matrix</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Topological sort</h3>
+      <p>
+        Ordering a directed acyclic graph so every dependency comes before its dependent — build
+        systems, course prerequisites, task scheduling. Kahn's algorithm (BFS on in-degrees) also
+        detects cycles for free, which is usually half the question.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/graph/topological-sort.html">cp-algorithms — topological sort</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — advanced graphs</a></li>
+            <li><a href="https://docs.python.org/3/library/graphlib.html">Python graphlib.TopologicalSorter</a> — it's in the stdlib</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/course-schedule/">Course Schedule</a></li>
+            <li><a href="https://leetcode.com/problems/course-schedule-ii/">Course Schedule II</a></li>
+            <li><a href="https://leetcode.com/problems/find-eventual-safe-states/">Find Eventual Safe States</a></li>
+            <li><a href="https://leetcode.com/problems/minimum-height-trees/">Minimum Height Trees</a></li>
+            <li><a href="https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/">Sort Items by Groups Respecting Dependencies</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Shortest path &amp; weighted graphs</h3>
+      <p>
+        When edges have costs, BFS stops working. Dijkstra with a heap for non-negative weights,
+        Bellman-Ford when weights can be negative or hops are capped, and the observation that many
+        "minimise the maximum" grid problems are Dijkstra in disguise.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/graph/dijkstra.html">cp-algorithms — Dijkstra</a></li>
+            <li><a href="https://cp-algorithms.com/graph/bellman_ford.html">cp-algorithms — Bellman-Ford</a></li>
+            <li><a href="https://visualgo.net/en/sssp">VisuAlgo — single-source shortest path</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/network-delay-time/">Network Delay Time</a></li>
+            <li><a href="https://leetcode.com/problems/cheapest-flights-within-k-stops/">Cheapest Flights Within K Stops</a></li>
+            <li><a href="https://leetcode.com/problems/path-with-minimum-effort/">Path With Minimum Effort</a></li>
+            <li><a href="https://leetcode.com/problems/swim-in-rising-water/">Swim in Rising Water</a></li>
+            <li><a href="https://leetcode.com/problems/shortest-path-in-binary-matrix/">Shortest Path in Binary Matrix</a></li>
+            <li><a href="https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/">Find the City With the Smallest Number of Neighbors</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Union-Find (disjoint set)</h3>
+      <p>
+        Near-constant-time "are these two connected?" and "merge these two groups", with path
+        compression and union by rank. The right tool whenever connectivity changes over time, and
+        the basis of Kruskal's minimum spanning tree.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/data_structures/disjoint_set_union.html">cp-algorithms — DSU</a> — the definitive write-up</li>
+            <li><a href="https://visualgo.net/en/ufds">VisuAlgo — union-find</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — advanced graphs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/number-of-provinces/">Number of Provinces</a></li>
+            <li><a href="https://leetcode.com/problems/redundant-connection/">Redundant Connection</a></li>
+            <li><a href="https://leetcode.com/problems/accounts-merge/">Accounts Merge</a></li>
+            <li><a href="https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/">Most Stones Removed with Same Row or Column</a></li>
+            <li><a href="https://leetcode.com/problems/min-cost-to-connect-all-points/">Min Cost to Connect All Points</a> — Kruskal</li>
+            <li><a href="https://leetcode.com/problems/satisfiability-of-equality-equations/">Satisfiability of Equality Equations</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="dsa-structures.html">← Linear Structures</a>    <a href="dsa-algorithms.html">Algorithms →</a>    <a href="dsa.html">All DSA tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dsa.html">← DSA Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

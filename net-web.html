@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Application Layer & Web — Networking — Khushboo</title>
+<meta name="description" content="HTTP and its versions, TLS, cookies and CORS, WebSockets and caching — the layer you work at every day.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+       <li class="done">   green dot  — revised
+       <li class="doing">  amber dot  — learning now
+       <li>                grey dot   — not started
+     Copy any <li> to add a topic; keep the <h2> count and the
+     progress bar on networking.html in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html" class="here">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="networking.html">← Networking</a>
+  <h1>Application Layer &amp; Web</h1>
+  <p>HTTP and its versions, TLS, cookies and CORS, WebSockets and caching — the layer you work at every day.</p>
+
+  <div class="pillnav"><a href="net-foundations.html">Foundations</a> <a href="net-transport.html">Transport Layer</a> <a href="net-web.html" style="border-color:var(--accent);color:var(--accent);">Application Layer &amp; Web</a> <a href="net-infrastructure.html">Infrastructure &amp; Security</a> <a href="net-debugging.html">Debugging &amp; Performance</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="web">
+  <h2>Application Layer &amp; Web <span class="count">— 6 topics</span></h2>
+  <p class="section-intro">The layer you work at every day. This group overlaps most with what you already build.</p>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>HTTP fundamentals</h3>
+      <p>
+        Methods and their semantics — safe, idempotent, cacheable — status codes that mean something
+        specific, headers, and the request/response shape. Knowing which methods are idempotent is
+        what makes retry logic correct rather than dangerous.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">MDN — HTTP</a> — the daily reference</li>
+            <li><a href="https://datatracker.ietf.org/doc/html/rfc9110">RFC 9110 — HTTP Semantics</a> — the actual spec, readable</li>
+            <li><a href="https://hpbn.co/brief-history-of-http/">HPBN — a brief history of HTTP</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>curl -v</code> against your own API and account for every request and response header.</li>
+            <li>List which of your API endpoints are idempotent — and fix any POST that should be.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — REST semantics across a real API</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>HTTP/2 &amp; HTTP/3</h3>
+      <p>
+        HTTP/2 adds multiplexing and header compression over one TCP connection, which kills the old
+        sharding hacks but not head-of-line blocking — TCP still stalls every stream on one lost
+        packet. HTTP/3 moves to QUIC over UDP specifically to fix that.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/http2/">HPBN — HTTP/2</a></li>
+            <li><a href="https://www.rfc-editor.org/rfc/rfc9114.html">RFC 9114 — HTTP/3</a></li>
+            <li><a href="https://quic.xargs.org/">The Illustrated QUIC Connection</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Check which HTTP version your deployed site negotiates, and explain the difference it makes.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>HTTPS, TLS &amp; certificates</h3>
+      <p>
+        The handshake, how certificate chains establish trust, and what TLS 1.3 removed to save a
+        round trip. Practically: where TLS terminates in your architecture, what a reverse proxy
+        does with it, and why certificate expiry is a recurring outage cause.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://tls13.xargs.org/">The Illustrated TLS 1.3 Connection</a> — every byte of a real handshake</li>
+            <li><a href="https://hpbn.co/transport-layer-security-tls/">HPBN — Transport Layer Security</a></li>
+            <li><a href="https://letsencrypt.org/how-it-works/">Let's Encrypt — how it works</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Inspect a certificate chain with <code>openssl s_client -connect</code> and identify the root, intermediate and leaf.</li>
+            <li>Set up TLS termination in Nginx and force HTTPS with HSTS.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Nginx terminating TLS in front of Gunicorn</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Cookies, sessions &amp; CORS</h3>
+      <p>
+        How state survives a stateless protocol, and the browser rules that constrain it: the
+        same-origin policy, cookie attributes (<code>HttpOnly</code>, <code>Secure</code>,
+        <code>SameSite</code>), and CORS preflight. Most "CORS errors" are really a server not
+        answering the preflight.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">MDN — CORS</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">MDN — HTTP cookies</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/sessions/">Django — sessions</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Trigger a CORS preflight deliberately and read the OPTIONS request and its response headers.</li>
+            <li>Set <code>SameSite=Strict</code> on a session cookie and find what it breaks.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — sessions and cookies, directly on topic</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>WebSockets, SSE &amp; polling</h3>
+      <p>
+        Four ways to push data to a client, with real trade-offs: short polling is simple and
+        wasteful, long polling holds a request open, SSE is one-directional over plain HTTP, and
+        WebSockets give a full-duplex connection at the cost of stateful servers.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">MDN — WebSockets API</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events">MDN — Server-sent events</a></li>
+            <li><a href="https://channels.readthedocs.io/en/latest/">Django Channels</a> — WebSockets in your stack</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build the same live-updating page three ways — polling, SSE, WebSocket — and compare request counts.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — pairs with the chat system design case study.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>HTTP caching &amp; conditional requests</h3>
+      <p>
+        <code>Cache-Control</code>, <code>ETag</code> and <code>Last-Modified</code>, and the 304
+        that saves sending a body at all. The cheapest performance win available, and the layer a
+        CDN operates on — this is the HTTP-level face of the caching topic in HLD.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching">MDN — HTTP caching</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/conditional-view-processing/">Django — conditional view processing</a></li>
+            <li><a href="https://www.rfc-editor.org/rfc/rfc9111.html">RFC 9111 — HTTP Caching</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add ETags to an endpoint and confirm the second request returns 304 with no body.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — caching mechanics, one layer down</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="net-transport.html">← Transport Layer</a>    <a href="net-infrastructure.html">Infrastructure &amp; Security →</a>    <a href="networking.html">All Networking tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="networking.html">← Networking</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

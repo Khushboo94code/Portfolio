@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies — Khushboo</title>
+<meta name="description" content="System design case studies — rate limiter, URL shortener, news feed, chat, payments, ride sharing and more, with resources, practice problems and my code.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     CASE STUDIES — how to edit
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each system is:
+       <li class="done">
+         <h3>System</h3>
+         <p>Description — the core problem it poses.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>  <ul>…</ul>
+             <h5>Practice</h5><ul>…</ul>
+             <h5>My code</h5> <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     Keep the counts in the <h2>s and the progress bar on
+     system-design.html in sync when you add items.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html" class="here">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="system-design.html">← System Design</a>
+  <h1>Case Studies</h1>
+  <p>
+    Full system walk-throughs. Same drill every time: requirements → scale estimate → API →
+    data model → high-level design → bottlenecks → trade-offs. Open <em>Resources</em> on any
+    system for the material I work from and my own code.
+  </p>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+
+  <div class="pillnav">
+    <a href="#built">Systems I've Built</a>
+    <a href="#core">Core Interview Systems</a>
+    <a href="#advanced">Larger Systems</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== BUILT ===================== -->
+<section class="wrap" id="built">
+  <h2>Systems I've Built <span class="count">— 3 systems</span></h2>
+  <p class="section-intro">
+    The strongest material in an interview, because the trade-offs are ones I actually hit.
+  </p>
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Web crawler</h3>
+      <p>
+        Collect pages continuously from sites that don't want to be crawled fast. The design centres
+        on a URL frontier with priority and politeness queues, per-domain rate limits, dedup of both
+        URLs and near-identical content, and checkpointing so a crash doesn't lose a whole run.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/donnemartin/system-design-primer#design-a-web-crawler">System Design Primer — design a web crawler</a></li>
+            <li><a href="https://docs.scrapy.org/en/latest/topics/architecture.html">Scrapy architecture overview</a> — a real frontier and scheduler, documented</li>
+            <li><a href="https://www.hellointerview.com/learn/system-design/in-a-hurry/introduction">Hello Interview</a> — the crawl-scale estimation pattern</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/web-crawler-multithreaded/">Web Crawler Multithreaded</a></li>
+            <li><a href="https://leetcode.com/problems/web-crawler/">Web Crawler</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">The Q-Commerce crawler isn't public. Worth pushing a trimmed version — it's your strongest case study.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>E-commerce / multi-vendor marketplace</h3>
+      <p>
+        Many sellers, real money, and files that must not leak. Catalogue and inventory, reserving
+        stock at checkout so two buyers can't take the last item, an order state machine, split
+        payments to vendors, and webhook handling that survives duplicate delivery.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.stripe.com/connect">Stripe Connect docs</a> — how split payments actually work</li>
+            <li><a href="https://docs.stripe.com/webhooks">Stripe — webhook best practices</a> — signature verification and replay safety</li>
+            <li><a href="https://microservices.io/patterns/data/saga.html">Saga pattern</a> — the order/payment/stock rollback problem</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-movie-rental-system/">Design Movie Rental System</a> — inventory across vendors</li>
+            <li><a href="https://leetcode.com/problems/design-a-food-rating-system/">Design a Food Rating System</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — vendors, buyers, Stripe Connect, S3 downloads</li>
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — the cart/session layer</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>RAG / LLM serving platform</h3>
+      <p>
+        Grounded answers over a private corpus, at acceptable cost and latency. Chunking and
+        embedding on ingest, ANN retrieval with re-ranking at query time, streaming responses,
+        multi-provider fallback for reliability, and evaluation so quality changes are measurable.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector</a> — indexes, distance operators, tuning</li>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM docs</a> — routing, fallbacks, cost tracking</li>
+            <li><a href="https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview">Claude — tool use &amp; agents</a> — the agentic loop, documented</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode equivalent — the practice is building evals for retrieval hit-rate and groundedness.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — the full system, cloud or local via one env var</li>
+            <li><a href="https://github.com/Khushboo94code/agents-from-scratch">agents-from-scratch</a> — the agent loop built up from first principles</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<!-- ===================== CORE ===================== -->
+<section class="wrap" id="core">
+  <h2>Core Interview Systems <span class="count">— 7 systems</span></h2>
+  <p class="section-intro">
+    The ones that come up most. Worth being able to design cold.
+  </p>
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Rate limiter</h3>
+      <p>
+        Deceptively deep for how small it looks. Where it sits (gateway, service or client), which
+        algorithm, what key to count against (user, IP, endpoint), what to return on rejection, and
+        how to keep a shared counter correct under concurrency across many instances.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://stripe.com/blog/rate-limiters">Stripe — Scaling your API with rate limiters</a></li>
+            <li><a href="https://blog.cloudflare.com/counting-things-a-lot-of-different-things/">Cloudflare — sliding window counters</a></li>
+            <li><a href="https://redis.io/glossary/rate-limiting/">Redis — rate limiting patterns</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/logger-rate-limiter/">Logger Rate Limiter</a></li>
+            <li><a href="https://leetcode.com/problems/design-hit-counter/">Design Hit Counter</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — fixed window; add sliding window and token bucket next</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>URL shortener</h3>
+      <p>
+        A tiny data model with a huge read:write ratio, so the whole design is about the read path.
+        Key generation (counter + base62 vs hash with collision check), caching, 301 vs 302 — 302 if
+        you want click analytics — plus custom aliases and expiry.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/donnemartin/system-design-primer#design-a-url-shortener">System Design Primer — URL shortener</a></li>
+            <li><a href="https://www.hellointerview.com/learn/system-design/problem-breakdowns/bitly">Hello Interview — Bit.ly breakdown</a></li>
+            <li><a href="https://www.youtube.com/@gkcs">Gaurav Sen (YouTube)</a> — the classic video walk-through</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/encode-and-decode-tinyurl/">Encode and Decode TinyURL</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/URL-Shortner">URL-Shortner</a> — base62 short-link generation</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>News feed</h3>
+      <p>
+        The fan-out question. Precomputing each user's feed on write gives fast reads but explodes
+        for accounts with millions of followers; computing on read is cheap to write but slow. The
+        real answer is hybrid — and raising the celebrity problem yourself is the signal.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.hellointerview.com/learn/system-design/problem-breakdowns/fb-news-feed">Hello Interview — news feed breakdown</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#design-the-twitter-timeline-and-search">System Design Primer — Twitter timeline</a></li>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo blog</a> — fan-out patterns with diagrams</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-twitter/">Design Twitter</a> — fan-out on read, in miniature</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Chat / messaging system</h3>
+      <p>
+        Real-time delivery over persistent connections. A registry mapping user to the server holding
+        their socket, message ordering by sequence number rather than timestamp, delivery and read
+        receipts, presence, and push notifications for anyone offline.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.hellointerview.com/learn/system-design/problem-breakdowns/whatsapp">Hello Interview — WhatsApp breakdown</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">MDN — WebSockets API</a></li>
+            <li><a href="https://channels.readthedocs.io/en/latest/">Django Channels</a> — WebSockets in the stack you know</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No close LeetCode equivalent — build a two-user chat over WebSockets end to end instead.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Notification system</h3>
+      <p>
+        One dispatch API over push, email and SMS. A queue per channel, provider failover when one
+        goes down, deduplication so a retry doesn't double-send, user preferences and quiet hours,
+        template rendering, and tracking delivery state per recipient.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo blog</a> — search "notification system", it has a full breakdown</li>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/tasks.html">Celery task guide</a> — retries and per-queue routing</li>
+            <li><a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/">AWS — making retries safe</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode equivalent — design the dedup key that makes a retried send safe.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — <a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> is the queueing half.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Search autocomplete / typeahead</h3>
+      <p>
+        A ~100 ms latency budget, so everything must be in memory and precomputed. A trie with the
+        top-k completions cached at each node, rebuilt offline from query logs rather than updated on
+        the write path, and sharded by prefix once it outgrows one machine.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo — design a search autocomplete system</a></li>
+            <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html">Elasticsearch suggesters</a> — the production shortcut</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer">System Design Primer</a> — trie and caching sections</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/implement-trie-prefix-tree/">Implement Trie (Prefix Tree)</a></li>
+            <li><a href="https://leetcode.com/problems/design-search-autocomplete-system/">Design Search Autocomplete System</a></li>
+            <li><a href="https://leetcode.com/problems/search-suggestions-system/">Search Suggestions System</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Distributed cache</h3>
+      <p>
+        Building Redis rather than using it. Consistent hashing to place keys across nodes, eviction
+        policy, replication so a node loss doesn't cause a stampede on the database, and what happens
+        to the key distribution when a node joins or dies.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Consistent_hashing">Consistent hashing — Wikipedia</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/">Redis Cluster — scaling docs</a></li>
+            <li><a href="https://aws.amazon.com/builders-library/caching-challenges-and-strategies/">AWS — caching challenges</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a></li>
+            <li><a href="https://leetcode.com/problems/lfu-cache/">LFU Cache</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — single-node cache</li>
+            <li><a href="https://github.com/Khushboo94code/Shrading-">Shrading-</a> — the key-distribution half</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<!-- ===================== LARGER ===================== -->
+<section class="wrap" id="advanced">
+  <h2>Larger Systems <span class="count">— 8 systems</span></h2>
+  <p class="section-intro">
+    Bigger surface area — each one leans on a specific building block from HLD.
+  </p>
+  <ol class="timeline">
+
+    <li>
+      <h3>Ticket booking system</h3>
+      <p>
+        A pure concurrency problem wearing a product costume. Seats must be held while a user pays,
+        holds must expire automatically, and no two people can ever get the same seat — under a
+        traffic spike where everyone arrives in the same second.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.hellointerview.com/learn/system-design/problem-breakdowns/ticketmaster">Hello Interview — Ticketmaster breakdown</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/explicit-locking.html">PostgreSQL — explicit locking</a> — <code>SELECT … FOR UPDATE</code></li>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/distributed-locks/">Redis — distributed locks</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/booking-concert-tickets-in-groups/">Booking Concert Tickets in Groups</a></li>
+            <li><a href="https://leetcode.com/problems/my-calendar-i/">My Calendar I</a> — interval conflicts</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a good next build, and it would pair with your marketplace work.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Payment system</h3>
+      <p>
+        Correctness matters more than latency. Idempotency keys on every charge, a double-entry
+        ledger where money is never stored as a float, sagas with compensating actions across
+        services, reconciliation jobs against the provider, and signed webhooks.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.stripe.com/api/idempotent_requests">Stripe — idempotent requests</a></li>
+            <li><a href="https://martinfowler.com/eaaDev/AccountingNarrative.html">Fowler — accounting patterns</a> — double-entry, properly explained</li>
+            <li><a href="https://brandur.org/idempotency-keys">Brandur — idempotency keys</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode equivalent — implement a double-entry ledger where every transaction balances to zero.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Stripe Connect payments and webhooks</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>File storage &amp; sync (Dropbox)</h3>
+      <p>
+        Chunk files, address chunks by content hash, and you get deduplication and delta sync for
+        free — only changed chunks travel. Metadata lives in a database, blocks in object storage,
+        and conflict resolution handles two devices editing offline.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/donnemartin/system-design-primer">System Design Primer</a> — object store and metadata split</li>
+            <li><a href="https://dropbox.tech/infrastructure">Dropbox engineering blog</a> — how they actually did it</li>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo — design Google Drive</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-in-memory-file-system/">Design In-Memory File System</a></li>
+            <li><a href="https://leetcode.com/problems/design-file-system/">Design File System</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Video streaming (YouTube / Netflix)</h3>
+      <p>
+        An upload-to-transcode pipeline feeding a CDN. One source file fans out into many bitrates,
+        adaptive streaming (HLS/DASH) lets the player switch as bandwidth changes, and almost all
+        the traffic is served from the edge rather than from you.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo — design YouTube</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming">MDN — streaming media</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Dynamic_Adaptive_Streaming_over_HTTP">MPEG-DASH — Wikipedia</a> — encoding and CDN at real scale</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode equivalent — the transcode fan-out is a queue/worker design exercise.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Ride sharing (Uber)</h3>
+      <p>
+        Write-heavy in an unusual way: hundreds of thousands of drivers pushing location updates
+        every few seconds. Needs a geospatial index for proximity search, in-memory location state
+        with batched persistence, a matching service, surge pricing and a trip state machine.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/uber/h3">Uber H3 — source &amp; docs</a></li>
+            <li><a href="https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber">Hello Interview — Uber breakdown</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/geospatial/">Redis geospatial</a> — the practical implementation</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/k-closest-points-to-origin/">K Closest Points to Origin</a> — proximity in miniature</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Collaborative editor (Google Docs)</h3>
+      <p>
+        Multiple people editing the same document simultaneously without losing edits. Operational
+        transforms rewrite concurrent operations against each other; CRDTs make operations
+        commutative so order stops mattering. Plus presence, shared cursors and offline merge.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://crdt.tech/">crdt.tech</a> — papers and implementations, curated</li>
+            <li><a href="https://www.youtube.com/watch?v=x7drE24geUw">Kleppmann — CRDTs and the quest for distributed consistency</a></li>
+            <li><a href="https://github.com/yjs/yjs">Yjs</a> — a production CRDT you can read</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-a-text-editor/">Design a Text Editor</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Log &amp; metrics collection</h3>
+      <p>
+        An ingestion pipeline handling enormous write volume that is almost never read at full
+        fidelity. Agents ship to a buffer, a stream writes into time-series storage, older data gets
+        downsampled, and retention policies decide what survives.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus — architecture overview</a></li>
+            <li><a href="https://opentelemetry.io/docs/">OpenTelemetry docs</a> — the collection standard</li>
+            <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE — monitoring</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-log-storage-system/">Design Log Storage System</a></li>
+            <li><a href="https://leetcode.com/problems/design-hit-counter/">Design Hit Counter</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers, the agent end of the pipeline</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Leaderboard / gaming ranking</h3>
+      <p>
+        Real-time ranking over millions of players, where the hard part is answering "what rank am
+        I?" cheaply. Redis sorted sets give O(log n) rank queries; scale comes from sharding by
+        region or time window, and ties need a deterministic rule.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/sorted-sets/">Redis sorted sets</a> — the whole design in one data type</li>
+            <li><a href="https://blog.bytebytego.com/">ByteByteGo — design a leaderboard</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/">Redis Cluster scaling</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-a-leaderboard/">Design a Leaderboard</a></li>
+            <li><a href="https://leetcode.com/problems/design-skiplist/">Design Skiplist</a> — what sorted sets use underneath</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Other tracks</h2>
+  <div class="links">
+    <a href="lld.html">← LLD Concepts</a>
+    <a href="hld.html">← HLD Concepts</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="system-design.html">← System Design</a> · © 2026 Khushboo ·
+    Some LeetCode design problems are Premium-only.
+  </div>
+</footer>
+
+</body>
+</html>

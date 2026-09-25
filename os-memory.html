@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Management — Operating Systems — Khushboo</title>
+<meta name="description" content="The illusion that makes everything else possible — every process thinking it owns all the memory.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html" class="here">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="os.html">← Operating Systems</a>
+  <h1>Memory Management</h1>
+  <p>The illusion that makes everything else possible — every process thinking it owns all the memory.</p>
+
+  <div class="pillnav"><a href="os-foundations.html">Foundations</a> <a href="os-processes.html">Processes &amp; Scheduling</a> <a href="os-memory.html" style="border-color:var(--accent);color:var(--accent);">Memory Management</a> <a href="os-storage.html">Files, Storage &amp; I/O</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="memory">
+  <h2>Memory Management <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>The address space</h3>
+      <p>Text, data, BSS, heap and stack — laid out so the heap grows up and the stack grows down. Knowing this layout is what makes a stack overflow, a memory leak and a segmentation fault three different, diagnosable things.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 330" role="img" aria-label="Process address space layout">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <text class="lbl-s" x="300" y="22">ONE PROCESS — its own private virtual address space</text>
+  <rect class="box-a" x="60" y="42" width="480" height="46" rx="7"/>
+  <text class="lbl-a" x="300.0" y="64.0">Stack</text>
+  <text class="lbl-s" x="300.0" y="79.0">local variables, call frames — grows down</text>
+  <text class="lbl-s" x="300" y="120">↓                                                    ↑</text>
+  <rect class="box-a" x="60" y="138" width="480" height="46" rx="7"/>
+  <text class="lbl-a" x="300.0" y="160.0">Heap</text>
+  <text class="lbl-s" x="300.0" y="175.0">malloc / new — grows up</text>
+  <rect class="box" x="60" y="194" width="480" height="46" rx="7"/>
+  <text class="lbl" x="300.0" y="216.0">BSS + Data</text>
+  <text class="lbl-s" x="300.0" y="231.0">globals and statics</text>
+  <rect class="box" x="60" y="250" width="480" height="46" rx="7"/>
+  <text class="lbl" x="300.0" y="272.0">Text</text>
+  <text class="lbl-s" x="300.0" y="287.0">the program code itself, read-only</text>
+  <text class="lbl-s" x="300" y="318">high addresses at the top, low at the bottom</text>
+  <rect class="box" x="600" y="60" width="250" height="46" rx="7"/>
+  <text class="lbl" x="725.0" y="82.0">Kernel space</text>
+  <text class="lbl-s" x="725.0" y="97.0">not yours to touch</text>
+  <rect class="box" x="600" y="130" width="250" height="46" rx="7"/>
+  <text class="lbl" x="725.0" y="152.0">Shared libraries</text>
+  <text class="lbl-s" x="725.0" y="167.0">mapped in</text>
+  <text class="lbl-s" x="725" y="205">Stack overflow and heap exhaustion</text>
+  <text class="lbl-s" x="725" y="225">are these two growing into each other.</text>
+</svg>
+        <figcaption>Every process believes it has the whole address space to itself. Stack grows down, heap grows up — and a recursive function with no base case is what happens when they meet.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — address spaces</li>
+            <li><a href="https://man7.org/linux/man-pages/man5/proc.5.html">proc(5)</a> — read /proc/self/maps for a real layout</li>
+            <li><a href="https://en.wikipedia.org/wiki/Data_segment">Data segment — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Print <code>/proc/self/maps</code> for a Python process and identify each region.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Virtual memory &amp; paging</h3>
+      <p>Each process gets its own virtual address space, translated to physical frames through a page table. This gives isolation, lets programs use more memory than exists, and makes shared libraries shareable — the single most important idea in operating systems.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 300" role="img" aria-label="Virtual to physical address translation">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <rect class="box-a" x="10" y="40" width="190" height="52" rx="7"/>
+  <text class="lbl-a" x="105.0" y="65.0">Virtual address</text>
+  <text class="lbl-s" x="105.0" y="80.0">page number + offset</text>
+  <rect class="box" x="250" y="40" width="170" height="52" rx="7"/>
+  <text class="lbl" x="335.0" y="65.0">TLB</text>
+  <text class="lbl-s" x="335.0" y="80.0">recently used mappings</text>
+  <rect class="box" x="470" y="40" width="190" height="52" rx="7"/>
+  <text class="lbl" x="565.0" y="65.0">Page table</text>
+  <text class="lbl-s" x="565.0" y="80.0">per-process map</text>
+  <rect class="box-a" x="710" y="40" width="160" height="52" rx="7"/>
+  <text class="lbl-a" x="790.0" y="65.0">Physical frame</text>
+  <text class="lbl-s" x="790.0" y="80.0">actual RAM</text>
+  <line class="flow-line" x1="200" y1="66" x2="246" y2="66" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="420" y1="66" x2="466" y2="66" marker-end="url(#ah)"/>
+  <line class="flow-line-a" x1="660" y1="66" x2="706" y2="66" marker-end="url(#ah-a)"/>
+  <text class="lbl-s" x="223" y="32">hit?</text>
+  <path class="flow-line-a" d="M335,92 L335,120 Q335,130 345,130 L780,130 Q790,130 790,120 L790,98" marker-end="url(#ah-a)"/>
+  <text class="lbl-a" x="560" y="124">TLB hit — skips the page table entirely</text>
+  <rect class="box" x="470" y="175" width="190" height="50" rx="7"/>
+  <text class="lbl" x="565.0" y="199.0">Page fault</text>
+  <text class="lbl-s" x="565.0" y="214.0">not in RAM</text>
+  <rect class="box" x="710" y="175" width="160" height="50" rx="7"/>
+  <text class="lbl" x="790.0" y="199.0">Load from disk</text>
+  <text class="lbl-s" x="790.0" y="214.0">~100,000× slower</text>
+  <line class="flow-line" x1="565" y1="92" x2="565" y2="171" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="660" y1="200" x2="706" y2="200" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="440" y="262">A page fault is not an error — it is the mechanism. Too many of them is thrashing.</text>
+</svg>
+        <figcaption>Every memory access goes through this. The TLB exists because walking a page table on every access would be unbearably slow — and a page fault quietly costs you the price of a disk read.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — paging, and translation</li>
+            <li><a href="https://en.wikipedia.org/wiki/Virtual_memory">Virtual memory — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Page_table">Page table — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain how two processes can both use address 0x400000 and not collide.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Page faults, TLB &amp; replacement</h3>
+      <p>A page fault means the page is not resident — the kernel fetches it and resumes you. The TLB caches translations so the page table is not walked every access. When faults dominate real work, that is thrashing, and the machine grinds to a halt.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — swapping, policies, and thrashing</li>
+            <li><a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm">Page replacement algorithms</a> — LRU, clock, optimal</li>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a> — the replacement policy, as code</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Work an LRU page-replacement trace by hand and count the faults.</li>
+            <li>Explain why more RAM fixes thrashing but a faster CPU does not.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Allocation &amp; fragmentation</h3>
+      <p>How <code>malloc</code> finds you memory, and why freeing it does not always return it to the OS. External fragmentation leaves unusable gaps between allocations; internal fragmentation wastes space inside them. Paging solves the external kind.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — free-space management</li>
+            <li><a href="https://man7.org/linux/man-pages/man3/malloc.3.html">malloc(3)</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Fragmentation_(computing)">Fragmentation — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why a long-running Python process’s memory rarely goes back down.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="python-advanced.html">Your Python track</a> — refcounting and gc sit on top of this</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Stack vs heap</h3>
+      <p>The stack is fast, automatic and scoped to a call; the heap is manual, flexible and outlives the function. In Python you never call malloc, but every object is on the heap and only references sit on the stack — which is exactly why mutable default arguments behave the way they do.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — memory API</li>
+            <li><a href="https://en.wikipedia.org/wiki/Stack-based_memory_allocation">Stack-based allocation — Wikipedia</a></li>
+            <li><a href="python-core.html">Your Python track</a> — names, references and mutability</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Cause a stack overflow with infinite recursion and read the error.</li>
+            <li>Explain where a Python list and the name pointing at it each live.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="os-processes.html">← Processes &amp; Scheduling</a>    <a href="os-storage.html">Files, Storage &amp; I/O →</a>    <a href="os.html">All OS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="os.html">← Operating Systems</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

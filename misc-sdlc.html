@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDLC & Agile — Reference — Khushboo</title>
+<meta name="description" content="How software gets planned and shipped, and the vocabulary interviewers expect you to use fluently — phases, methodologies, Scrum, and the practices around a release.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>SDLC &amp; Agile</h1>
+  <p>How software gets planned and shipped, and the vocabulary interviewers expect you to use fluently — phases, methodologies, Scrum, and the practices around a release.</p>
+
+  <div class="pillnav"><a href="misc-http.html">HTTP Codes</a> <a href="misc-errors.html">Error Codes</a> <a href="misc-shell.html">Shell</a> <a href="misc-python.html">Python &amp; Django</a> <a href="misc-redis.html">Redis</a> <a href="misc-sdlc.html" style="border-color:var(--accent);color:var(--accent);">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 49 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>SDLC phases</h3>
+    <p class="note">Every methodology does these; they differ in the order and the size of the loop.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Phase</th><th>What happens</th><th>Output</th></tr></thead>
+        <tbody>
+        <tr><td><strong>Requirements</strong></td><td>Gather what is needed and why</td><td>Requirement docs, user stories</td></tr>
+        <tr><td><strong>Design</strong></td><td>Architecture and interfaces — HLD then LLD</td><td>Design docs, ER and class diagrams</td></tr>
+        <tr><td><strong>Implementation</strong></td><td>Write the code</td><td>Working software in version control</td></tr>
+        <tr><td><strong>Testing</strong></td><td>Unit, integration, system, acceptance</td><td>Test reports, defect list</td></tr>
+        <tr><td><strong>Deployment</strong></td><td>Release to users</td><td>Running system</td></tr>
+        <tr><td><strong>Maintenance</strong></td><td>Fix, improve, adapt</td><td>Patches and new versions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Methodologies</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Model</th><th>How it works</th><th>Best for</th><th>Weakness</th></tr></thead>
+        <tbody>
+        <tr><td><strong>Waterfall</strong></td><td>Phases in strict sequence</td><td>Fixed, well-understood requirements</td><td>No feedback until the end</td></tr>
+        <tr><td><strong>Agile</strong></td><td>Short iterations, continuous feedback</td><td>Changing requirements — most products</td><td>Needs discipline and real customer access</td></tr>
+        <tr><td><strong>Scrum</strong></td><td>Agile with fixed-length sprints and roles</td><td>Teams delivering features regularly</td><td>Ceremony overhead if applied blindly</td></tr>
+        <tr><td><strong>Kanban</strong></td><td>Continuous flow, limit work in progress</td><td>Support and ops work</td><td>No fixed cadence to plan around</td></tr>
+        <tr><td><strong>Spiral</strong></td><td>Iterations driven by risk analysis</td><td>Large, high-risk systems</td><td>Heavyweight</td></tr>
+        <tr><td><strong>V-model</strong></td><td>Each build phase paired with a test phase</td><td>Safety-critical work</td><td>As rigid as waterfall</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Scrum — roles, events, artifacts</h3>
+    <p class="note">Read the <a href="https://scrumguides.org/">Scrum Guide</a> once; it is 13 pages and settles most arguments.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Item</th><th>Type</th><th>What it is</th></tr></thead>
+        <tbody>
+        <tr><td>Product Owner</td><td>Role</td><td>Owns the backlog and its priority — the "what"</td></tr>
+        <tr><td>Scrum Master</td><td>Role</td><td>Removes blockers, protects the process — not a manager</td></tr>
+        <tr><td>Developers</td><td>Role</td><td>The people building it — the "how"</td></tr>
+        <tr><td>Sprint</td><td>Event</td><td>A fixed-length iteration, usually 1-4 weeks</td></tr>
+        <tr><td>Sprint Planning</td><td>Event</td><td>Choose what the sprint will deliver</td></tr>
+        <tr><td>Daily Standup</td><td>Event</td><td>15 minutes: progress, plan, blockers</td></tr>
+        <tr><td>Sprint Review</td><td>Event</td><td>Demo the increment to stakeholders</td></tr>
+        <tr><td>Retrospective</td><td>Event</td><td>Improve the process, not the product</td></tr>
+        <tr><td>Product Backlog</td><td>Artifact</td><td>Everything wanted, ordered by value</td></tr>
+        <tr><td>Sprint Backlog</td><td>Artifact</td><td>What this sprint committed to</td></tr>
+        <tr><td>Increment</td><td>Artifact</td><td>The shippable result of the sprint</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Agile vocabulary</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+        <tr><td><strong>User story</strong></td><td>"As a &lt;role&gt;, I want &lt;goal&gt;, so that &lt;benefit&gt;"</td></tr>
+        <tr><td><strong>Acceptance criteria</strong></td><td>The conditions that make a story done</td></tr>
+        <tr><td><strong>Definition of Done</strong></td><td>The team-wide bar — tested, reviewed, documented, deployed</td></tr>
+        <tr><td><strong>Story points</strong></td><td>Relative effort, not hours — often Fibonacci</td></tr>
+        <tr><td><strong>Velocity</strong></td><td>Points completed per sprint; used to forecast, never to compare teams</td></tr>
+        <tr><td><strong>Epic</strong></td><td>A large body of work split into stories</td></tr>
+        <tr><td><strong>Spike</strong></td><td>A timeboxed investigation to reduce uncertainty</td></tr>
+        <tr><td><strong>Burndown chart</strong></td><td>Work remaining against time in the sprint</td></tr>
+        <tr><td><strong>Backlog grooming</strong></td><td>Refining and re-ordering upcoming work</td></tr>
+        <tr><td><strong>Technical debt</strong></td><td>Shortcuts taken now that cost interest later</td></tr>
+        <tr><td><strong>WIP limit</strong></td><td>Cap on in-progress items — the core Kanban idea</td></tr>
+        <tr><td><strong>MVP</strong></td><td>Smallest version that delivers and validates value</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Engineering practices around the cycle</h3>
+    <p class="note">These are what actually make short iterations safe — agile without them is just shipping faster with more bugs.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Practice</th><th>Why it exists</th></tr></thead>
+        <tbody>
+        <tr><td><strong>Version control</strong></td><td>Every change traceable and revertible — see the <a href="git.html">Git track</a></td></tr>
+        <tr><td><strong>Code review</strong></td><td>Catches defects and spreads knowledge; small PRs get reviewed properly</td></tr>
+        <tr><td><strong>Continuous integration</strong></td><td>Merge and test often so integration is never a phase</td></tr>
+        <tr><td><strong>Continuous delivery</strong></td><td>Every commit is releasable — see the <a href="deployment.html">Deployment track</a></td></tr>
+        <tr><td><strong>Automated testing</strong></td><td>The only thing that makes frequent change safe</td></tr>
+        <tr><td><strong>Refactoring</strong></td><td>Improve structure without changing behaviour — continuously, not as a project</td></tr>
+        <tr><td><strong>Pair programming</strong></td><td>Real-time review; good for hard problems and onboarding</td></tr>
+        <tr><td><strong>Blameless postmortems</strong></td><td>Learn from incidents without making people hide them</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Testing levels</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Level</th><th>Scope</th><th>Who usually writes it</th></tr></thead>
+        <tbody>
+        <tr><td><strong>Unit</strong></td><td>One function or class in isolation</td><td>The developer</td></tr>
+        <tr><td><strong>Integration</strong></td><td>Several components together, real database</td><td>The developer</td></tr>
+        <tr><td><strong>System / E2E</strong></td><td>The whole application through its interface</td><td>QA or the developer</td></tr>
+        <tr><td><strong>Acceptance (UAT)</strong></td><td>Does it meet the requirement</td><td>Product or the customer</td></tr>
+        <tr><td><strong>Regression</strong></td><td>Did a change break something that worked</td><td>Automated in CI</td></tr>
+        <tr><td><strong>Smoke</strong></td><td>Is the build fundamentally alive</td><td>Automated after deploy</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Read more</h2>
+  <ul style="max-width:62ch;">
+      <li><a href="https://agilemanifesto.org/">The Agile Manifesto</a> — four values, twelve principles, one page</li>
+      <li><a href="https://scrumguides.org/">The Scrum Guide</a> — the authoritative 13 pages</li>
+      <li><a href="https://www.atlassian.com/agile">Atlassian Agile Coach</a> — practical, well-written</li>
+  </ul>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="misc-redis.html">← Redis</a>    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

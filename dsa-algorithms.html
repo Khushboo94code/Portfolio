@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algorithms — DSA — Khushboo</title>
+<meta name="description" content="Backtracking, greedy, dynamic programming, bit manipulation and number theory.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html" class="here">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dsa.html">← DSA Roadmap</a>
+  <h1>Algorithms</h1>
+  <p>Backtracking, greedy, dynamic programming, bit manipulation and number theory.</p>
+
+  <div class="pillnav"><a href="dsa-foundations.html">Foundations</a> <a href="dsa-patterns.html">Core Patterns</a> <a href="dsa-structures.html">Linear Structures</a> <a href="dsa-graphs.html">Trees &amp; Graphs</a> <a href="dsa-algorithms.html" style="border-color:var(--accent);color:var(--accent);">Algorithms</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="algorithms">
+  <h2>Algorithms <span class="count">— 6 topics</span></h2>
+
+<ol class="timeline">
+
+    <li>
+      <h3>Recursion &amp; backtracking</h3>
+      <p>
+        Explore a choice, recurse, then undo the choice. Every subset, permutation and combination
+        question is the same skeleton with a different constraint — and pruning invalid branches
+        early is what separates a passing solution from a timeout.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — backtracking</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/recursion/">Tech Interview Handbook — recursion</a></li>
+            <li><a href="https://www.youtube.com/@BackToBackSWE">Back To Back SWE (YouTube)</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/subsets/">Subsets</a></li>
+            <li><a href="https://leetcode.com/problems/permutations/">Permutations</a></li>
+            <li><a href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></li>
+            <li><a href="https://leetcode.com/problems/generate-parentheses/">Generate Parentheses</a></li>
+            <li><a href="https://leetcode.com/problems/letter-combinations-of-a-phone-number/">Letter Combinations of a Phone Number</a></li>
+            <li><a href="https://leetcode.com/problems/word-search/">Word Search</a></li>
+            <li><a href="https://leetcode.com/problems/palindrome-partitioning/">Palindrome Partitioning</a></li>
+            <li><a href="https://leetcode.com/problems/n-queens/">N-Queens</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Greedy</h3>
+      <p>
+        Take the locally best option and never reconsider. Fast and short when it works — and wrong
+        when it doesn't, so the real skill is justifying <em>why</em> the greedy choice is safe.
+        Usually pairs with sorting by the right key.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — greedy</a></li>
+            <li><a href="https://usaco.guide/bronze/intro-greedy">USACO Guide — introduction to greedy</a></li>
+            <li><a href="https://www.youtube.com/@abdul_bari">Abdul Bari (YouTube)</a> — greedy vs DP, clearly separated</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/maximum-subarray/">Maximum Subarray</a> — Kadane's</li>
+            <li><a href="https://leetcode.com/problems/jump-game/">Jump Game</a></li>
+            <li><a href="https://leetcode.com/problems/jump-game-ii/">Jump Game II</a></li>
+            <li><a href="https://leetcode.com/problems/gas-station/">Gas Station</a></li>
+            <li><a href="https://leetcode.com/problems/partition-labels/">Partition Labels</a></li>
+            <li><a href="https://leetcode.com/problems/task-scheduler/">Task Scheduler</a></li>
+            <li><a href="https://leetcode.com/problems/candy/">Candy</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/boxpacker">boxpacker</a> — bin-packing, a real greedy/heuristic optimisation problem</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Dynamic programming — 1D</h3>
+      <p>
+        Overlapping subproblems solved once and reused. Start from the recursive brute force, add
+        memoisation, then convert to a bottom-up table. Defining the state — what <code>dp[i]</code>
+        actually means — is the whole problem; the transition usually follows.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — 1D dynamic programming</a></li>
+            <li><a href="https://cses.fi/book/book.pdf">Competitive Programmer's Handbook</a> — the DP chapter is excellent and free</li>
+            <li><a href="https://docs.python.org/3/library/functools.html#functools.cache">functools.cache</a> — memoisation in one decorator</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/climbing-stairs/">Climbing Stairs</a></li>
+            <li><a href="https://leetcode.com/problems/house-robber/">House Robber</a></li>
+            <li><a href="https://leetcode.com/problems/house-robber-ii/">House Robber II</a></li>
+            <li><a href="https://leetcode.com/problems/coin-change/">Coin Change</a></li>
+            <li><a href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence</a></li>
+            <li><a href="https://leetcode.com/problems/word-break/">Word Break</a></li>
+            <li><a href="https://leetcode.com/problems/decode-ways/">Decode Ways</a></li>
+            <li><a href="https://leetcode.com/problems/partition-equal-subset-sum/">Partition Equal Subset Sum</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Dynamic programming — 2D &amp; knapsack</h3>
+      <p>
+        Two-dimensional state, typically comparing two sequences or tracking a capacity alongside an
+        index. Grid paths, edit distance, longest common subsequence and the knapsack family are the
+        templates worth knowing cold — most 2D DP questions are a variation on one of them.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — 2D dynamic programming</a></li>
+            <li><a href="https://cses.fi/problemset/">CSES Problem Set</a> — the DP section is the best drill anywhere</li>
+            <li><a href="https://www.youtube.com/@Errichto">Errichto (YouTube)</a> — DP from a competitive programmer's angle</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/unique-paths/">Unique Paths</a></li>
+            <li><a href="https://leetcode.com/problems/longest-common-subsequence/">Longest Common Subsequence</a></li>
+            <li><a href="https://leetcode.com/problems/edit-distance/">Edit Distance</a></li>
+            <li><a href="https://leetcode.com/problems/coin-change-ii/">Coin Change II</a> — unbounded knapsack</li>
+            <li><a href="https://leetcode.com/problems/target-sum/">Target Sum</a> — 0/1 knapsack</li>
+            <li><a href="https://leetcode.com/problems/longest-palindromic-substring/">Longest Palindromic Substring</a></li>
+            <li><a href="https://leetcode.com/problems/maximal-square/">Maximal Square</a></li>
+            <li><a href="https://leetcode.com/problems/interleaving-string/">Interleaving String</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/boxpacker">boxpacker</a> — packing is the knapsack family applied to a real product</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Bit manipulation</h3>
+      <p>
+        XOR's self-cancelling property, masks, and <code>n &amp; (n-1)</code> to clear the lowest set
+        bit. Niche but high-yield — several problems have a two-line bitwise answer and no other
+        solution under the constraints. Bitmasks also encode subsets for DP.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/algebra/bit-manipulation.html">cp-algorithms — bit manipulation</a></li>
+            <li><a href="https://graphics.stanford.edu/~seander/bithacks.html">Bit Twiddling Hacks</a> — the classic reference</li>
+            <li><a href="https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types">Python bitwise operations</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/single-number/">Single Number</a></li>
+            <li><a href="https://leetcode.com/problems/number-of-1-bits/">Number of 1 Bits</a></li>
+            <li><a href="https://leetcode.com/problems/counting-bits/">Counting Bits</a></li>
+            <li><a href="https://leetcode.com/problems/reverse-bits/">Reverse Bits</a></li>
+            <li><a href="https://leetcode.com/problems/missing-number/">Missing Number</a></li>
+            <li><a href="https://leetcode.com/problems/sum-of-two-integers/">Sum of Two Integers</a></li>
+            <li><a href="https://leetcode.com/problems/single-number-ii/">Single Number II</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Math &amp; number theory</h3>
+      <p>
+        GCD and the Euclidean algorithm, primes and the sieve, modular arithmetic, fast
+        exponentiation, and base conversion. Base62 encoding for a URL shortener is exactly this —
+        the one place where the maths track and the system design track meet directly.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/algebra/binary-exp.html">cp-algorithms — binary exponentiation</a></li>
+            <li><a href="https://cp-algorithms.com/algebra/sieve-of-eratosthenes.html">cp-algorithms — sieve of Eratosthenes</a></li>
+            <li><a href="https://docs.python.org/3/library/math.html">Python math module</a> — <code>gcd</code>, <code>isqrt</code>, <code>comb</code></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/palindrome-number/">Palindrome Number</a></li>
+            <li><a href="https://leetcode.com/problems/roman-to-integer/">Roman to Integer</a></li>
+            <li><a href="https://leetcode.com/problems/powx-n/">Pow(x, n)</a></li>
+            <li><a href="https://leetcode.com/problems/sqrtx/">Sqrt(x)</a></li>
+            <li><a href="https://leetcode.com/problems/count-primes/">Count Primes</a></li>
+            <li><a href="https://leetcode.com/problems/happy-number/">Happy Number</a></li>
+            <li><a href="https://leetcode.com/problems/excel-sheet-column-number/">Excel Sheet Column Number</a> — base conversion</li>
+            <li><a href="https://leetcode.com/problems/rotate-image/">Rotate Image</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/URL-Shortner">URL-Shortner</a> — base62 encoding in production form</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="dsa-graphs.html">← Trees &amp; Graphs</a>    <a href="dsa.html">All DSA tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dsa.html">← DSA Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

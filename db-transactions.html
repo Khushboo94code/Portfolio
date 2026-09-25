@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transactions & Concurrency — DBMS &amp; SQL — Khushboo</title>
+<meta name="description" content="What happens when two people write at once — the group that decides whether your data stays correct.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html" class="here">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dbms.html">← DBMS &amp; SQL</a>
+  <h1>Transactions &amp; Concurrency</h1>
+  <p>What happens when two people write at once — the group that decides whether your data stays correct.</p>
+
+  <div class="pillnav"><a href="db-relational.html">Relational Foundations</a> <a href="db-sql.html">SQL</a> <a href="db-transactions.html" style="border-color:var(--accent);color:var(--accent);">Transactions &amp; Concurrency</a> <a href="db-performance.html">Performance</a> <a href="db-beyond.html">Beyond Relational</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="transactions">
+  <h2>Transactions &amp; Concurrency <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>ACID</h3>
+      <p>Atomicity — all or nothing. Consistency — constraints hold before and after. Isolation — concurrent transactions do not see each other’s partial work. Durability — committed means survived a power cut. Four words you will be asked to expand and justify.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/tutorial-transactions.html">PostgreSQL — transactions</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/ACID">ACID — Wikipedia</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — chapter 7</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain each letter with a concrete failure it prevents in your marketplace checkout.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — order and payment, the transaction that matters</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Isolation levels &amp; anomalies</h3>
+      <p>Read uncommitted, read committed, repeatable read, serializable — and the anomalies each permits: dirty reads, non-repeatable reads, phantoms and write skew. Postgres defaults to read committed, which allows more than people assume.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL — transaction isolation</a> — with the anomaly table</li>
+            <li><a href="https://jepsen.io/consistency">Jepsen — consistency models</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — weak isolation and write skew</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Open two psql sessions and reproduce a non-repeatable read, then raise the level to stop it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Locking &amp; MVCC</h3>
+      <p>Postgres uses multi-version concurrency control, so readers never block writers and writers never block readers — a very different model from lock-everything databases. Explicit <code>SELECT ... FOR UPDATE</code> is how you serialise a row when you actually need to.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/mvcc.html">PostgreSQL — MVCC</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/explicit-locking.html">PostgreSQL — explicit locking</a></li>
+            <li><a href="django-orm.html">Your Django track</a> — select_for_update in practice</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Reproduce the "two buyers, last item" race, then fix it with a row lock.</li>
+            <li>Explain why VACUUM exists as a consequence of MVCC.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — checkout is where this bites</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Deadlocks in the database</h3>
+      <p>Two transactions each holding what the other needs. Postgres detects the cycle and kills one with SQLSTATE <code>40P01</code> — so your application must be ready to retry. Consistent ordering of updates is the prevention.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-DEADLOCKS">PostgreSQL — deadlocks</a></li>
+            <li><a href="misc-errors.html">Error codes reference</a> — 40P01 and 40001</li>
+            <li><a href="conc-threading.html">Your Concurrency track</a> — the same problem one level down</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Create a deadlock with two psql sessions and read the error the loser receives.</li>
+            <li>Add a retry for serialization failures in one piece of code.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="db-sql.html">← SQL</a>    <a href="db-performance.html">Performance →</a>    <a href="dbms.html">All DBMS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dbms.html">← DBMS &amp; SQL</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

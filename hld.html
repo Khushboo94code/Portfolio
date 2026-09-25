@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HLD Concepts — Khushboo</title>
+<meta name="description" content="High-level design learning roadmap — scaling, load balancing, caching, databases, sharding, consistency, queues and observability, with resources and my code.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HLD ROADMAP — how to edit
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>  <ul>…</ul>
+             <h5>Practice</h5><ul>…</ul>
+             <h5>My code</h5> <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     Keep the counts in the <h2>s and the progress bar on
+     system-design.html in sync when you add items.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html" class="here">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="system-design.html">← System Design</a>
+  <h1>HLD Concepts</h1>
+  <p>
+    High-level design — the building blocks you assemble into a system. Learn these once and every
+    case study becomes a matter of picking the right pieces. Open <em>Resources</em> on any topic
+    for what I learn from, what to practise, and my own code.
+  </p>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+
+  <div class="pillnav">
+    <a href="#foundations">Foundations</a>
+    <a href="#data">Data &amp; Storage</a>
+    <a href="#distributed">Distributed Systems</a>
+    <a href="#operating">Reliability &amp; Ops</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== FOUNDATIONS ===================== -->
+<section class="wrap" id="foundations">
+  <h2>Foundations <span class="count">— 4 topics</span></h2>
+  <p class="section-intro">
+    <strong>Networking</strong> is the other foundation of system design — DNS, TCP, HTTP, TLS.
+    It outgrew this section and now has its own track: <a href="networking.html">Networking →</a>
+  </p>
+  <ol class="timeline">
+
+
+    <li>
+      <h3>Capacity estimation</h3>
+      <p>
+        Back-of-envelope maths that justifies every later decision: QPS from daily actives, storage
+        from write volume × retention, bandwidth from payload size. Do this first in an interview —
+        it's what turns "add a cache" from a guess into a conclusion.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/donnemartin/system-design-primer#latency-numbers-every-programmer-should-know">Latency numbers every programmer should know</a> — memorise these</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#appendix">System Design Primer — powers of two &amp; estimation</a></li>
+            <li><a href="https://www.hellointerview.com/learn/system-design/in-a-hurry/introduction">Hello Interview — System Design in a Hurry</a> — shows where estimation fits in the 45 minutes</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — estimate QPS and storage for your own crawler and marketplace, then check against reality.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Scaling &amp; statelessness</h3>
+      <p>
+        Vertical scaling hits a ceiling; horizontal scaling needs services that hold no local state.
+        Push sessions into Redis or a signed token so any instance can serve any request, then scale
+        web, worker and database tiers independently.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://12factor.net/">The Twelve-Factor App</a> — factor VI (processes) is exactly this</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#application-layer">System Design Primer — application layer</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/sessions/">Django sessions</a> — where the state actually lives</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — run two instances of one of your apps behind a proxy and find what breaks.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — session and cookie state handling</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Load balancing</h3>
+      <p>
+        Spreading traffic across instances: L4 (TCP) versus L7 (HTTP, can route on path or header),
+        the algorithms — round robin, least connections, consistent hashing for stickiness — plus
+        health checks and connection draining so a dying instance stops receiving traffic.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.nginx.com/resources/glossary/load-balancing/">NGINX — load balancing explained</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#load-balancer">System Design Primer — load balancer</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Load_balancing_(computing)">Load balancing — Wikipedia</a> — short and clear on the algorithms</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No direct LeetCode — implement weighted round robin and least-connections yourself.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/loadbalancer">loadbalancer</a> — round-robin balancer from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Reverse proxy &amp; API gateway</h3>
+      <p>
+        The single front door: TLS termination, routing, auth, rate limiting and request shaping
+        before traffic ever reaches your application. A reverse proxy handles transport concerns; a
+        gateway adds cross-cutting application concerns.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/">NGINX reverse proxy guide</a></li>
+            <li><a href="https://microservices.io/patterns/apigateway.html">microservices.io — API Gateway pattern</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#reverse-proxy-web-server">System Design Primer — reverse proxy</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — write an Nginx config that terminates TLS, serves static files and proxies the rest.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Nginx in front of Gunicorn</li>
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — request shaping and filtering at the API edge</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<!-- ===================== DATA & STORAGE ===================== -->
+<section class="wrap" id="data">
+  <h2>Data &amp; Storage <span class="count">— 8 topics</span></h2>
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>SQL vs NoSQL &amp; data modelling</h3>
+      <p>
+        Choosing a store from the access pattern, not from fashion. SQL when you need relationships
+        and transactions; NoSQL when the query shape is known and scale matters more than
+        flexibility. Normalise for correctness, then denormalise deliberately for read speed.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a> — chapter 2 is the definitive treatment</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#database">System Design Primer — database</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/datatype.html">PostgreSQL data types</a> — knowing these well is underrated</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — model the same domain twice, relationally and as documents, and compare the queries.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — relational modelling for vendors, products and orders</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Indexing &amp; query optimisation</h3>
+      <p>
+        Why a query is slow and what to do about it: B-tree vs hash indexes, leftmost-prefix rules
+        for composite indexes, covering indexes that avoid the table lookup, and the fact that every
+        index you add slows writes down.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> — the best free resource on SQL indexing</li>
+            <li><a href="https://www.postgresql.org/docs/current/indexes.html">PostgreSQL — Indexes</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/using-explain.html">PostgreSQL — Using EXPLAIN</a> — learn to read a query plan</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — run <code>EXPLAIN ANALYZE</code> on the slowest query in your crawler database and fix it.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — filtering and query construction in the ORM</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Caching</h3>
+      <p>
+        The biggest single lever on read-heavy systems, and the biggest source of stale-data bugs.
+        Cache-aside vs write-through vs write-back, LRU/LFU/TTL eviction, and the three failure
+        modes: stampede, penetration and avalanche.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://aws.amazon.com/builders-library/caching-challenges-and-strategies/">AWS Builders' Library — Caching challenges and strategies</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#cache">System Design Primer — cache</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a></li>
+            <li><a href="https://leetcode.com/problems/lfu-cache/">LFU Cache</a></li>
+            <li><a href="https://leetcode.com/problems/design-most-recently-used-queue/">Design Most Recently Used Queue</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — cache built on a dictionary from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>CDN &amp; object storage</h3>
+      <p>
+        Large and static content never belongs on your app servers. Object storage holds the bytes,
+        a CDN caches them near the user, and pre-signed URLs give a specific user time-limited
+        access without the request ever touching your backend.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">AWS — pre-signed URLs</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/CDN">MDN — CDN</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching">MDN — HTTP caching</a> — the headers that drive edge behaviour</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — add direct-to-S3 uploads with a pre-signed PUT to one of your apps.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — S3 pre-signed downloads for paid files</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Replication</h3>
+      <p>
+        Copies of your data on more than one machine, for read scale and for survival. Leader–follower
+        topology, sync vs async trade-offs, replication lag and the "user can't see their own write"
+        bug, plus failover and why you need a quorum. Replicas scale reads, never writes.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://dataintensive.net/">DDIA chapter 5</a> — the clearest treatment of replication lag</li>
+            <li><a href="https://www.postgresql.org/docs/current/high-availability.html">PostgreSQL — replication &amp; high availability</a></li>
+            <li><a href="https://martinfowler.com/articles/patterns-of-distributed-systems/">Fowler — Patterns of Distributed Systems</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — set up a Postgres replica locally and measure lag under write load.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Partitioning &amp; sharding</h3>
+      <p>
+        Splitting data across machines once one box can't hold the writes. Range partitioning gives
+        cheap scans but risks hotspots; hash partitioning spreads evenly but loses range queries.
+        The shard key is the one decision you can't cheaply undo.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://dataintensive.net/">DDIA chapter 6</a> — partitioning, rebalancing, secondary indexes</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#sharding">System Design Primer — sharding</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/ddl-partitioning.html">PostgreSQL — table partitioning</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — write a router that picks a database from a hash of the key, then try adding a node.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Shrading-">Shrading-</a> — data split across multiple databases</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Search &amp; ranking</h3>
+      <p>
+        Turning documents into something queryable: inverted indexes, tokenisation and analysers,
+        relevance scoring, and — increasingly — hybrid retrieval that combines keyword matching with
+        vector similarity, then re-ranks the merged result.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">Elasticsearch reference</a> — inverted index and analysers</li>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector</a> — vector search inside Postgres</li>
+            <li><a href="https://www.postgresql.org/docs/current/textsearch.html">PostgreSQL full-text search</a> — often enough on its own</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/implement-trie-prefix-tree/">Implement Trie (Prefix Tree)</a></li>
+            <li><a href="https://leetcode.com/problems/design-add-and-search-words-data-structure/">Design Add and Search Words</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — semantic retrieval over pgvector with cited results</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Geospatial indexing</h3>
+      <p>
+        Answering "what's near me" without scanning every row. Geohash turns coordinates into
+        sortable string prefixes; QuadTrees subdivide space adaptively; H3 uses hexagons to keep
+        neighbour distances uniform. The basis of every ride-sharing and delivery design.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://h3geo.org/docs/">H3 documentation</a> — Uber's hexagonal grid, with the reasoning</li>
+            <li><a href="https://postgis.net/documentation/">PostGIS docs</a> — geospatial in the database you already use</li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/geospatial/">Redis geospatial commands</a> — the quick practical route</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No direct LeetCode — implement geohash encoding and a proximity query yourself.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<!-- ===================== DISTRIBUTED SYSTEMS ===================== -->
+<section class="wrap" id="distributed">
+  <h2>Distributed Systems <span class="count">— 9 topics</span></h2>
+  <ol class="timeline">
+
+    <li>
+      <h3>Consistency models &amp; CAP</h3>
+      <p>
+        CAP says that <em>during a network partition</em> you choose consistency or availability — it
+        says nothing about normal operation, which is where most people misuse it. The useful
+        vocabulary is the middle ground: read-your-writes, monotonic reads, and quorum reads/writes.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://jepsen.io/consistency">Jepsen — consistency models map</a> — the reference hierarchy</li>
+            <li><a href="https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html">Kleppmann — Please stop calling databases CP or AP</a></li>
+            <li><a href="https://www.youtube.com/playlist?list=PLeKd45zvjcDFUEv_ohr_HdUFe97RItdiB">Kleppmann — Distributed Systems lectures</a> — free, full university course</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — for each of your projects, name the consistency level it actually needs.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Transactions &amp; isolation levels</h3>
+      <p>
+        ACID in practice: which anomalies each isolation level permits — dirty reads,
+        non-repeatable reads, phantoms — and what that costs in lock contention. Postgres uses MVCC,
+        so readers don't block writers, which changes the trade-offs from what textbooks assume.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL — transaction isolation</a> — with the anomaly table</li>
+            <li><a href="https://www.postgresql.org/docs/current/mvcc.html">PostgreSQL — MVCC</a></li>
+            <li><a href="https://dataintensive.net/">DDIA chapter 7</a> — weak isolation levels and write skew</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — open two psql sessions and reproduce a phantom read at each isolation level.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — order and payment flows are where isolation actually bites</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Distributed transactions</h3>
+      <p>
+        Keeping several services consistent without a single database transaction. Two-phase commit
+        blocks on a coordinator failure; sagas break the work into steps with compensating actions;
+        the transactional outbox makes "write to DB and publish an event" atomic.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://microservices.io/patterns/data/saga.html">microservices.io — Saga pattern</a></li>
+            <li><a href="https://microservices.io/patterns/data/transactional-outbox.html">microservices.io — Transactional Outbox</a></li>
+            <li><a href="https://dataintensive.net/">DDIA chapter 9</a> — consensus and atomic commit</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — design the saga for "place order → charge card → reserve stock → email", including every rollback.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Message queues &amp; async processing</h3>
+      <p>
+        Decoupling producers from consumers so slow work never blocks a request, bursts get absorbed,
+        and failures can be retried. Covers worker pools, retry policy, dead-letter queues for poison
+        messages, and backpressure when consumers fall behind.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/tasks.html">Celery — task design guide</a> — retries, acks, idempotency</li>
+            <li><a href="https://www.rabbitmq.com/tutorials">RabbitMQ tutorials</a> — the messaging patterns, framework-free</li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#asynchronism">System Design Primer — asynchronism</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-bounded-blocking-queue/">Design Bounded Blocking Queue</a></li>
+            <li><a href="https://leetcode.com/problems/design-circular-queue/">Design Circular Queue</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — a mini message queue from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Event-driven architecture</h3>
+      <p>
+        Services that react to events instead of calling each other directly. An append-only log
+        like Kafka keeps history so new consumers can replay it; ordering is guaranteed per
+        partition, never globally, which shapes how you choose a partition key.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://kafka.apache.org/documentation/#design">Kafka — design documentation</a></li>
+            <li><a href="https://martinfowler.com/articles/201701-event-driven.html">Fowler — What do you mean by event-driven?</a></li>
+            <li><a href="https://dataintensive.net/">DDIA chapter 11</a> — stream processing and logs</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — re-model one synchronous flow in your marketplace as an event and see what gets easier.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — <a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> is the closest starting point.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Stream processing</h3>
+      <p>
+        Computing over unbounded data: tumbling and sliding windows, watermarks for late-arriving
+        events, and what "exactly-once" really means in a stream. The lambda and kappa architectures
+        are the two standard ways to combine this with batch.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.oreilly.com/radar/the-world-beyond-batch-streaming-101/">Streaming 101</a> — the classic explainer on windows and watermarks</li>
+            <li><a href="https://kafka.apache.org/documentation/streams/">Kafka Streams docs</a></li>
+            <li><a href="https://dataintensive.net/">DDIA chapter 11</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — compute a rolling 5-minute average over your crawler's price feed.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Idempotency &amp; deduplication</h3>
+      <p>
+        Since almost every distributed system delivers at-least-once, the same message will arrive
+        twice — so handlers must be safe to replay. Idempotency keys, deduplication tables and
+        conditional updates are how you get exactly-once behaviour without exactly-once delivery.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.stripe.com/api/idempotent_requests">Stripe — idempotent requests</a> — the reference implementation</li>
+            <li><a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/">AWS Builders' Library — making retries safe</a></li>
+            <li><a href="https://brandur.org/idempotency-keys">Brandur — Implementing Stripe-like idempotency keys</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — make your Stripe webhook handler safe against a duplicate delivery.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — the webhook path where this matters most</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Consistent hashing</h3>
+      <p>
+        Plain <code>hash % N</code> remaps almost every key when N changes, which empties a cache
+        cluster on a single node addition. Consistent hashing places nodes on a ring so only ~1/N of
+        keys move, and virtual nodes even out the distribution.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Consistent_hashing">Consistent hashing — Wikipedia</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#under-development">System Design Primer</a> — see the caching and DNS sections</li>
+            <li><a href="https://www.youtube.com/@gkcs">Gaurav Sen (YouTube)</a> — the standard visual explanation</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No direct LeetCode — implement the ring with virtual nodes and measure how many keys move when you add one.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a natural follow-up to <a href="https://github.com/Khushboo94code/Shrading-">Shrading-</a>.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Coordination &amp; leader election</h3>
+      <p>
+        When several instances must agree who is in charge: distributed locks, consensus protocols
+        like Raft and Paxos, and the systems that implement them (etcd, ZooKeeper). Split-brain —
+        two nodes both believing they lead — is the failure this prevents.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://raft.github.io/">The Raft Consensus Algorithm</a> — with the interactive visualisation</li>
+            <li><a href="https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html">Kleppmann — How to do distributed locking</a></li>
+            <li><a href="https://etcd.io/docs/">etcd documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — make sure only one Celery beat scheduler can run at a time using a Redis lock.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<!-- ===================== RELIABILITY & OPS ===================== -->
+<section class="wrap" id="operating">
+  <h2>Reliability &amp; Operations <span class="count">— 7 topics</span></h2>
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Rate limiting &amp; throttling</h3>
+      <p>
+        Protecting a service from being overwhelmed, and being a good client of someone else's.
+        Token bucket allows bursts and is the usual answer; fixed windows leak a 2× burst at the
+        boundary, which sliding windows fix. Distributed limiting needs shared atomic counters.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://blog.cloudflare.com/counting-things-a-lot-of-different-things/">Cloudflare — sliding window rate limiting</a></li>
+            <li><a href="https://redis.io/glossary/rate-limiting/">Redis — rate limiting patterns</a></li>
+            <li><a href="https://stripe.com/blog/rate-limiters">Stripe — Scaling your API with rate limiters</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/logger-rate-limiter/">Logger Rate Limiter</a></li>
+            <li><a href="https://leetcode.com/problems/design-hit-counter/">Design Hit Counter</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — fixed-window limiter; sliding window is the next step</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Probabilistic data structures</h3>
+      <p>
+        Trading exactness for enormous memory savings. A Bloom filter answers "definitely not
+        present" or "probably present" with no false negatives; count-min sketch approximates
+        frequencies; HyperLogLog counts uniques in kilobytes instead of gigabytes.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://llimllib.github.io/bloomfilter-tutorial/">Interactive Bloom filter tutorial</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/probabilistic/">Redis probabilistic data types</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — where these appear in real storage engines</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No direct LeetCode — implement a Bloom filter and measure the real false-positive rate against the formula.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — would pair well with the dedup logic in your crawler.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Microservices &amp; resilience</h3>
+      <p>
+        When to split a monolith and what it costs: service discovery, network failure as a normal
+        event, and the patterns that stop one slow dependency taking everything down — timeouts,
+        retries with jitter, circuit breakers and bulkheads.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS — Timeouts, retries and backoff with jitter</a> — essential</li>
+            <li><a href="https://martinfowler.com/bliki/CircuitBreaker.html">Fowler — Circuit Breaker</a></li>
+            <li><a href="https://microservices.io/patterns/">microservices.io — pattern catalogue</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — add a circuit breaker around one external call and test it with the dependency down.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — LiteLLM provider fallback is graceful degradation in practice</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Observability</h3>
+      <p>
+        Knowing a system is unhealthy before users tell you. Structured logs, metrics and distributed
+        traces; measuring p50/p95/p99 rather than averages, which hide the pain; and alerting on
+        symptoms users feel instead of on CPU.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE Book — Monitoring distributed systems</a></li>
+            <li><a href="https://sre.google/workbook/implementing-slos/">Google SRE Workbook — Implementing SLOs</a></li>
+            <li><a href="https://opentelemetry.io/docs/">OpenTelemetry docs</a> — the vendor-neutral standard</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — add request-id propagation and p99 latency metrics to one of your APIs.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers, the foundation of the logs pillar</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Security in design</h3>
+      <p>
+        Authentication versus authorisation, sessions versus JWT and the revocation problem JWTs
+        create, RBAC enforced server-side, TLS everywhere, secrets in a vault rather than in a repo,
+        and signed URLs for granting narrow, temporary access.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+            <li><a href="https://cheatsheetseries.owasp.org/">OWASP Cheat Sheet Series</a> — the practical lookup</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">MDN — Content Security Policy</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — audit one of your own apps against the OWASP top 10 and write down what you find.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — RBAC and pre-signed URL access control</li>
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — CSP and iframe sandboxing for LLM output</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Deployment &amp; release strategy</h3>
+      <p>
+        Getting changes out without downtime: containers and orchestration, CI/CD pipelines,
+        blue-green and canary releases, and the discipline of backwards-compatible migrations —
+        expand, migrate, contract — so the old and new code can run at once.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html">Fowler — Blue-green deployment</a></li>
+            <li><a href="https://12factor.net/">The Twelve-Factor App</a> — config, build/release/run, dev-prod parity</li>
+            <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — Dockerfile best practices</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — ship a column rename to a live app with zero downtime using expand/contract.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — Dockerized end to end</li>
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Gunicorn + Nginx deployment</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Multi-region &amp; disaster recovery</h3>
+      <p>
+        Surviving the loss of a whole region: active-active versus active-passive, data residency
+        constraints, and defining RPO (how much data you can lose) and RTO (how long you can be
+        down). A backup you have never restored is not a backup.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://aws.amazon.com/builders-library/static-stability-using-availability-zones/">AWS — Static stability using Availability Zones</a></li>
+            <li><a href="https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html">AWS — Disaster recovery options</a></li>
+            <li><a href="https://sre.google/books/">Google SRE books</a> — the reliability framing behind RPO/RTO</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No LeetCode — restore one of your databases from a backup into a fresh environment and time it.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Other tracks</h2>
+  <div class="links">
+    <a href="lld.html">← LLD Concepts</a>
+    <a href="case-studies.html">Case Studies →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="system-design.html">← System Design</a> · © 2026 Khushboo ·
+    Some LeetCode design problems are Premium-only.
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance — DBMS &amp; SQL — Khushboo</title>
+<meta name="description" content="Why a query is slow, and the ordered list of things to do about it.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html" class="here">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dbms.html">← DBMS &amp; SQL</a>
+  <h1>Performance</h1>
+  <p>Why a query is slow, and the ordered list of things to do about it.</p>
+
+  <div class="pillnav"><a href="db-relational.html">Relational Foundations</a> <a href="db-sql.html">SQL</a> <a href="db-transactions.html">Transactions &amp; Concurrency</a> <a href="db-performance.html" style="border-color:var(--accent);color:var(--accent);">Performance</a> <a href="db-beyond.html">Beyond Relational</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="performance">
+  <h2>Performance <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Indexes &amp; B-trees</h3>
+      <p>An index is a sorted structure that turns a full scan into a lookup. B-tree serves equality and range; hash only equality; GIN and GiST handle full-text and arrays. Composite index order follows the leftmost-prefix rule, and every index you add slows writes.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> — the best free resource on indexing</li>
+            <li><a href="https://www.postgresql.org/docs/current/indexes.html">PostgreSQL — indexes</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/indexes-types.html">PostgreSQL — index types</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a composite index and prove with EXPLAIN that column order matters.</li>
+            <li>Find an index in one of your projects that is never used, and drop it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — the queries to index for</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>EXPLAIN &amp; the query planner</h3>
+      <p>The planner estimates costs and picks a strategy; <code>EXPLAIN ANALYZE</code> shows what it actually did. Learn to spot a sequential scan on a large table, a mis-estimated row count, and a nested loop that should have been a hash join.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/using-explain.html">PostgreSQL — using EXPLAIN</a></li>
+            <li><a href="https://explain.depesz.com/">explain.depesz.com</a> — paste a plan, read it clearly</li>
+            <li><a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> — the execution plan chapters</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run EXPLAIN ANALYZE on your slowest query and name the single worst node.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Query optimisation patterns</h3>
+      <p>The recurring wins: replace correlated subqueries with joins, avoid functions on indexed columns in WHERE, select only the columns you need, paginate by cursor rather than OFFSET on large tables, and fix N+1 at the ORM layer rather than the SQL one.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/performance-tips.html">PostgreSQL — performance tips</a></li>
+            <li><a href="https://use-the-index-luke.com/no-offset">No Offset</a> — why OFFSET pagination degrades</li>
+            <li><a href="django-orm.html">Your Django track</a> — N+1 and select_related</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Convert an OFFSET-paginated endpoint to cursor pagination and compare page-1000 timings.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — filtering and pagination, directly on topic</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Denormalisation, views &amp; caching</h3>
+      <p>When reads outgrow a clean schema: materialised views precompute expensive aggregates, denormalised columns trade write complexity for read speed, and a cache in front trades freshness for both. Each one is a correctness trade you should state out loud.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/rules-materializedviews.html">PostgreSQL — materialized views</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/sql-createview.html">PostgreSQL — views</a></li>
+            <li><a href="hld.html">Your HLD track</a> — caching strategies and invalidation</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Replace a slow aggregate endpoint with a materialised view and decide the refresh policy.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Partitioning &amp; scaling reads</h3>
+      <p>Splitting one large table by range or list so queries touch less data, and read replicas for spreading read load. Both have real costs — cross-partition queries and replication lag — which is why they come after indexing, not before.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/ddl-partitioning.html">PostgreSQL — table partitioning</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/high-availability.html">PostgreSQL — replication</a></li>
+            <li><a href="hld.html">Your HLD track</a> — sharding and replication theory</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Partition a time-series table by month and show the planner pruning partitions.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Shrading-">Shrading-</a> — your own sharding experiment</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="db-transactions.html">← Transactions &amp; Concurrency</a>    <a href="db-beyond.html">Beyond Relational →</a>    <a href="dbms.html">All DBMS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dbms.html">← DBMS &amp; SQL</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

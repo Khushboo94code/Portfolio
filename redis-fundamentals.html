@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentals — Redis — Khushboo</title>
+<meta name="description" content="What Redis is, why it is fast, and the properties that decide what you should and should not put in it.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html" class="here">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="redis.html">← Redis</a>
+  <h1>Fundamentals</h1>
+  <p>What Redis is, why it is fast, and the properties that decide what you should and should not put in it.</p>
+
+  <div class="pillnav"><a href="redis-fundamentals.html" style="border-color:var(--accent);color:var(--accent);">Fundamentals</a> <a href="redis-datatypes.html">Data Structures</a> <a href="redis-patterns.html">Patterns</a> <a href="redis-production.html">Production</a> <a href="misc-redis.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="fundamentals">
+  <h2>Fundamentals <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>What Redis is</h3>
+      <p>An in-memory data structure server — not just a cache. It holds strings, hashes, lists, sets and sorted sets in RAM and serves them in microseconds, which is why the same process can be your cache, your queue broker, your rate limiter and your session store.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/">Redis documentation</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/get-started/">Redis — get started</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/reference/protocol-spec/">RESP — the wire protocol</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Install Redis locally and run <code>redis-cli</code> against it.</li>
+            <li>Name four different jobs Redis is doing in systems you have built.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Redis as Celery broker and cache</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>The single-threaded model</h3>
+      <p>Command execution is single-threaded, which sounds like a limitation and is actually the source of its guarantees — every command is atomic because nothing runs beside it. The consequence: one slow command (<code>KEYS *</code> on a big database) blocks every other client.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/reference/">Redis — programming reference</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/keys/">KEYS</a> — and why to use SCAN instead</li>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why <code>INCR</code> needs no lock while the same thing in Django does.</li>
+            <li>Find every <code>KEYS</code> call in any code you have and replace it with <code>SCAN</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — atomic counters are exactly this property</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Keys, TTL &amp; expiry</h3>
+      <p>Everything is a key, and any key can have a time to live. Expiry is how a cache stays a cache rather than growing forever — and Redis expires lazily plus in background sampling, so a key is not necessarily removed the instant it expires.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/use/keyspace/">Redis — keyspace &amp; key expiry</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/expire/">EXPIRE</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/use/keyspace-notifications/">Keyspace notifications</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Design a key naming scheme for one project — <code>app:entity:id:field</code> and stick to it.</li>
+            <li>Set a TTL with jitter so a thousand keys do not expire in the same second.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — the cache this formalises</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Persistence — RDB &amp; AOF</h3>
+      <p>Redis can snapshot to disk (RDB) or append every write to a log (AOF), or both. RDB is compact and loses the window since the last snapshot; AOF loses almost nothing and replays slower on restart. A cache may need neither — a queue certainly does.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/">Redis — persistence</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/config/">Redis — configuration</a></li>
+            <li><a href="hld.html">Your HLD track</a> — durability trade-offs generally</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Decide, for each Redis use in your projects, whether you could lose its data on restart.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Transactions &amp; Lua scripts</h3>
+      <p><code>MULTI</code>/<code>EXEC</code> queues commands and runs them without interleaving; <code>WATCH</code> adds optimistic locking. Lua scripts run atomically on the server, which is how you do read-modify-write in one round trip — the correct way to build a rate limiter.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/interact/transactions/">Redis — transactions</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/interact/programmability/eval-intro/">Redis — Lua scripting</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/watch/">WATCH</a> — optimistic locking</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a Lua script that increments a counter and sets its TTL atomically.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — the natural home for that script</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="redis-datatypes.html">Data Structures →</a>    <a href="misc-redis.html">Command reference</a>    <a href="redis.html">All Redis tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="redis.html">← Redis</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

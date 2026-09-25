@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patterns — Redis — Khushboo</title>
+<meta name="description" content="The five jobs Redis actually does in production — each one you have already built or nearly built.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html" class="here">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="redis.html">← Redis</a>
+  <h1>Patterns</h1>
+  <p>The five jobs Redis actually does in production — each one you have already built or nearly built.</p>
+
+  <div class="pillnav"><a href="redis-fundamentals.html">Fundamentals</a> <a href="redis-datatypes.html">Data Structures</a> <a href="redis-patterns.html" style="border-color:var(--accent);color:var(--accent);">Patterns</a> <a href="redis-production.html">Production</a> <a href="misc-redis.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="patterns">
+  <h2>Patterns <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Caching</h3>
+      <p>The original use. Cache-aside is the default: check Redis, miss, read the database, write it back with a TTL. The hard parts are invalidation and the three failure modes — stampede, penetration and avalanche — which TTL jitter, locking and negative caching address.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
+            <li><a href="https://aws.amazon.com/builders-library/caching-challenges-and-strategies/">AWS — caching challenges and strategies</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/cache/">Django — caching with Redis</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add cache-aside to your slowest endpoint and invalidate it correctly on write.</li>
+            <li>Add jitter to your TTLs and explain which failure mode that prevents.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — cache mechanics from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Rate limiting</h3>
+      <p>A counter per key with an expiry is a fixed-window limiter in two commands. Sliding windows use a sorted set of timestamps; token buckets store tokens and a refill timestamp. Doing it in a Lua script keeps it atomic across many app instances.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/glossary/rate-limiting/">Redis — rate limiting patterns</a></li>
+            <li><a href="https://stripe.com/blog/rate-limiters">Stripe — scaling with rate limiters</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/interact/programmability/eval-intro/">Redis — Lua scripting</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Upgrade your fixed-window limiter to a sliding window with a sorted set.</li>
+            <li>Make it correct when three app instances share one Redis.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — fixed window today, sliding window next</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Sessions &amp; shared state</h3>
+      <p>Moving session state out of the app process is what makes horizontal scaling possible — any instance can serve any request because the session lives in Redis, not in local memory. Carts, feature flags and short-lived tokens follow the same pattern.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/sessions/">Django — sessions</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/hashes/">Redis — hashes</a> — the right type for session data</li>
+            <li><a href="https://12factor.net/processes">Twelve-Factor — stateless processes</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Move a Django session backend to Redis and run two app instances behind a proxy.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — the session layer this replaces</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Queues &amp; pub/sub</h3>
+      <p>Two different tools. Lists give a durable work queue consumed by one worker; pub/sub is fire-and-forget broadcast with no persistence — a subscriber that is offline simply misses the message. Streams sit between them with acknowledgement and replay.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/interact/pubsub/">Redis — pub/sub</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/streams/">Redis — streams</a></li>
+            <li><a href="https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/redis.html">Celery — Redis as broker</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why pub/sub is the wrong choice for a job that must not be lost.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — a queue you wrote yourself</li>
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Celery on Redis in production</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Distributed locks</h3>
+      <p>One instance at a time across many processes — <code>SET key val NX EX 30</code> acquires, a matching random value proves ownership on release. Essential for "only one scheduler runs" and genuinely subtle: a lock that expires mid-work is worse than no lock.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/distributed-locks/">Redis — distributed locks</a></li>
+            <li><a href="https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html">Kleppmann — how to do distributed locking</a> — read the criticism too</li>
+            <li><a href="conc-threading.html">Your Concurrency track</a> — locks one level down</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Stop a scheduled Celery job from ever running twice with a Redis lock.</li>
+            <li>Explain what breaks if the work outlasts the lock TTL.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="redis-datatypes.html">← Data Structures</a>    <a href="redis-production.html">Production →</a>    <a href="misc-redis.html">Command reference</a>    <a href="redis.html">All Redis tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="redis.html">← Redis</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

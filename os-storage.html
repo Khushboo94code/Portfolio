@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Files, Storage & I/O — Operating Systems — Khushboo</title>
+<meta name="description" content="The fourth job — turning a spinning or flash device into named files you can open.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html" class="here">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="os.html">← Operating Systems</a>
+  <h1>Files, Storage &amp; I/O</h1>
+  <p>The fourth job — turning a spinning or flash device into named files you can open.</p>
+
+  <div class="pillnav"><a href="os-foundations.html">Foundations</a> <a href="os-processes.html">Processes &amp; Scheduling</a> <a href="os-memory.html">Memory Management</a> <a href="os-storage.html" style="border-color:var(--accent);color:var(--accent);">Files, Storage &amp; I/O</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="storage">
+  <h2>Files, Storage &amp; I/O <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Files, inodes &amp; directories</h3>
+      <p>A file’s name is not the file. The inode holds the metadata and block pointers; a directory is just a table mapping names to inode numbers. That is why a hard link costs nothing and why deleting a file with an open handle does not free the space.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man7/inode.7.html">inode(7)</a></li>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — files and directories</li>
+            <li><a href="https://en.wikipedia.org/wiki/Inode">Inode — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Create a hard link and a symlink to the same file; delete the original and explain both results.</li>
+            <li>Run <code>ls -i</code> and <code>stat</code> on a file and read every field.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>File descriptors &amp; redirection</h3>
+      <p>An open file is an integer index into a per-process table. 0, 1 and 2 are stdin, stdout and stderr — which is the whole mechanism behind shell redirection and pipes. Running out of them is the <code>EMFILE</code> error you have met.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man2/open.2.html">open(2)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man2/dup.2.html">dup(2)</a> — how redirection is implemented</li>
+            <li><a href="misc-errors.html">Error codes reference</a> — EMFILE, too many open files</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Check a running process’s open descriptors with <code>lsof -p</code>.</li>
+            <li>Explain what <code>2>&amp;1</code> does at the descriptor level.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>The page cache &amp; buffered I/O</h3>
+      <p>The kernel caches file contents in free RAM, which is why the second read of a file is instant and why "free memory" on Linux looks alarmingly low and is not a problem. It also means a write returns before the data is on disk — <code>fsync</code> is what actually guarantees durability.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — file system implementation</li>
+            <li><a href="https://man7.org/linux/man-pages/man2/fsync.2.html">fsync(2)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man1/free.1.html">free(1)</a> — read the buff/cache column properly</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Time reading a large file twice in a row and explain the difference.</li>
+            <li>Explain why a database calls fsync and your log file usually does not.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Disk scheduling &amp; SSDs</h3>
+      <p>FCFS, SSTF, SCAN and the elevator algorithm exist because seeking a spinning disk is expensive. On SSDs seek cost vanishes and different concerns appear — wear levelling, write amplification, and the fact that random reads are no longer catastrophic.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — hard disk drives, and flash-based SSDs</li>
+            <li><a href="https://en.wikipedia.org/wiki/Disk_scheduling">Disk scheduling — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Solid-state_drive">SSDs — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why the classic disk-scheduling algorithms matter less on an SSD.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Permissions, mounting &amp; filesystems</h3>
+      <p>The user/group/other permission bits, what the execute bit means on a directory, and how filesystems are mounted into one tree rather than given drive letters. ext4, XFS and the journal that lets a filesystem survive a power cut.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man1/chmod.1.html">chmod(1)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man8/mount.8.html">mount(8)</a></li>
+            <li><a href="misc-shell.html">Shell reference</a> — the commands for all of this</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Work out what <code>755</code> and <code>644</code> mean without looking them up.</li>
+            <li>Explain what the execute bit does on a directory.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="os-memory.html">← Memory Management</a>    <a href="os.html">All OS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="os.html">← Operating Systems</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

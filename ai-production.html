@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production & Evaluation — AI — Khushboo</title>
+<meta name="description" content="What separates a demo from something people rely on — cost, latency, reliability and proof that it works.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>Production &amp; Evaluation</h1>
+  <p>What separates a demo from something people rely on — cost, latency, reliability and proof that it works.</p>
+
+  <div class="pillnav"><a href="ai-providers.html">Providers &amp; Models</a> <a href="ai-llm-basics.html">LLM Basics</a> <a href="ai-rag.html">RAG</a> <a href="ai-agents.html">Agents &amp; Tool Use</a> <a href="ai-production.html" style="border-color:var(--accent);color:var(--accent);">Production &amp; Evaluation</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="prod">
+  <h2>Production &amp; Evaluation <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Provider routing &amp; fallback</h3>
+      <p>Depending on one provider means their outage is your outage, and their rate limit is your ceiling. A router in front of several — with a consistent interface and a fallback order — turns that into a degraded response instead of a failure.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM docs</a> — routing, fallbacks, cost tracking</li>
+            <li><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS — retries with jitter</a></li>
+            <li><a href="https://martinfowler.com/bliki/CircuitBreaker.html">Fowler — circuit breaker</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Kill your primary provider key and confirm the app degrades instead of erroring.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — LiteLLM fallback across OpenAI, Gemini, Claude and Ollama</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Running local models</h3>
+      <p>Ollama makes running Llama or Mistral locally genuinely easy, which matters for privacy, offline work and cost. The trade is quality and speed — and being able to swap cloud for local behind one config is a strong engineering signal.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://ollama.com/">Ollama</a></li>
+            <li><a href="https://github.com/ollama/ollama">Ollama — source &amp; model library</a></li>
+            <li><a href="https://huggingface.co/docs/transformers/index">HuggingFace Transformers</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run the same eval set against a cloud model and a local one; quantify the gap.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — one env var switches cloud to fully local</li>
+            <li><a href="https://github.com/Khushboo94code/oogway">oogway</a> — the same assistant lineage</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Cost &amp; latency</h3>
+      <p>Cost is tokens in plus tokens out, and latency is dominated by output length. The levers, in order: send less context, cache prompts, stream so time-to-first-token feels fast, and route simple requests to a cheaper model.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/build-with-claude/prompt-caching">Claude — prompt caching</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/latency-optimization">OpenAI — latency optimisation</a></li>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM</a> — per-request cost tracking</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Instrument one endpoint for tokens and cost per request, then cut it by 30%.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — streaming responses</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Evaluation &amp; regression testing</h3>
+      <p>Prompts are code without a test suite unless you build one. A golden set plus automated scoring turns "this feels better" into evidence, and catches the regression where fixing one case quietly breaks five others.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.ragas.io/en/stable/">Ragas</a> — retrieval and generation metrics</li>
+            <li><a href="https://docs.claude.com/en/docs/test-and-evaluate/eval-tool">Claude — evals</a></li>
+            <li><a href="https://github.com/openai/evals">OpenAI evals</a> — framework and examples</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a 50-case eval set and run it in CI on every prompt change.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Observability for LLM apps</h3>
+      <p>Standard metrics plus LLM-specific ones: tokens, cost, latency per stage, retrieval hit-rate, refusal and error rates. Tracing a full agent run — every prompt, tool call and result — is the only practical way to debug one.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://opentelemetry.io/docs/">OpenTelemetry docs</a></li>
+            <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE — monitoring</a></li>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM docs</a> — logging &amp; observability integrations</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Log every agent run as a trace you can replay, and use it to debug a real failure.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — the logging foundation</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="ai-agents.html">← Agents &amp; Tool Use</a>    <a href="ai.html">All AI tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

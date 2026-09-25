@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Providers &amp; Models — AI — Khushboo</title>
+<meta name="description" content="LLM providers and their model families, how a chat model is derived from a base model, open versus closed weights, and choosing a tier.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>Providers &amp; Models</h1>
+  <p>Who makes the models, what the families are called, and how one is derived from another — the map I wanted when every article assumed I already knew the names.</p>
+
+  <div class="pillnav"><a href="ai-providers.html" style="border-color:var(--accent);color:var(--accent);">Providers &amp; Models</a> <a href="ai-llm-basics.html">LLM Basics</a> <a href="ai-rag.html">RAG</a> <a href="ai-agents.html">Agents &amp; Tool Use</a> <a href="ai-production.html">Production &amp; Evaluation</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="providers">
+  <h2>Providers &amp; Models <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>How a chat model is derived</h3>
+      <p>Every hosted assistant comes off the same line: pretrain a transformer on a huge corpus to get a <strong>base model</strong> that only continues text, instruction-tune it so it follows requests, then align it with human or AI feedback so it is helpful and refuses sensibly. The thing you call over an API is the end of that chain, never the base model.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 330" role="img" aria-label="How a chat model is derived">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <text class="lbl-s" x="60" y="20" style="text-anchor:start">THE COMMON PIPELINE — every provider below follows this shape</text>
+  <rect class="box" x="5" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl" x="70.0" y="62.0">Transformer</text>
+  <text class="lbl-s" x="70.0" y="77.0">architecture, 2017</text>
+  <rect class="box" x="153" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl" x="218.0" y="62.0">Pretraining</text>
+  <text class="lbl-s" x="218.0" y="77.0">next-token, huge corpus</text>
+  <rect class="box-a" x="301" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl-a" x="366.0" y="62.0">Base model</text>
+  <text class="lbl-s" x="366.0" y="77.0">raw completion</text>
+  <rect class="box" x="449" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl" x="514.0" y="62.0">Instruction tuning</text>
+  <text class="lbl-s" x="514.0" y="77.0">learns to follow</text>
+  <rect class="box" x="597" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl" x="662.0" y="62.0">Alignment</text>
+  <text class="lbl-s" x="662.0" y="77.0">RLHF / RLAIF</text>
+  <rect class="box-a" x="745" y="36" width="130" height="54" rx="7"/>
+  <text class="lbl-a" x="810.0" y="62.0">Assistant</text>
+  <text class="lbl-s" x="810.0" y="77.0">what you call</text>
+  <line class="flow-line" x1="135" y1="63" x2="149" y2="63" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="283" y1="63" x2="297" y2="63" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="431" y1="63" x2="445" y2="63" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="579" y1="63" x2="593" y2="63" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="727" y1="63" x2="741" y2="63" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="440" y="118">one generation of a family is trained once, then sized into tiers</text>
+  <rect class="box-a" x="150" y="140" width="180" height="50" rx="7"/>
+  <text class="lbl-a" x="240.0" y="164.0">Large tier</text>
+  <text class="lbl-s" x="240.0" y="179.0">most capable, slowest</text>
+  <rect class="box" x="350" y="140" width="180" height="50" rx="7"/>
+  <text class="lbl" x="440.0" y="164.0">Mid tier</text>
+  <text class="lbl-s" x="440.0" y="179.0">the usual default</text>
+  <rect class="box" x="550" y="140" width="180" height="50" rx="7"/>
+  <text class="lbl" x="640.0" y="164.0">Small tier</text>
+  <text class="lbl-s" x="640.0" y="179.0">fast and cheap</text>
+  <path class="flow-line-a" d="M810,90 L810,112 Q810,122 800,122 L250,122 Q240,122 240,132 L240,136" marker-end="url(#ah-a)"/>
+  <path class="flow-line" d="M440,122 L440,136" marker-end="url(#ah)"/>
+  <path class="flow-line" d="M640,122 L640,136" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="60" y="224" style="text-anchor:start">OPEN-WEIGHTS BRANCH — only when the provider publishes the weights</text>
+  <rect class="box" x="5" y="240" width="210" height="54" rx="7"/>
+  <text class="lbl" x="110.0" y="266.0">Open weights</text>
+  <text class="lbl-s" x="110.0" y="281.0">Llama, Mistral, Qwen</text>
+  <rect class="box" x="230" y="240" width="205" height="54" rx="7"/>
+  <text class="lbl" x="332.5" y="266.0">Community fine-tune</text>
+  <text class="lbl-s" x="332.5" y="281.0">domain-specific</text>
+  <rect class="box" x="455" y="240" width="185" height="54" rx="7"/>
+  <text class="lbl" x="547.5" y="266.0">Quantize</text>
+  <text class="lbl-s" x="547.5" y="281.0">GGUF, 4-bit</text>
+  <rect class="box-a" x="660" y="240" width="215" height="54" rx="7"/>
+  <text class="lbl-a" x="767.5" y="266.0">Runs on your laptop</text>
+  <text class="lbl-s" x="767.5" y="281.0">Ollama</text>
+  <line class="flow-line" x1="215" y1="267" x2="226" y2="267" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="435" y1="267" x2="451" y2="267" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="640" y1="267" x2="656" y2="267" marker-end="url(#ah)"/>
+</svg>
+        <figcaption>Every hosted assistant is the same pipeline ending in a different place. The open-weights branch is what makes running a model on your own machine possible at all — closed providers never expose the base model.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> — the architecture all of them share</li>
+            <li><a href="https://arxiv.org/abs/2203.02155">InstructGPT</a> — the instruction-tuning and RLHF step</li>
+            <li><a href="https://huggingface.co/docs/transformers/index">HuggingFace Transformers</a> — where open base models actually live</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain in two sentences why a base model is not usable as a chat assistant.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Providers &amp; their families</h3>
+      <p>Six names cover almost everything in production. What separates them for an engineer is not benchmark position — which changes monthly — but whether the weights are downloadable, what the context window is, and what a million tokens costs.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 300" role="img" aria-label="Providers and their model families">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <rect class="box-a" x="5" y="40" width="275" height="62" rx="7"/>
+  <text class="lbl-a" x="142.5" y="70.0">Anthropic</text>
+  <text class="lbl-s" x="142.5" y="85.0">Claude</text>
+  <rect class="box" x="300" y="40" width="275" height="62" rx="7"/>
+  <text class="lbl" x="437.5" y="70.0">OpenAI</text>
+  <text class="lbl-s" x="437.5" y="85.0">GPT · o-series</text>
+  <rect class="box" x="595" y="40" width="275" height="62" rx="7"/>
+  <text class="lbl" x="732.5" y="70.0">Google</text>
+  <text class="lbl-s" x="732.5" y="85.0">Gemini · Gemma</text>
+  <rect class="box" x="5" y="132" width="275" height="62" rx="7"/>
+  <text class="lbl" x="142.5" y="162.0">Meta</text>
+  <text class="lbl-s" x="142.5" y="177.0">Llama</text>
+  <rect class="box" x="300" y="132" width="275" height="62" rx="7"/>
+  <text class="lbl" x="437.5" y="162.0">Mistral AI</text>
+  <text class="lbl-s" x="437.5" y="177.0">Mistral · Mixtral</text>
+  <rect class="box" x="595" y="132" width="275" height="62" rx="7"/>
+  <text class="lbl" x="732.5" y="162.0">DeepSeek / Qwen</text>
+  <text class="lbl-s" x="732.5" y="177.0">open families</text>
+  <text class="lbl-s" x="440" y="22">PROVIDER → MODEL FAMILY</text>
+  <rect class="box-a" x="5" y="232" width="420" height="54" rx="7"/>
+  <text class="lbl-a" x="215.0" y="258.0">Closed weights</text>
+  <text class="lbl-s" x="215.0" y="273.0">API only — Claude, GPT, Gemini</text>
+  <rect class="box" x="455" y="232" width="420" height="54" rx="7"/>
+  <text class="lbl" x="665.0" y="258.0">Open weights</text>
+  <text class="lbl-s" x="665.0" y="273.0">downloadable — Llama, Mistral, Qwen, Gemma</text>
+</svg>
+        <figcaption>The split that actually changes your architecture is open versus closed weights — it decides whether running locally, fine-tuning, or self-hosting is even an option.</figcaption>
+      </figure>
+      <div class="refgroup" style="margin-top:16px;margin-bottom:0;">
+    <h3 style="font-size:15px;">Claude — current models</h3>
+    <p class="note">Tiers run Fable (most capable) → Opus → Sonnet → Haiku (fastest, cheapest). Prices are per million tokens on the first-party API and change — check the docs before quoting them.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Model</th><th>Model ID</th><th>Context</th><th>In / Out $per 1M</th></tr></thead>
+        <tbody>
+        <tr><td>Claude Fable 5.1</td><td><code>claude-fable-5-1</code></td><td>1M</td><td>$10 / $50</td></tr>
+        <tr><td>Claude Fable 5</td><td><code>claude-fable-5</code></td><td>1M</td><td>$10 / $50</td></tr>
+        <tr><td>Claude Opus 5</td><td><code>claude-opus-5</code></td><td>1M</td><td>$5 / $25</td></tr>
+        <tr><td>Claude Opus 4.8</td><td><code>claude-opus-4-8</code></td><td>1M</td><td>$5 / $25</td></tr>
+        <tr><td>Claude Opus 4.7</td><td><code>claude-opus-4-7</code></td><td>1M</td><td>$5 / $25</td></tr>
+        <tr><td>Claude Opus 4.6</td><td><code>claude-opus-4-6</code></td><td>1M</td><td>$5 / $25</td></tr>
+        <tr><td>Claude Sonnet 5</td><td><code>claude-sonnet-5</code></td><td>1M</td><td>$2 / $10</td></tr>
+        <tr><td>Claude Sonnet 4.6</td><td><code>claude-sonnet-4-6</code></td><td>1M</td><td>$3 / $15</td></tr>
+        <tr><td>Claude Haiku 4.5</td><td><code>claude-haiku-4-5</code></td><td>200K</td><td>$1 / $5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+      <div class="refgroup" style="margin-top:16px;margin-bottom:0;">
+    <h3 style="font-size:15px;">Other providers — family level</h3>
+    <p class="note">Listed by family rather than exact version, because version names and prices move faster than any page can track. Check each provider’s own model list before writing a model string into code.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Provider</th><th>Families</th><th>Weights</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr><td>Anthropic</td><td>Claude — Fable, Opus, Sonnet, Haiku</td><td>Closed</td><td>Tiered by capability; 1M context on current models</td></tr>
+        <tr><td>OpenAI</td><td>GPT series, o-series reasoning models</td><td>Closed</td><td>Reasoning models trade latency for harder problems</td></tr>
+        <tr><td>Google</td><td>Gemini (Pro / Flash tiers)</td><td>Closed</td><td>Gemma is their open-weights line</td></tr>
+        <tr><td>Meta</td><td>Llama</td><td><strong>Open</strong></td><td>The base most local models and fine-tunes derive from</td></tr>
+        <tr><td>Mistral AI</td><td>Mistral, Mixtral</td><td><strong>Open</strong> (most)</td><td>Mixtral is mixture-of-experts — fewer active parameters per token</td></tr>
+        <tr><td>DeepSeek</td><td>DeepSeek V / R series</td><td><strong>Open</strong></td><td>Strong reasoning models at low cost</td></tr>
+        <tr><td>Alibaba</td><td>Qwen</td><td><strong>Open</strong></td><td>Wide size range, strong multilingual</td></tr>
+        <tr><td>Meta / Google / Mistral via Ollama</td><td>whatever you pull</td><td><strong>Open</strong></td><td>Quantized GGUF builds that run on a laptop</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/about-claude/models/overview">Claude — model overview</a></li>
+            <li><a href="https://huggingface.co/models">HuggingFace model hub</a> — every open family, downloadable</li>
+            <li><a href="https://ollama.com/library">Ollama library</a> — the open models you can run locally</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>For one real feature you have built, pick a provider and tier and write down the reason.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — OpenAI, Gemini, Claude and Llama behind one interface</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Open vs closed weights</h3>
+      <p>Closed models are an API — you get capability and no control. Open weights you can download, fine-tune, quantize and run on your own hardware, which is what makes privacy, offline use and per-token-free inference possible at all. The trade is that you now own the serving, the GPUs and the quality gap.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://ollama.com/">Ollama</a> — the simplest way to run open weights</li>
+            <li><a href="https://huggingface.co/docs/transformers/index">HuggingFace Transformers</a></li>
+            <li><a href="https://github.com/ollama/ollama">Ollama — source and model library</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run the same prompt against a cloud model and a local one; note quality, latency and cost.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — one env var switches cloud for fully local Llama via Ollama</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Choosing a tier</h3>
+      <p>Within a family the tiers exist so you do not pay frontier prices for simple work. The practical rule: start on the most capable model to prove the task is possible at all, then step down tier by tier while an eval set tells you quality still holds. Most production traffic ends up on a mid tier.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/about-claude/models/choosing-a-model">Claude — choosing a model</a></li>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM</a> — route different requests to different tiers</li>
+            <li><a href="https://docs.ragas.io/en/stable/">Ragas</a> — the eval half of the decision</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take one working feature, drop it a tier, and measure whether anything actually got worse.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Staying provider-agnostic</h3>
+      <p>Model names change, prices change, and a provider you depend on will have an outage. Keeping one interface in front of them — a router with a fallback order — means a model change is configuration rather than a refactor, and an outage is a slower answer instead of an error page.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.litellm.ai/docs/">LiteLLM</a> — one interface over many providers</li>
+            <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a> — standardising tool access across models</li>
+            <li><a href="https://martinfowler.com/bliki/CircuitBreaker.html">Fowler — circuit breaker</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Swap your app’s primary provider without touching anything but configuration.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — LiteLLM router with fallback across four providers</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="ai-llm-basics.html">LLM Basics →</a>
+    <a href="ai.html">All AI tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo ·
+    Model names and prices move — verify against each provider’s docs before relying on them.
+  </div>
+</footer>
+
+</body>
+</html>

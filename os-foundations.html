@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundations — Operating Systems — Khushboo</title>
+<meta name="description" content="What an operating system is actually for, and the boundary that makes it work.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html" class="here">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="os.html">← Operating Systems</a>
+  <h1>Foundations</h1>
+  <p>What an operating system is actually for, and the boundary that makes it work.</p>
+
+  <div class="pillnav"><a href="os-foundations.html" style="border-color:var(--accent);color:var(--accent);">Foundations</a> <a href="os-processes.html">Processes &amp; Scheduling</a> <a href="os-memory.html">Memory Management</a> <a href="os-storage.html">Files, Storage &amp; I/O</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="foundations">
+  <h2>Foundations <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>What an OS does</h3>
+      <p>It manages hardware so your program does not have to, and shares it safely between processes that do not know about each other. Four jobs: processes, memory, files and devices — every OS topic is one of those four.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">Operating Systems: Three Easy Pieces</a> — free, and the best OS book there is</li>
+            <li><a href="https://en.wikipedia.org/wiki/Operating_system">Operating system — Wikipedia</a></li>
+            <li><a href="https://www.kernel.org/doc/html/latest/">The Linux kernel documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Name which of the four jobs is involved when you open a file and read one line.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Kernel space vs user space</h3>
+      <p>The kernel runs privileged and can touch hardware; your code runs unprivileged and cannot. That single boundary is why one buggy program cannot crash the machine or read another process’s memory — and why crossing it costs something.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/#book-chapters">OSTEP — virtualization chapters</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Protection_ring">Protection rings — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/User_space_and_kernel_space">User space and kernel space</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why a segmentation fault kills your process but not the machine.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>System calls</h3>
+      <p>The doorway between the two worlds. <code>open</code>, <code>read</code>, <code>write</code>, <code>fork</code>, <code>execve</code> — every interesting thing your program does eventually becomes one of these. A system call is far more expensive than a function call, which is why buffering exists.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man2/syscalls.2.html">syscalls(2) — the complete list</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man1/strace.1.html">strace(1)</a> — watch them happen live</li>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — the process API chapters</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>strace python -c "print(1)"</code> and count how many system calls that takes.</li>
+            <li>Find the <code>write</code> call that actually prints your output.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — logging bottoms out in write() system calls</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Interrupts, traps &amp; exceptions</h3>
+      <p>How the CPU gets told something happened. A hardware interrupt is a device saying "I am ready"; a trap is your program deliberately calling into the kernel; an exception is something going wrong. All three switch to kernel mode and run a handler.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Interrupt">Interrupts — Wikipedia</a></li>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — limited direct execution</li>
+            <li><a href="https://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a> — the process-level version of the same idea</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain what happens between pressing Ctrl-C and your Python script exiting.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Boot, init &amp; the process tree</h3>
+      <p>From firmware to a login prompt: the bootloader loads the kernel, the kernel starts <code>init</code> (systemd on most Linux), and everything else descends from it. Every process except the first has a parent, which is what makes the process tree a tree.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man1/systemd.1.html">systemd(1)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man5/proc.5.html">proc(5)</a> — the kernel exposed as files</li>
+            <li><a href="https://en.wikipedia.org/wiki/Booting">Booting — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>pstree</code> and trace your shell back to PID 1.</li>
+            <li>Read <code>/proc/self/status</code> and identify five fields.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="os-processes.html">Processes &amp; Scheduling →</a>    <a href="os.html">All OS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="os.html">← Operating Systems</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

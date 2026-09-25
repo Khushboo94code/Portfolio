@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG — AI — Khushboo</title>
+<meta name="description" content="Retrieval-Augmented Generation — giving the model the right facts at answer time so it can cite instead of guess. The track you have shipped.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>RAG</h1>
+  <p>Retrieval-Augmented Generation — giving the model the right facts at answer time so it can cite instead of guess. The track you have shipped.</p>
+
+  <div class="pillnav"><a href="ai-providers.html">Providers &amp; Models</a> <a href="ai-llm-basics.html">LLM Basics</a> <a href="ai-rag.html" style="border-color:var(--accent);color:var(--accent);">RAG</a> <a href="ai-agents.html">Agents &amp; Tool Use</a> <a href="ai-production.html">Production &amp; Evaluation</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="rag">
+  <h2>RAG <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>The RAG pipeline end to end</h3>
+      <p>Two halves: an offline ingest path that chunks and embeds documents into a vector store, and an online query path that embeds the question, retrieves the closest chunks, and puts them in the prompt. Both sides must use the same embedding model.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 285" role="img" aria-label="RAG pipeline: ingest and query">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <text class="lbl-s" x="60" y="22" style="text-anchor:start">INGEST  ·  offline, once per document</text>
+  <rect class="box" x="20" y="34" width="130" height="52" rx="7"/>
+  <text class="lbl" x="85.0" y="64.0">Documents</text>
+  <rect class="box" x="180" y="34" width="130" height="52" rx="7"/>
+  <text class="lbl" x="245.0" y="59.0">Chunk</text>
+  <text class="lbl-s" x="245.0" y="74.0">split + overlap</text>
+  <rect class="box" x="340" y="34" width="130" height="52" rx="7"/>
+  <text class="lbl" x="405.0" y="59.0">Embed</text>
+  <text class="lbl-s" x="405.0" y="74.0">model → vector</text>
+  <rect class="box-a" x="500" y="34" width="130" height="52" rx="7"/>
+  <text class="lbl-a" x="565.0" y="59.0">Vector store</text>
+  <text class="lbl-s" x="565.0" y="74.0">pgvector</text>
+  <line class="flow-line" x1="150" y1="60" x2="176" y2="60" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="310" y1="60" x2="336" y2="60" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="470" y1="60" x2="496" y2="60" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="60" y="140" style="text-anchor:start">QUERY  ·  every request</text>
+  <rect class="box" x="5" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl" x="65.0" y="182.0">Question</text>
+  <rect class="box" x="130" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl" x="190.0" y="177.0">Embed</text>
+  <text class="lbl-s" x="190.0" y="192.0">same model</text>
+  <rect class="box-a" x="255" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl-a" x="315.0" y="177.0">Retrieve</text>
+  <text class="lbl-s" x="315.0" y="192.0">top-k, ANN</text>
+  <rect class="box" x="380" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl" x="440.0" y="177.0">Rerank</text>
+  <text class="lbl-s" x="440.0" y="192.0">optional</text>
+  <rect class="box" x="505" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl" x="565.0" y="177.0">Prompt</text>
+  <text class="lbl-s" x="565.0" y="192.0">context + question</text>
+  <rect class="box" x="630" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl" x="690.0" y="177.0">LLM</text>
+  <text class="lbl-s" x="690.0" y="192.0">generate</text>
+  <rect class="box-a" x="755" y="152" width="120" height="52" rx="7"/>
+  <text class="lbl-a" x="815.0" y="177.0">Answer</text>
+  <text class="lbl-s" x="815.0" y="192.0">with citations</text>
+  <line class="flow-line" x1="125" y1="178" x2="126" y2="178" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="250" y1="178" x2="251" y2="178" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="375" y1="178" x2="376" y2="178" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="500" y1="178" x2="501" y2="178" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="625" y1="178" x2="626" y2="178" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="750" y1="178" x2="751" y2="178" marker-end="url(#ah)"/>
+  <path class="flow-line-a" d="M565,86 L565,112 Q565,122 555,122 L325,122 Q315,122 315,132 L315,148" marker-end="url(#ah-a)"/>
+  <text class="lbl-s" x="440" y="112">same embedding model both sides — this is non-negotiable</text>
+  <text class="lbl-s" x="440" y="228">the retrieved chunks are what make the answer groundable and citable</text>
+</svg>
+        <figcaption>Ingest runs once per document; query runs per request. The retrieved chunks are what let the answer carry citations — the part that turns a plausible answer into a checkable one.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://arxiv.org/abs/2005.11401">RAG — the original paper</a></li>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector</a></li>
+            <li><a href="https://docs.llamaindex.ai/en/stable/">LlamaIndex docs</a> — pipeline patterns worth borrowing</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a minimal RAG over 20 of your own documents with no framework.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — the full pipeline, cloud or local</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Chunking strategy</h3>
+      <p>The most under-rated decision in RAG. Chunks too large bury the answer in noise and waste context; too small and they lose the context that makes them meaningful. Overlap preserves meaning across boundaries, and splitting on document structure beats splitting on character count.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/">LlamaIndex — node parsers &amp; chunking</a></li>
+            <li><a href="https://python.langchain.com/docs/concepts/text_splitters/">LangChain — text splitters</a></li>
+            <li><a href="https://arxiv.org/abs/2005.11401">RAG paper</a> — the retrieval unit matters</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Try three chunk sizes on the same corpus and measure retrieval hit-rate for each.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — chunking over podcast transcripts</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Vector search &amp; ANN indexes</h3>
+      <p>Exact nearest-neighbour search is O(n) and fine until it is not. Approximate indexes — HNSW, IVFFlat — trade a little recall for a large speed win, and each has parameters that move that trade. Keeping vectors in Postgres avoids running a second database.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector — HNSW &amp; IVFFlat indexes</a></li>
+            <li><a href="https://www.pinecone.io/learn/series/faiss/">Pinecone — vector index explainers</a></li>
+            <li><a href="https://github.com/facebookresearch/faiss">FAISS</a> — the reference implementation</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Compare exact vs HNSW search on 100k vectors — measure latency and recall.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — ANN retrieval in Postgres</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Hybrid search &amp; reranking</h3>
+      <p>Embeddings miss exact matches — product codes, names, rare terms — which keyword search nails. Hybrid retrieval runs both and fuses the results; a reranker then scores the merged candidates properly. This is usually the largest single quality win available.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/textsearch.html">PostgreSQL full-text search</a></li>
+            <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB — retrieval &amp; reranking models</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25 — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Find a query your vector search fails and keyword search gets right. Then fuse them.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — retrieval layer to extend with hybrid</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Grounding, citations &amp; hallucination</h3>
+      <p>Retrieval alone does not stop a model inventing things — the prompt must instruct it to answer only from the provided context and to say when the context is insufficient. Returning citations is what makes an answer auditable rather than merely confident.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview">Claude — prompt engineering</a></li>
+            <li><a href="https://arxiv.org/abs/2305.14627">Enabling LLMs to generate citations</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/structured-outputs">OpenAI — structured outputs</a> — force a citation field</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Ask your assistant something not in the corpus and confirm it declines rather than invents.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — grounded, cited answers</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Evaluating a RAG system</h3>
+      <p>You cannot improve what you do not measure, and "it looks good" is not measurement. Evaluate the two stages separately: retrieval by hit-rate and MRR against a golden set, generation by groundedness and answer correctness. Otherwise you cannot tell which half is broken.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.ragas.io/en/stable/">Ragas</a> — RAG evaluation framework</li>
+            <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB</a> — how retrieval is benchmarked</li>
+            <li><a href="https://docs.claude.com/en/docs/test-and-evaluate/eval-tool">Claude — evaluation tooling</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a 30-question golden set for your corpus and measure retrieval hit-rate.</li>
+            <li>Change one thing (chunk size) and prove whether it helped.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="ai-llm-basics.html">← LLM Basics</a>    <a href="ai-agents.html">Agents &amp; Tool Use →</a>    <a href="ai.html">All AI tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

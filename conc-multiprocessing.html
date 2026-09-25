@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multiprocessing — Concurrency — Khushboo</title>
+<meta name="description" content="Real parallelism, at the cost of isolation — nothing is shared unless you arrange it.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html" class="here">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="concurrency.html">← Concurrency</a>
+  <h1>Multiprocessing</h1>
+  <p>Real parallelism, at the cost of isolation — nothing is shared unless you arrange it.</p>
+
+  <div class="pillnav"><a href="conc-foundations.html">Foundations</a> <a href="conc-threading.html">Threading</a> <a href="conc-multiprocessing.html" style="border-color:var(--accent);color:var(--accent);">Multiprocessing</a> <a href="conc-async.html">Async &amp; the Event Loop</a> <a href="conc-patterns.html">Patterns &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="multiprocessing">
+  <h2>Multiprocessing <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Processes &amp; process pools</h3>
+      <p>The way past the GIL. <code>ProcessPoolExecutor</code> mirrors the thread pool API, so switching between them is often one word — but every argument and return value has to cross a process boundary, which is not free.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor">ProcessPoolExecutor</a></li>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a></li>
+            <li><a href="https://superfastpython.com/processpoolexecutor-in-python/">Super Fast Python — ProcessPoolExecutor</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take a CPU-bound function and parallelise it across cores; measure the real speedup.</li>
+            <li>Find the task size where process overhead stops being worth it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Pickling &amp; what can cross a boundary</h3>
+      <p>Arguments and results are serialised with pickle, so lambdas, open sockets, database connections and local closures cannot travel. Most confusing multiprocessing errors are really pickling errors — and large arguments make the copy itself the bottleneck.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/pickle.html">pickle</a></li>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html#programming-guidelines">multiprocessing — programming guidelines</a></li>
+            <li><a href="https://superfastpython.com/multiprocessing-pool-pickle/">Pickling errors in multiprocessing</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Try to send a lambda to a process pool, read the error, and fix it properly.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>IPC — queues, pipes &amp; shared memory</h3>
+      <p>Processes talk through <code>multiprocessing.Queue</code>, pipes, or genuinely shared memory for large arrays. Shared memory is fastest and reintroduces every synchronisation problem isolation had removed — use it only when copying is measurably the bottleneck.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html#exchanging-objects-between-processes">multiprocessing — exchanging objects</a></li>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.shared_memory.html">shared_memory</a></li>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html#sharing-state-between-processes">multiprocessing — sharing state</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Pass 100 MB between processes by queue and by shared memory; compare the timings.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — the queue-based half of this</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>fork vs spawn</h3>
+      <p>Start methods differ by platform and change behaviour: <code>fork</code> copies the parent process and is fast but unsafe alongside threads; <code>spawn</code> starts fresh and re-imports your module, which is why multiprocessing code needs the <code>if __name__ == "__main__"</code> guard.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods">multiprocessing — start methods</a></li>
+            <li><a href="https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods">spawn and forkserver</a></li>
+            <li><a href="https://superfastpython.com/multiprocessing-start-method/">Start methods explained</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run the same script under fork and spawn and explain the difference in behaviour.</li>
+            <li>Remove the <code>__main__</code> guard on macOS and read what happens.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="conc-threading.html">← Threading</a>    <a href="conc-async.html">Async &amp; the Event Loop →</a>    <a href="concurrency.html">All Concurrency tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="concurrency.html">← Concurrency</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

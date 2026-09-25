@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundations — Networking — Khushboo</title>
+<meta name="description" content="The layers and addressing scheme everything else assumes — OSI and TCP/IP, IP and subnetting, routing, DNS.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+       <li class="done">   green dot  — revised
+       <li class="doing">  amber dot  — learning now
+       <li>                grey dot   — not started
+     Copy any <li> to add a topic; keep the <h2> count and the
+     progress bar on networking.html in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html" class="here">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="networking.html">← Networking</a>
+  <h1>Foundations</h1>
+  <p>The layers and addressing scheme everything else assumes — OSI and TCP/IP, IP and subnetting, routing, DNS.</p>
+
+  <div class="pillnav"><a href="net-foundations.html" style="border-color:var(--accent);color:var(--accent);">Foundations</a> <a href="net-transport.html">Transport Layer</a> <a href="net-web.html">Application Layer &amp; Web</a> <a href="net-infrastructure.html">Infrastructure &amp; Security</a> <a href="net-debugging.html">Debugging &amp; Performance</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="foundations">
+  <h2>Foundations <span class="count">— 5 topics</span></h2>
+  <p class="section-intro">The layers and addressing scheme everything else assumes. Worth getting solid before touching
+    the protocol details.</p>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>OSI &amp; TCP/IP models</h3>
+      <p>
+        The layering that lets a protocol at one level ignore the one below it. Seven OSI layers in
+        theory, four TCP/IP layers in practice — what matters is being able to place any technology
+        on the stack and say what it does and doesn't guarantee.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.destroyallsoftware.com/compendium/network-protocols">Network Protocols — Destroy All Software</a> — builds the whole stack from the wire up</li>
+            <li><a href="https://en.wikipedia.org/wiki/OSI_model">OSI model — Wikipedia</a> — the layer-by-layer reference</li>
+            <li><a href="https://www.youtube.com/@hnasr">Hussein Nasser (YouTube)</a> — the best protocol explanations available free</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take one HTTPS request and name what happens at every layer, from Ethernet frame to response body.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — this is theory that shows up inside everything else.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>IP addressing &amp; subnetting</h3>
+      <p>
+        IPv4 versus IPv6, CIDR notation, and splitting an address space into subnets. Directly
+        practical the moment you touch cloud infrastructure — a VPC, a security group and a subnet
+        mask are the same idea wearing different names.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">AWS VPC — user guide</a> — subnetting as you'll actually meet it</li>
+            <li><a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR — Wikipedia</a></li>
+            <li><a href="https://beej.us/guide/bgnet/html/">Beej's Guide to Network Programming</a> — addresses and sockets from first principles</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/validate-ip-address/">Validate IP Address</a></li>
+            <li><a href="https://leetcode.com/problems/restore-ip-addresses/">Restore IP Addresses</a></li>
+            <li><a href="https://leetcode.com/problems/defanging-an-ip-address/">Defanging an IP Address</a></li>
+            <li><a href="https://leetcode.com/problems/ip-to-cidr/">IP to CIDR</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Switching, routing &amp; NAT</h3>
+      <p>
+        How a packet finds its way: switches forwarding by MAC within a network, routers forwarding
+        by IP between them, and NAT letting many private addresses share one public one. NAT is why
+        your laptop can reach a server but the server can't reach back.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Routing">Routing — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Network_address_translation">NAT — Wikipedia</a></li>
+            <li><a href="https://www.destroyallsoftware.com/compendium/network-protocols">Network Protocols</a> — the routing chapters</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>traceroute</code> to a server abroad and explain every hop that responds.</li>
+            <li>Find your private and public IP and explain why they differ.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>DNS</h3>
+      <p>
+        Turning a name into an address: recursive versus authoritative resolvers, the record types
+        (A, AAAA, CNAME, MX, TXT), and TTL-driven caching at every level. DNS caching and propagation
+        delay are behind a large share of "it works on my machine" incidents.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/DNS">MDN — DNS</a></li>
+            <li><a href="https://messwithdns.net/">Mess with DNS</a> — a live playground for breaking and fixing records</li>
+            <li><a href="https://implement-dns.wizardzines.com/">Implement DNS in a Weekend</a> — build a resolver yourself</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Use <code>dig +trace</code> on a domain and follow resolution from the root servers down.</li>
+            <li>Explain why a TTL change should be made <em>before</em> a migration, not during it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a small resolver is a good weekend repo.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>DHCP &amp; ARP</h3>
+      <p>
+        The two protocols that quietly make a local network work: DHCP hands out addresses when a
+        device joins, ARP maps an IP to the MAC address on the wire. Mostly invisible until an ARP
+        cache goes stale or a lease expires at the wrong moment.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol">DHCP — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Address_Resolution_Protocol">ARP — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>arp -a</code> and match entries to devices on your network.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="net-transport.html">Transport Layer →</a>    <a href="networking.html">All Networking tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="networking.html">← Networking</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

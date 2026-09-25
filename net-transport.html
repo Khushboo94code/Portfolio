@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transport Layer — Networking — Khushboo</title>
+<meta name="description" content="TCP and UDP — where most interview questions land, and where most real performance problems live.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+       <li class="done">   green dot  — revised
+       <li class="doing">  amber dot  — learning now
+       <li>                grey dot   — not started
+     Copy any <li> to add a topic; keep the <h2> count and the
+     progress bar on networking.html in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html" class="here">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="networking.html">← Networking</a>
+  <h1>Transport Layer</h1>
+  <p>TCP and UDP — where most interview questions land, and where most real performance problems live.</p>
+
+  <div class="pillnav"><a href="net-foundations.html">Foundations</a> <a href="net-transport.html" style="border-color:var(--accent);color:var(--accent);">Transport Layer</a> <a href="net-web.html">Application Layer &amp; Web</a> <a href="net-infrastructure.html">Infrastructure &amp; Security</a> <a href="net-debugging.html">Debugging &amp; Performance</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="transport">
+  <h2>Transport Layer <span class="count">— 4 topics</span></h2>
+  <p class="section-intro">TCP and UDP are where most interview questions actually land — and where most real performance
+    problems live.</p>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>TCP — handshake &amp; reliability</h3>
+      <p>
+        The three-way handshake, sequence and acknowledgement numbers, retransmission, and the
+        four-way close with TIME_WAIT. Reliability isn't free: every guarantee TCP gives you costs a
+        round trip, which is why connection reuse matters so much.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/building-blocks-of-tcp/">High Performance Browser Networking — Building Blocks of TCP</a></li>
+            <li><a href="https://www.youtube.com/@hnasr">Hussein Nasser (YouTube)</a> — TCP internals series</li>
+            <li><a href="https://beej.us/guide/bgnet/html/">Beej's Guide</a> — sockets, the API view of TCP</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Capture a handshake in Wireshark and identify SYN, SYN-ACK and ACK.</li>
+            <li>Explain what TIME_WAIT is for and why a busy server accumulates them.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a socket echo server would anchor this.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Flow &amp; congestion control</h3>
+      <p>
+        Two different problems people conflate: flow control stops a fast sender overwhelming a slow
+        receiver (the window), congestion control stops it overwhelming the network (slow start,
+        AIMD). Bandwidth-delay product explains why a fat, distant link can still feel slow.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/building-blocks-of-tcp/">HPBN — slow start, congestion avoidance, BDP</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/TCP_congestion_control">TCP congestion control — Wikipedia</a></li>
+            <li><a href="https://www.destroyallsoftware.com/compendium/network-protocols">Network Protocols</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Compute the bandwidth-delay product for a 100 Mbps link at 150 ms RTT, and say what window size it needs.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>UDP &amp; when to use it</h3>
+      <p>
+        No handshake, no ordering, no retransmission — and that's the point. The right choice when
+        late data is worse than lost data: DNS, video calls, games, and QUIC, which rebuilds
+        reliability on top of UDP in user space to escape TCP's constraints.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/building-blocks-of-udp/">HPBN — Building Blocks of UDP</a></li>
+            <li><a href="https://quic.xargs.org/">The Illustrated QUIC Connection</a> — byte by byte</li>
+            <li><a href="https://www.youtube.com/@hnasr">Hussein Nasser</a> — UDP vs TCP trade-offs</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a UDP sender and receiver, drop packets deliberately, and observe what the application has to handle.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Ports, sockets &amp; connection state</h3>
+      <p>
+        A connection is identified by the four-tuple of source IP, source port, destination IP and
+        destination port — which is why one server port can hold thousands of connections. Knowing
+        the socket states explains ephemeral port exhaustion and "address already in use".
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://beej.us/guide/bgnet/html/">Beej's Guide to Network Programming</a> — the definitive sockets tutorial</li>
+            <li><a href="https://docs.python.org/3/library/socket.html">Python socket module</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Protocol_operation">TCP state diagram</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>ss -tan</code> (or <code>netstat -an</code>) on a running server and identify every connection state you see.</li>
+            <li>Build a socket server that handles two clients at once — with threads, then with <code>select</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Multithreading">Multithreading</a> — the concurrency model a socket server needs</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="net-foundations.html">← Foundations</a>    <a href="net-web.html">Application Layer &amp; Web →</a>    <a href="networking.html">All Networking tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="networking.html">← Networking</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

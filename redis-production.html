@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production — Redis — Khushboo</title>
+<meta name="description" content="What changes when it holds real traffic — memory is finite, and a cache that falls over takes the database with it.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html" class="here">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="redis.html">← Redis</a>
+  <h1>Production</h1>
+  <p>What changes when it holds real traffic — memory is finite, and a cache that falls over takes the database with it.</p>
+
+  <div class="pillnav"><a href="redis-fundamentals.html">Fundamentals</a> <a href="redis-datatypes.html">Data Structures</a> <a href="redis-patterns.html">Patterns</a> <a href="redis-production.html" style="border-color:var(--accent);color:var(--accent);">Production</a> <a href="misc-redis.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="production">
+  <h2>Production <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Memory &amp; eviction policies</h3>
+      <p>Redis lives in RAM, so <code>maxmemory</code> plus an eviction policy is not optional. <code>allkeys-lru</code> for a pure cache, <code>volatile-lru</code> when some keys must never be evicted, and <code>noeviction</code> — which starts refusing writes — when you are using it as a database.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/reference/eviction/">Redis — key eviction policies</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/">Redis — memory optimization</a></li>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a> — the policy, implemented</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Set maxmemory on a local instance, fill it, and watch the eviction policy act.</li>
+            <li>Decide the right policy for each Redis use in your projects.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — eviction is the part to add next</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Replication &amp; Sentinel</h3>
+      <p>A replica keeps a copy and serves reads; Sentinel watches the primary and promotes a replica when it fails. Replication is asynchronous, so a failover can lose the most recent writes — which is fine for a cache and not for a queue.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/replication/">Redis — replication</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/">Redis Sentinel</a></li>
+            <li><a href="hld.html">Your HLD track</a> — replication lag and failover theory</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain what a client sees during a Sentinel failover.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Redis Cluster &amp; sharding</h3>
+      <p>Beyond one machine’s memory, Cluster shards the keyspace across nodes by hash slot. The catch: multi-key operations only work when keys land on the same node, which is what hash tags are for — and why cluster changes how you design keys.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/">Redis Cluster — scaling</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Consistent_hashing">Consistent hashing — Wikipedia</a></li>
+            <li><a href="hld.html">Your HLD track</a> — partitioning and shard keys</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why <code>MGET</code> across two random keys can fail on a cluster.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Shrading-">Shrading-</a> — your own sharding experiment</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Monitoring &amp; slow commands</h3>
+      <p>The metrics that matter: hit rate, evicted keys, memory usage and connected clients. <code>SLOWLOG</code> catches commands that blocked the server, and because Redis is single-threaded, one slow command is everyone’s problem.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/commands/slowlog/">SLOWLOG</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/info/">INFO</a> — every metric worth alerting on</li>
+            <li><a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html">ElastiCache</a> — the managed version</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Read <code>INFO stats</code> on a running instance and compute your cache hit rate.</li>
+            <li>Find anything in SLOWLOG and explain why it was slow.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — where these metrics should land</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Security &amp; operations</h3>
+      <p>Default Redis has no password and binds to all interfaces, which is how instances end up mining cryptocurrency for strangers. Require authentication, bind to a private network, rename or disable dangerous commands, and never expose it to the internet.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/security/">Redis — security</a></li>
+            <li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/config/">Redis — configuration</a></li>
+            <li><a href="aws-networking.html">Your AWS track</a> — private subnets and security groups</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Check whether any Redis you run is reachable without a password.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="redis-patterns.html">← Patterns</a>    <a href="misc-redis.html">Command reference</a>    <a href="redis.html">All Redis tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="redis.html">← Redis</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

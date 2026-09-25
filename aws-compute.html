@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compute — AWS — Khushboo</title>
+<meta name="description" content="Four ways to run code, in increasing order of how much AWS manages for you.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html" class="here">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="aws.html">← AWS</a>
+  <h1>Compute</h1>
+  <p>Four ways to run code, in increasing order of how much AWS manages for you.</p>
+
+  <div class="pillnav"><a href="aws-foundations.html">Foundations</a> <a href="aws-compute.html" style="border-color:var(--accent);color:var(--accent);">Compute</a> <a href="aws-storage.html">Storage &amp; Data</a> <a href="aws-networking.html">Networking &amp; Delivery</a> <a href="aws-operations.html">Operations &amp; Architecture</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="compute">
+  <h2>Compute <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>EC2 — virtual machines</h3>
+      <p>A rented Linux box. You choose the instance family and size, manage the OS, and pay by the second. Still the right answer when you need full control or have something that does not containerise — and the baseline everything else is compared against.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">Amazon EC2 — user guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">EC2 — instance types</a></li>
+            <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">EC2 — key pairs &amp; SSH access</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Launch a t-family instance, deploy a Django app on it, then terminate it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Containers — ECS, Fargate &amp; EKS</h3>
+      <p>ECS is AWS’s own orchestrator; Fargate removes the servers underneath it; EKS is managed Kubernetes. For a small team Fargate is usually the sweet spot — you ship an image and never think about an instance again.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html">Amazon ECS — developer guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html">AWS Fargate</a></li>
+            <li><a href="https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html">Amazon EKS</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Push one of your Docker images to ECR and run it on Fargate.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — Dockerized and ready for this</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Lambda &amp; serverless</h3>
+      <p>Functions that run on demand and cost nothing when idle. Excellent for event-driven work — an S3 upload triggering a thumbnail job — and a poor fit for long-running or latency-critical paths because of cold starts and the execution time limit.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/welcome.html">AWS Lambda — developer guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-concepts.html">Lambda — concepts &amp; execution model</a></li>
+            <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html">Amazon SQS</a> — the usual trigger</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a Lambda that resizes an image whenever one lands in an S3 bucket.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Load balancing &amp; auto scaling</h3>
+      <p>An Application Load Balancer spreads HTTP traffic across healthy targets and terminates TLS; an auto scaling group adds and removes instances against a metric. Together they are what "scale out" actually means in practice.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html">Elastic Load Balancing</a> — ALB vs NLB</li>
+            <li><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">EC2 Auto Scaling</a></li>
+            <li><a href="net-infrastructure.html">Your Networking track</a> — L4 vs L7, the theory underneath</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put two instances behind an ALB, kill one, and watch the health check route around it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/loadbalancer">loadbalancer</a> — a round-robin balancer you wrote yourself</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="aws-foundations.html">← Foundations</a>    <a href="aws-storage.html">Storage &amp; Data →</a>    <a href="aws.html">All AWS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="aws.html">← AWS</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

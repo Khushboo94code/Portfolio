@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugging & Performance — Networking — Khushboo</title>
+<meta name="description" content="Latency versus bandwidth, the diagnostic toolkit, common failure modes and connection reuse.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+       <li class="done">   green dot  — revised
+       <li class="doing">  amber dot  — learning now
+       <li>                grey dot   — not started
+     Copy any <li> to add a topic; keep the <h2> count and the
+     progress bar on networking.html in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html" class="here">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="networking.html">← Networking</a>
+  <h1>Debugging &amp; Performance</h1>
+  <p>Latency versus bandwidth, the diagnostic toolkit, common failure modes and connection reuse.</p>
+
+  <div class="pillnav"><a href="net-foundations.html">Foundations</a> <a href="net-transport.html">Transport Layer</a> <a href="net-web.html">Application Layer &amp; Web</a> <a href="net-infrastructure.html">Infrastructure &amp; Security</a> <a href="net-debugging.html" style="border-color:var(--accent);color:var(--accent);">Debugging &amp; Performance</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="debugging">
+  <h2>Debugging &amp; Performance <span class="count">— 4 topics</span></h2>
+  <p class="section-intro">The part that actually gets used on the job — and the part most candidates can't demonstrate.</p>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>Latency, throughput &amp; RTT</h3>
+      <p>
+        Bandwidth is how much fits in the pipe; latency is how long one trip takes — and you can buy
+        more bandwidth but not less distance. Since every round trip costs RTT, reducing the
+        <em>number</em> of round trips beats making each one faster.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/primer-on-latency-and-bandwidth/">HPBN — primer on latency and bandwidth</a></li>
+            <li><a href="https://github.com/donnemartin/system-design-primer#latency-numbers-every-programmer-should-know">Latency numbers every programmer should know</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Network_delay">Network delay — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Measure RTT to servers on three continents and relate the numbers to physical distance.</li>
+            <li>Count the round trips in one cold page load: DNS, TCP, TLS, then the request itself.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Tooling — dig, curl, traceroute, tcpdump</h3>
+      <p>
+        The diagnostic kit: <code>dig</code> for DNS, <code>curl -v</code> for the full HTTP
+        exchange, <code>traceroute</code> for the path, <code>ss</code> for socket states, and
+        <code>tcpdump</code> or Wireshark when you need the packets themselves. Being fluent here is
+        a visible differentiator.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.wireshark.org/docs/wsug_html_chunked/">Wireshark User's Guide</a></li>
+            <li><a href="https://curl.se/docs/manpage.html">curl manual</a> — far more than <code>-v</code></li>
+            <li><a href="https://wizardzines.com/">Julia Evans' zines</a> — networking debugging made genuinely approachable</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Capture a full page load in Wireshark and find the DNS lookup, TCP handshake and TLS handshake.</li>
+            <li>Debug a failing request using only <code>curl -v</code> and <code>dig</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Common failure modes</h3>
+      <p>
+        The recurring ones: timeouts versus connection refused versus DNS failure — three different
+        causes people report identically; stale DNS after a cutover; MTU mismatch causing large
+        requests to hang; and connection pool exhaustion under load.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS — timeouts, retries and backoff with jitter</a></li>
+            <li><a href="https://sre.google/sre-book/addressing-cascading-failures/">Google SRE — addressing cascading failures</a></li>
+            <li><a href="https://wizardzines.com/">Julia Evans</a> — debugging guides</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain the difference between a connection timeout and a read timeout, and set both correctly in one HTTP client.</li>
+            <li>Find every external call in your code with no timeout set.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — provider fallback when an upstream call fails</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Connection reuse &amp; tuning</h3>
+      <p>
+        Since a new HTTPS connection costs DNS plus TCP plus TLS round trips, reusing connections is
+        usually the largest available win: keep-alive, HTTP client session objects, and database
+        connection pooling. Compression and payload size come after that.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://hpbn.co/optimizing-application-delivery/">HPBN — optimizing application delivery</a></li>
+            <li><a href="https://requests.readthedocs.io/en/latest/user/advanced/">Requests — session objects</a> — connection reuse in one line</li>
+            <li><a href="https://www.pgbouncer.org/">PgBouncer</a> — pooling at the database edge</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Benchmark 100 requests with a fresh connection each time versus one reused session.</li>
+            <li>Find any code making repeated HTTP calls without a session and fix it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/API-Integration-with-service-layer-">API-Integration-with-service-layer-</a> — where an HTTP client belongs</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="net-infrastructure.html">← Infrastructure &amp; Security</a>    <a href="networking.html">All Networking tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="networking.html">← Networking</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

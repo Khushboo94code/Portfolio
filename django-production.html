@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture & Production — Django — Khushboo</title>
+<meta name="description" content="Settings, service layers, middleware, security, deployment topology and what breaks first under load.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django Roadmap</a>
+  <h1>Architecture &amp; Production</h1>
+  <p>Settings, service layers, middleware, security, deployment topology and what breaks first under load.</p>
+
+  <div class="pillnav"><a href="django-core.html">Core Django</a> <a href="django-orm.html">ORM Depth</a> <a href="django-api.html">APIs with DRF</a> <a href="django-async.html">Async &amp; Caching</a> <a href="django-production.html" style="border-color:var(--accent);color:var(--accent);">Architecture &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="production">
+  <h2>Architecture &amp; Production <span class="count">— 6 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>Settings, environments &amp; secrets</h3>
+      <p>
+        Config as environment, not as committed code. Split settings per environment, read secrets
+        from the environment or a vault, and never let <code>DEBUG=True</code> or a real
+        <code>SECRET_KEY</code> reach a repository.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://12factor.net/config">The Twelve-Factor App — config</a></li>
+            <li><a href="https://django-environ.readthedocs.io/en/latest/">django-environ</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/deployment/checklist/">Django — deployment checklist</a> — run this before every launch</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>manage.py check --deploy</code> on your deployed apps and fix every warning.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — cloud or fully local behind one env var</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Project structure &amp; the service layer</h3>
+      <p>
+        Where business logic lives once views and models both get too fat. A service layer keeps
+        domain rules callable from a view, a Celery task, a management command or a test — which is
+        the same dependency-inversion argument as in LLD, applied to a Django project.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/HackSoftware/Django-Styleguide">HackSoft Django Styleguide</a> — the best-documented service-layer approach</li>
+            <li><a href="https://www.cosmicpython.com/book/preface.html">Architecture Patterns with Python</a> — free online</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/intro/reusable-apps/">Django — reusable apps</a> — where app boundaries should fall</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Pull the logic out of your fattest view into a service and call it from both a view and a test.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/API-Integration-with-service-layer-">API-Integration-with-service-layer-</a> — exactly this pattern</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Signals, middleware &amp; the request pipeline</h3>
+      <p>
+        Django's two extension points, and when each is a mistake. Middleware is genuinely
+        cross-cutting — request IDs, timing, auth. Signals are the observer pattern, and they make
+        control flow hard to follow; an explicit service call is usually better.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/middleware/">Django — middleware</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/signals/">Django — signals</a></li>
+            <li><a href="https://github.com/HackSoftware/Django-Styleguide">HackSoft Styleguide</a> — read their argument against signals</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write middleware that attaches a request ID and logs duration for every request.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers, the other half of request logging</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Security in Django</h3>
+      <p>
+        What the framework gives you free — CSRF protection, ORM parameterisation against SQL
+        injection, template autoescaping — and what it doesn't: CSP, secure cookie flags, HSTS, rate
+        limiting, and never trusting file uploads.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/security/">Django — security</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/middleware/#module-django.middleware.security">Django — SecurityMiddleware</a></li>
+            <li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Audit one deployed app against the OWASP top 10 and write down what you found.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — RBAC and pre-signed URL access control</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Deployment topology</h3>
+      <p>
+        The standard shape: Nginx terminating TLS and serving static files, Gunicorn running the
+        WSGI workers, Postgres and Redis behind them, all containerised. Static and media are the
+        part people get wrong — <code>collectstatic</code> to a CDN, media to object storage.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/gunicorn/">Django — deploying with Gunicorn</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/static-files/deployment/">Django — serving static files in production</a></li>
+            <li><a href="https://whitenoise.readthedocs.io/en/stable/">WhiteNoise</a> — static files without a separate server</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Containerise a Django app with Gunicorn and Nginx, and serve media from S3.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Gunicorn + Nginx + S3, deployed</li>
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — Dockerized end to end</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Scaling Django</h3>
+      <p>
+        Where a Django app actually breaks under load, and in what order: database connections first
+        (use a pooler), then N+1s, then synchronous third-party calls. Read replicas need a database
+        router; horizontal scaling needs the statelessness from the HLD track.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/multi-db/">Django — multiple databases &amp; routers</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/performance/">Django — performance and optimization</a></li>
+            <li><a href="https://www.pgbouncer.org/">PgBouncer</a> — connection pooling, the first real bottleneck</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Load-test one endpoint, find the first thing that breaks, and fix it. Repeat twice.</li>
+            <li>Route reads to a replica with a database router and handle the replication lag.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="django-async.html">← Async &amp; Caching</a>    <a href="django.html">All Django tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

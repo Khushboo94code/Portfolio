@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentals — Git &amp; GitHub — Khushboo</title>
+<meta name="description" content="The model underneath the commands. Once the three trees and &quot;a branch is just a pointer&quot; click, git stops being scary.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="git.html">← Git &amp; GitHub</a>
+  <h1>Fundamentals</h1>
+  <p>The model underneath the commands. Once the three trees and "a branch is just a pointer" click, git stops being scary.</p>
+
+  <div class="pillnav"><a href="git-basics.html" style="border-color:var(--accent);color:var(--accent);">Fundamentals</a> <a href="git-workflows.html">Branching &amp; Workflows</a> <a href="git-fixing.html">Fixing Mistakes</a> <a href="git-github.html">GitHub</a> <a href="git-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="basics">
+  <h2>Fundamentals <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>The three trees</h3>
+      <p>Working directory, staging area (index) and repository. Every command moves changes between these three — <code>add</code> working→staging, <code>commit</code> staging→repository, <code>restore</code> back again. Almost all git confusion is not knowing which tree a command touches.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified">Pro Git — Reset Demystified</a> — the clearest explanation of the three trees</li>
+            <li><a href="https://git-scm.com/book/en/v2">Pro Git</a> — free and complete</li>
+            <li><a href="https://learngitbranching.js.org/">Learn Git Branching</a> — interactive and genuinely good</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Draw the three trees and place <code>add</code>, <code>commit</code>, <code>reset</code> and <code>restore</code> on it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Commits, SHAs &amp; history</h3>
+      <p>A commit is an immutable snapshot with a parent pointer, identified by a hash of its content. History is therefore a directed graph, not a list — which is why rebasing creates <em>new</em> commits rather than moving existing ones.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Pro Git — Git objects</a></li>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History">Pro Git — viewing history</a></li>
+            <li><a href="git-commands.html">Command reference</a> — log, show, diff</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>git cat-file -p HEAD</code> and read the raw commit object.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Branches as pointers</h3>
+      <p>A branch is a movable pointer to a commit, and nothing more — which is why creating one is instant and free. <code>HEAD</code> points at your current branch; "detached HEAD" just means it points directly at a commit instead.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git — branches in a nutshell</a></li>
+            <li><a href="https://learngitbranching.js.org/">Learn Git Branching</a> — visualises exactly this</li>
+            <li><a href="https://git-scm.com/docs/git-switch">git switch — docs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Create five branches from the same commit and confirm no files were copied.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Remotes &amp; tracking branches</h3>
+      <p><code>origin/main</code> is your local cache of where the remote was at last fetch — not where it is now. <code>fetch</code> updates that cache, <code>pull</code> is fetch plus merge. Knowing the difference explains most "why is it out of date" confusion.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches">Pro Git — remote branches</a></li>
+            <li><a href="https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories">GitHub — about remotes</a></li>
+            <li><a href="git-commands.html">Command reference</a> — fetch, pull, push</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Fetch without pulling, then diff your branch against <code>origin/main</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>.gitignore &amp; what not to commit</h3>
+      <p>Secrets, virtualenvs, <code>__pycache__</code>, build output and large binaries. The important part: adding something to <code>.gitignore</code> after committing it does nothing — it is still in history, and a committed credential must be rotated, not just deleted.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/github/gitignore">GitHub — gitignore templates</a></li>
+            <li><a href="https://git-scm.com/docs/gitignore">gitignore — documentation</a></li>
+            <li><a href="https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning">GitHub — secret scanning</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Check whether any repo of yours has a committed <code>.env</code> in its history.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="git-workflows.html">Branching &amp; Workflows →</a>    <a href="git.html">All Git &amp; GitHub tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="git.html">← Git &amp; GitHub</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

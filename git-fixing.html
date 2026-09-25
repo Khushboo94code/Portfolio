@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixing Mistakes — Git &amp; GitHub — Khushboo</title>
+<meta name="description" content="The genuinely useful part. Almost nothing in git is unrecoverable, and knowing that changes how confidently you work.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="git.html">← Git &amp; GitHub</a>
+  <h1>Fixing Mistakes</h1>
+  <p>The genuinely useful part. Almost nothing in git is unrecoverable, and knowing that changes how confidently you work.</p>
+
+  <div class="pillnav"><a href="git-basics.html">Fundamentals</a> <a href="git-workflows.html">Branching &amp; Workflows</a> <a href="git-fixing.html" style="border-color:var(--accent);color:var(--accent);">Fixing Mistakes</a> <a href="git-github.html">GitHub</a> <a href="git-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="fixing">
+  <h2>Fixing Mistakes <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>reset vs revert vs restore</h3>
+      <p>Three different tools people confuse. <code>restore</code> discards file changes, <code>reset</code> moves the branch pointer and rewrites history, <code>revert</code> adds a new commit undoing an old one. On anything already pushed, revert is the safe choice.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified">Pro Git — Reset Demystified</a></li>
+            <li><a href="https://git-scm.com/docs/git-revert">git revert — docs</a></li>
+            <li><a href="git-commands.html">Command reference</a> — the undo table</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Undo a commit three ways — soft, mixed and hard reset — and observe each result.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Recovering with reflog</h3>
+      <p><code>git reflog</code> records every position HEAD has held, including commits no branch points at any more. A "lost" commit after a bad reset or a deleted branch is almost always still there for weeks — this is the command that saves you.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/docs/git-reflog">git reflog — docs</a></li>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Internals-Maintenance-and-Data-Recovery">Pro Git — data recovery</a></li>
+            <li><a href="git-commands.html">Command reference</a> — recovery row</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Delete a branch, then recover it from the reflog.</li>
+            <li>Do a <code>reset --hard</code> you regret, then undo it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Rewriting history</h3>
+      <p><code>commit --amend</code> for the last commit, interactive rebase to squash, reorder or reword several. Fine on your own unpushed branch; disruptive on a shared one, and <code>--force-with-lease</code> is the safer force push.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History">Pro Git — rewriting history</a></li>
+            <li><a href="https://git-scm.com/docs/git-rebase">git rebase — interactive mode</a></li>
+            <li><a href="https://git-scm.com/docs/git-push">git push --force-with-lease</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Squash five messy commits into two coherent ones with <code>rebase -i</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Stash, clean &amp; bisect</h3>
+      <p><code>stash</code> parks work in progress so you can switch branches; <code>clean</code> removes untracked files; <code>bisect</code> binary-searches your history to find the commit that introduced a bug — which turns an afternoon of guessing into about eight checkouts.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning">Pro Git — stashing and cleaning</a></li>
+            <li><a href="https://git-scm.com/docs/git-bisect">git bisect — docs</a></li>
+            <li><a href="dsa-foundations.html">Your DSA track</a> — bisect is binary search on history</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Use <code>git bisect</code> to find a bug you introduced deliberately 20 commits ago.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="git-workflows.html">← Branching &amp; Workflows</a>    <a href="git-github.html">GitHub →</a>    <a href="git.html">All Git &amp; GitHub tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="git.html">← Git &amp; GitHub</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

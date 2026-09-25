@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP Status Codes — Reference — Khushboo</title>
+<meta name="description" content="What to return and what a response is telling you. The ones people get wrong are 401 vs 403, 400 vs 422, and 502 vs 503 vs 504.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>HTTP Status Codes</h1>
+  <p>What to return and what a response is telling you. The ones people get wrong are 401 vs 403, 400 vs 422, and 502 vs 503 vs 504.</p>
+
+  <div class="pillnav"><a href="misc-http.html" style="border-color:var(--accent);color:var(--accent);">HTTP Codes</a> <a href="misc-errors.html">Error Codes</a> <a href="misc-shell.html">Shell</a> <a href="misc-python.html">Python &amp; Django</a> <a href="misc-redis.html">Redis</a> <a href="misc-sdlc.html">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 26 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>2xx — Success</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Use it when</th></tr></thead>
+        <tbody>
+        <tr><td><code>200 OK</code></td><td>Request succeeded</td><td>Standard success with a body</td></tr>
+        <tr><td><code>201 Created</code></td><td>Resource created</td><td>POST created something — return its <code>Location</code></td></tr>
+        <tr><td><code>202 Accepted</code></td><td>Accepted, not yet processed</td><td>You queued the work (Celery) and will finish later</td></tr>
+        <tr><td><code>204 No Content</code></td><td>Success, no body</td><td>DELETE succeeded, or a PUT with nothing to return</td></tr>
+        <tr><td><code>206 Partial Content</code></td><td>Range served</td><td>Resumable downloads / video seeking</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>3xx — Redirection</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Use it when</th></tr></thead>
+        <tbody>
+        <tr><td><code>301 Moved Permanently</code></td><td>Permanent redirect</td><td>URL changed forever — browsers cache this hard</td></tr>
+        <tr><td><code>302 Found</code></td><td>Temporary redirect</td><td>Temporary move; keep it if you want to count clicks</td></tr>
+        <tr><td><code>304 Not Modified</code></td><td>Cache still valid</td><td>Conditional GET matched the <code>ETag</code> — no body sent</td></tr>
+        <tr><td><code>307 Temporary Redirect</code></td><td>Temporary, method preserved</td><td>Like 302 but POST stays POST</td></tr>
+        <tr><td><code>308 Permanent Redirect</code></td><td>Permanent, method preserved</td><td>Like 301 but POST stays POST</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>4xx — Client error</h3>
+    <p class="note">The client can fix these. Being precise here is what makes an API pleasant to integrate with.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Use it when</th></tr></thead>
+        <tbody>
+        <tr><td><code>400 Bad Request</code></td><td>Malformed request</td><td>Unparseable body, missing required param</td></tr>
+        <tr><td><code>401 Unauthorized</code></td><td>Not authenticated</td><td>No or invalid credentials — <em>who are you?</em></td></tr>
+        <tr><td><code>403 Forbidden</code></td><td>Authenticated, not allowed</td><td>Known user without permission — <em>not yours</em></td></tr>
+        <tr><td><code>404 Not Found</code></td><td>No such resource</td><td>Also used to hide existence from unauthorised users</td></tr>
+        <tr><td><code>405 Method Not Allowed</code></td><td>Wrong verb</td><td>POST to a read-only endpoint</td></tr>
+        <tr><td><code>409 Conflict</code></td><td>State conflict</td><td>Duplicate create, version mismatch, concurrent edit</td></tr>
+        <tr><td><code>410 Gone</code></td><td>Deliberately removed</td><td>Resource existed and will not come back</td></tr>
+        <tr><td><code>413 Payload Too Large</code></td><td>Body too big</td><td>Upload exceeds your limit</td></tr>
+        <tr><td><code>415 Unsupported Media Type</code></td><td>Wrong content type</td><td>Sent XML where JSON was expected</td></tr>
+        <tr><td><code>422 Unprocessable Entity</code></td><td>Valid syntax, invalid data</td><td>Parsed fine but failed business validation (DRF default)</td></tr>
+        <tr><td><code>429 Too Many Requests</code></td><td>Rate limited</td><td>Include <code>Retry-After</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>5xx — Server error</h3>
+    <p class="note">Your fault. 502/503/504 are the three that show up in an incident, and they mean different things.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Code</th><th>Meaning</th><th>Usually means</th></tr></thead>
+        <tbody>
+        <tr><td><code>500 Internal Server Error</code></td><td>Unhandled exception</td><td>A bug — check the traceback</td></tr>
+        <tr><td><code>501 Not Implemented</code></td><td>Method unsupported</td><td>Server does not know this verb at all</td></tr>
+        <tr><td><code>502 Bad Gateway</code></td><td>Bad upstream response</td><td>Nginx reached Gunicorn but got garbage / a crash</td></tr>
+        <tr><td><code>503 Service Unavailable</code></td><td>No capacity</td><td>Nothing is listening, or you are shedding load</td></tr>
+        <tr><td><code>504 Gateway Timeout</code></td><td>Upstream too slow</td><td>Backend exceeded the proxy timeout — usually a slow query</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="misc-errors.html">Error Codes →</a>
+    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

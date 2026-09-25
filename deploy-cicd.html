@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation & CI/CD — Deployment — Khushboo</title>
+<meta name="description" content="Making deploys boring — the same steps every time, run by a machine rather than remembered by you.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="deployment.html">← Deployment</a>
+  <h1>Automation &amp; CI/CD</h1>
+  <p>Making deploys boring — the same steps every time, run by a machine rather than remembered by you.</p>
+
+  <div class="pillnav"><a href="deploy-basics.html">Fundamentals</a> <a href="deploy-first.html">Your First Deploy</a> <a href="deploy-data.html">Data in Production</a> <a href="deploy-cicd.html" style="border-color:var(--accent);color:var(--accent);">Automation &amp; CI/CD</a> <a href="deploy-operating.html">Operating It</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="cicd">
+  <h2>Automation &amp; CI/CD <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li>
+      <h3>Deploying from git</h3>
+      <p>The deploy artefact should be a specific commit, not "whatever is on the server". Push to a branch, have the platform build and release that exact SHA, and keep the previous release so you can go back.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://12factor.net/build-release-run">Twelve-Factor — build, release, run</a></li>
+            <li><a href="https://docs.github.com/en/actions">GitHub Actions — documentation</a></li>
+            <li><a href="https://git-scm.com/book/en/v2">Pro Git</a> — free, and the reference for the git half</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a deploy that is reproducible from a git SHA alone.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>CI — testing before you ship</h3>
+      <p>Run the test suite, linting and <code>check --deploy</code> on every push, and block merges that fail. The value is not the tests themselves but that nobody has to remember to run them.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python">GitHub Actions — testing Python</a></li>
+            <li><a href="https://pytest-django.readthedocs.io/en/latest/">pytest-django</a></li>
+            <li><a href="https://pre-commit.com/">pre-commit</a> — catch it before CI does</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a workflow that runs tests and blocks merging on failure.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Deploying containers</h3>
+      <p>Build the image once, tag it by commit SHA, push it to a registry, and deploy that digest. The point is that the artefact you tested is byte-for-byte the artefact that runs.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/ci/github-actions/">Docker — build in GitHub Actions</a></li>
+            <li><a href="docker.html">Your Docker track</a> — images, layers and registries</li>
+            <li><a href="https://docs.docker.com/reference/compose-file/">Compose file reference</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build and push an image on merge to main, tagged with the SHA.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — Dockerized end to end</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Zero-downtime releases</h3>
+      <p>Rolling, blue-green and canary — all answers to "how do I replace running code without dropping requests". They all require that the old and new versions can run at once, which is why backwards-compatible migrations come first.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html">Fowler — blue-green deployment</a></li>
+            <li><a href="https://martinfowler.com/bliki/CanaryRelease.html">Fowler — canary release</a></li>
+            <li><a href="https://docs.gunicorn.org/">Gunicorn documentation</a> — signals &amp; graceful reload</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Deploy while running a request loop against the app and confirm zero failures.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="deploy-data.html">← Data in Production</a>    <a href="deploy-operating.html">Operating It →</a>    <a href="deployment.html">All Deployment tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="deployment.html">← Deployment</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced — Python — Khushboo</title>
+<meta name="description" content="The internals worth knowing — memory, concurrency and performance. This is the group that separates senior answers from correct ones.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html" class="here">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="python.html">← Python</a>
+  <h1>Advanced</h1>
+  <p>The internals worth knowing — memory, concurrency and performance. This is the group that separates senior answers from correct ones.</p>
+
+  <div class="pillnav"><a href="python-core.html">Core Language</a> <a href="python-intermediate.html">Intermediate</a> <a href="python-advanced.html" style="border-color:var(--accent);color:var(--accent);">Advanced</a> <a href="python-stdlib.html">Standard Library</a> <a href="python-tooling.html">Tooling &amp; Quality</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="advanced">
+  <h2>Advanced <span class="count">— 3 topics</span></h2>
+  <p class="section-intro">
+    <strong>The GIL and concurrency</strong> outgrew this page — threads, processes and the event
+    loop now have their own track: <a href="concurrency.html">Concurrency →</a>
+  </p>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Memory, references &amp; garbage collection</h3>
+      <p>CPython frees objects by reference counting, with a cycle collector for the cases counting cannot handle. Practically this explains memory that never comes back: a global cache, a closure holding a large object, or a reference cycle you created.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/gc.html">gc — garbage collector interface</a></li>
+            <li><a href="https://docs.python.org/3/library/sys.html#sys.getrefcount">sys.getrefcount</a></li>
+            <li><a href="https://docs.python.org/3/library/tracemalloc.html">tracemalloc</a> — find what is actually allocating</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Create a reference cycle, confirm it is not freed by refcounting, then collect it.</li>
+            <li>Profile memory on a long-running script with tracemalloc.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+
+
+    <li>
+      <h3>Descriptors, metaclasses &amp; protocols</h3>
+      <p>How Django model fields and ORM attributes actually work. A descriptor customises attribute access; a metaclass customises class creation. Rarely what you should write, frequently what you need to read.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/howto/descriptor.html">Python — descriptor HOWTO</a></li>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#metaclasses">Python — metaclasses</a></li>
+            <li><a href="https://docs.python.org/3/library/typing.html#typing.Protocol">typing.Protocol</a> — structural typing</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a descriptor that validates a value on assignment, then find the same pattern in Django.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Profiling &amp; optimisation</h3>
+      <p>Measure before you change anything — intuition about Python performance is usually wrong. <code>cProfile</code> for where time goes, <code>timeit</code> for micro-comparisons, and the ordered fixes: better algorithm, better data structure, then C-level libraries.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/profile.html">cProfile &amp; profile</a></li>
+            <li><a href="https://docs.python.org/3/library/timeit.html">timeit</a></li>
+            <li><a href="https://pythonspeed.com/">Python Speed</a> — practical performance writing</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Profile your slowest script and fix the actual hotspot rather than the one you assumed.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/boxpacker">boxpacker</a> — an optimisation problem where this matters</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="python-intermediate.html">← Intermediate</a>    <a href="python-stdlib.html">Standard Library →</a>    <a href="python.html">All Python tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="python.html">← Python</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

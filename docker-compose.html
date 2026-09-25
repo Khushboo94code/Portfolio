@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compose & Multi-Service — Docker — Khushboo</title>
+<meta name="description" content="Running the whole stack — app, database, cache, workers — as one reproducible unit.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Compose &amp; Multi-Service</h1>
+  <p>Running the whole stack — app, database, cache, workers — as one reproducible unit.</p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html">Fundamentals</a> <a href="docker-data-network.html">Data &amp; Networking</a> <a href="docker-compose.html" style="border-color:var(--accent);color:var(--accent);">Compose &amp; Multi-Service</a> <a href="docker-images.html">Image Quality</a> <a href="docker-production.html">Production</a> <a href="docker-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="compose">
+  <h2>Compose &amp; Multi-Service <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Docker Compose basics</h3>
+      <p>One YAML file describing every service, its image or build context, ports, volumes and networks — then <code>docker compose up</code> brings the stack up together. This is what makes a project cloneable and runnable in one command.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/compose/">Docker Compose — documentation</a></li>
+            <li><a href="https://docs.docker.com/reference/compose-file/">Compose file reference</a></li>
+            <li><a href="https://docs.docker.com/compose/gettingstarted/">Compose — getting started</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a Compose file running Django, Postgres, Redis and a Celery worker together.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — multi-service stack</li>
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — app, database and proxy</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Dependencies &amp; healthchecks</h3>
+      <p><code>depends_on</code> only waits for the container to <em>start</em>, not to be ready — which is why Django so often crashes on boot because Postgres is still initialising. <code>condition: service_healthy</code> plus a <code>HEALTHCHECK</code> is the actual fix.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/reference/compose-file/services/#depends_on">Compose — depends_on &amp; conditions</a></li>
+            <li><a href="https://docs.docker.com/reference/dockerfile/#healthcheck">Dockerfile HEALTHCHECK</a></li>
+            <li><a href="https://docs.docker.com/compose/how-tos/startup-order/">Compose — controlling startup order</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make your app wait for Postgres properly using a healthcheck rather than a sleep.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Development vs production compose</h3>
+      <p>The same stack needs different shapes: bind mounts and auto-reload locally, baked images and no source mount in production. Override files (<code>compose.override.yml</code>) and profiles keep that in one place instead of two divergent files.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/compose/how-tos/multiple-compose-files/">Compose — multiple files &amp; overrides</a></li>
+            <li><a href="https://docs.docker.com/compose/how-tos/profiles/">Compose — profiles</a></li>
+            <li><a href="https://12factor.net/dev-prod-parity">Twelve-Factor — dev/prod parity</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Split your Compose setup into a base file plus a development override.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Running migrations &amp; one-off jobs</h3>
+      <p>Where <code>migrate</code> and <code>collectstatic</code> actually belong — not in the image build, where there is no database, and not racing across multiple replicas at boot. An explicit entrypoint step or a one-off <code>compose run</code> is the safe pattern.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/reference/cli/docker/compose/run/">docker compose run</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/migrations/">Django — migrations</a></li>
+            <li><a href="https://12factor.net/admin-processes">Twelve-Factor — admin processes</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run migrations as a one-off container rather than inside the app start command.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="docker-data-network.html">← Data &amp; Networking</a>    <a href="docker-images.html">Image Quality →</a>    <a href="docker.html">All Docker tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

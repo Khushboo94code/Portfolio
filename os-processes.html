@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Processes & Scheduling — Operating Systems — Khushboo</title>
+<meta name="description" content="How one CPU convinces many programs they each have one. Threads and locks live in the Concurrency track — this is the kernel’s side of it.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html" class="here">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="os.html">← Operating Systems</a>
+  <h1>Processes &amp; Scheduling</h1>
+  <p>How one CPU convinces many programs they each have one. Threads and locks live in the <a href="concurrency.html">Concurrency track</a> — this is the kernel’s side of it.</p>
+
+  <div class="pillnav"><a href="os-foundations.html">Foundations</a> <a href="os-processes.html" style="border-color:var(--accent);color:var(--accent);">Processes &amp; Scheduling</a> <a href="os-memory.html">Memory Management</a> <a href="os-storage.html">Files, Storage &amp; I/O</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="processes">
+  <h2>Processes &amp; Scheduling <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Process lifecycle &amp; the PCB</h3>
+      <p>New, ready, running, waiting, terminated — and the kernel’s record of each one, the process control block, holding its registers, memory map, open files and state. A context switch is really just saving one PCB and loading another.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — the abstraction: the process</li>
+            <li><a href="https://man7.org/linux/man-pages/man5/proc.5.html">proc(5)</a> — read a real process’s state</li>
+            <li><a href="https://en.wikipedia.org/wiki/Process_control_block">Process control block — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Watch a process move between states with <code>ps -o stat</code> under load.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>fork, exec &amp; process creation</h3>
+      <p>Unix creates processes by <strong>copying</strong> — <code>fork</code> duplicates the caller, and the child usually calls <code>exec</code> to replace itself with a different program. Copy-on-write makes the duplication cheap. This is exactly what Python’s multiprocessing does underneath.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man2/fork.2.html">fork(2)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man3/exec.3.html">exec(3)</a></li>
+            <li><a href="conc-multiprocessing.html">Your Concurrency track</a> — fork vs spawn in Python</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a fork/exec pair in C or Python and explain what the return value of fork means.</li>
+            <li>Create a zombie process deliberately, then reap it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Context switching</h3>
+      <p>Saving one process’s registers and restoring another’s so both appear to run at once. It is not free — registers, the TLB flush, and cache pollution all cost — which is why thousands of threads perform worse than a handful plus async I/O.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — mechanism: limited direct execution</li>
+            <li><a href="https://en.wikipedia.org/wiki/Context_switch">Context switch — Wikipedia</a></li>
+            <li><a href="https://www.brendangregg.com/linuxperf.html">Brendan Gregg — Linux performance</a> — measuring it</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Measure context switches per second with <code>vmstat</code> while running a threaded program.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Multithreading">Multithreading</a> — the workload to measure</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>CPU scheduling algorithms</h3>
+      <p>FCFS, shortest-job-first, round robin, priority and multilevel feedback queues — and the trade they all negotiate: throughput versus latency versus fairness versus starvation. Interactive systems favour response time, batch systems favour throughput.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> — scheduling, and MLFQ</li>
+            <li><a href="https://en.wikipedia.org/wiki/Scheduling_(computing)">Scheduling — Wikipedia</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man7/sched.7.html">sched(7)</a> — what Linux actually does</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Work a round-robin schedule by hand for four processes and compute average wait time.</li>
+            <li>Explain why pure shortest-job-first starves long jobs.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>IPC — how processes talk</h3>
+      <p>Isolated by default, so communication must be explicit: pipes, named pipes, message queues, shared memory, sockets and signals. Shared memory is fastest and reintroduces every synchronisation problem isolation had removed.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://man7.org/linux/man-pages/man7/pipe.7.html">pipe(7)</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man7/shm_overview.7.html">shm_overview(7)</a> — shared memory</li>
+            <li><a href="conc-multiprocessing.html">Your Concurrency track</a> — the Python-level version</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Connect two processes with a pipe and pass data through it.</li>
+            <li>Explain why a pipe needs no lock but shared memory does.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — producer and consumer over a queue</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="os-foundations.html">← Foundations</a>    <a href="os-memory.html">Memory Management →</a>    <a href="os.html">All OS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="os.html">← Operating Systems</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

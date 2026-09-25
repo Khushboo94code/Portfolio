@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data & Networking — Docker — Khushboo</title>
+<meta name="description" content="Containers are ephemeral — state and connectivity are the two things you have to deliberately arrange.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Data &amp; Networking</h1>
+  <p>Containers are ephemeral — state and connectivity are the two things you have to deliberately arrange.</p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html">Fundamentals</a> <a href="docker-data-network.html" style="border-color:var(--accent);color:var(--accent);">Data &amp; Networking</a> <a href="docker-compose.html">Compose &amp; Multi-Service</a> <a href="docker-images.html">Image Quality</a> <a href="docker-production.html">Production</a> <a href="docker-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="data">
+  <h2>Data &amp; Networking <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Volumes &amp; bind mounts</h3>
+      <p>A container’s writable layer dies with it, so anything that must persist needs a volume. Named volumes are managed by Docker and right for databases; bind mounts map a host directory in and are right for live-reloading source in development.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/storage/volumes/">Docker — volumes</a></li>
+            <li><a href="https://docs.docker.com/engine/storage/bind-mounts/">Docker — bind mounts</a></li>
+            <li><a href="https://docs.docker.com/engine/storage/">Docker — storage overview</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run Postgres in a container, write data, destroy the container, and prove the data survived.</li>
+            <li>Bind-mount your source so code changes reload without a rebuild.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Networks &amp; service discovery</h3>
+      <p>Containers on a user-defined bridge network reach each other <strong>by service name</strong> — Docker runs an embedded DNS resolver. This is why <code>db</code> works as a hostname in Compose and why the default bridge network is not good enough.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/network/">Docker — networking overview</a></li>
+            <li><a href="https://docs.docker.com/engine/network/drivers/bridge/">Docker — bridge networks</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/DNS">MDN — DNS</a> — what the embedded resolver implements</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put two containers on one network and curl one from the other by name.</li>
+            <li>Try the same on the default bridge and see it fail.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Ports, publishing &amp; EXPOSE</h3>
+      <p><code>EXPOSE</code> is documentation only — it publishes nothing. <code>-p 8000:8000</code> is what actually maps a host port to a container port. Binding to <code>127.0.0.1</code> inside the container is the classic reason a published port still refuses connections.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/network/#published-ports">Docker — published ports</a></li>
+            <li><a href="https://docs.docker.com/reference/dockerfile/#expose">Dockerfile EXPOSE</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Port_(computer_networking)">Ports — Wikipedia</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a Django container bind <code>0.0.0.0</code> instead of <code>127.0.0.1</code> and explain why it matters.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Nginx and app ports mapped in a real deployment</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Environment variables &amp; secrets</h3>
+      <p>Configuration belongs in the environment, not the image — but environment variables are visible in <code>docker inspect</code> and in your shell history, so real secrets need Docker secrets, a mounted file, or a vault. Never bake a key into a layer; layers are forever.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/swarm/secrets/">Docker — secrets</a></li>
+            <li><a href="https://12factor.net/config">Twelve-Factor — config</a></li>
+            <li><a href="https://docs.docker.com/compose/how-tos/environment-variables/">Compose — environment variables</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Find a secret committed in any image layer using <code>docker history</code>.</li>
+            <li>Move one credential from <code>ENV</code> to a mounted secret file.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — cloud or local behind one env var</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="docker-fundamentals.html">← Fundamentals</a>    <a href="docker-compose.html">Compose &amp; Multi-Service →</a>    <a href="docker.html">All Docker tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

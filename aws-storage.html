@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storage & Data — AWS — Khushboo</title>
+<meta name="description" content="Where state lives — and the service you already use in production.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html" class="here">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="aws.html">← AWS</a>
+  <h1>Storage &amp; Data</h1>
+  <p>Where state lives — and the service you already use in production.</p>
+
+  <div class="pillnav"><a href="aws-foundations.html">Foundations</a> <a href="aws-compute.html">Compute</a> <a href="aws-storage.html" style="border-color:var(--accent);color:var(--accent);">Storage &amp; Data</a> <a href="aws-networking.html">Networking &amp; Delivery</a> <a href="aws-operations.html">Operations &amp; Architecture</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="storage">
+  <h2>Storage &amp; Data <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>S3 — object storage</h3>
+      <p>Effectively unlimited durable storage for files, addressed by key rather than path. Storage classes trade retrieval speed for cost, lifecycle rules move old objects automatically, and pre-signed URLs grant time-limited access without your server touching the bytes.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html">Amazon S3 — user guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">S3 — pre-signed URLs</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">S3 — lifecycle rules</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add direct-to-S3 uploads with a pre-signed PUT so files never pass through your app.</li>
+            <li>Set a lifecycle rule moving objects to a cheaper class after 90 days.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — S3 pre-signed downloads for paid files, in production</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>EBS vs EFS — block vs file</h3>
+      <p>EBS is a virtual disk attached to one instance; EFS is a shared filesystem many instances can mount. The mistake is reaching for either when S3 would do — object storage is cheaper, and it is the right answer for anything you serve to users.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html">Amazon EBS</a></li>
+            <li><a href="https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html">Amazon EFS</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html">S3</a> — check this is not the better answer first</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Decide, for each piece of state in your marketplace, whether it belongs in S3, EBS or RDS.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>RDS — managed relational databases</h3>
+      <p>Managed Postgres or MySQL: AWS handles backups, patching, and failover to a standby in another AZ. Multi-AZ is for availability, read replicas are for read scale — they are different features and interviews like the distinction.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html">Amazon RDS — user guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html">RDS — Multi-AZ deployments</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">RDS — read replicas</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain when you would add a read replica and when Multi-AZ solves nothing.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — the Postgres this would replace</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>DynamoDB — managed NoSQL</h3>
+      <p>Single-digit millisecond key-value and document storage at any scale — provided you design the partition key around your access patterns, because you cannot query what you did not model. The opposite discipline from a relational schema.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html">Amazon DynamoDB</a></li>
+            <li><a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/best-practices.html">DynamoDB — design best practices</a></li>
+            <li><a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html">DynamoDB — partition keys</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Model your price-history data for DynamoDB and compare it to the Postgres schema.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>ElastiCache &amp; queues</h3>
+      <p>Managed Redis for caching and sessions, SQS for durable queues, SNS for fan-out. These are the AWS versions of things you already run — the concepts transfer directly from your Redis and Celery work.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html">Amazon ElastiCache for Redis</a></li>
+            <li><a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html">Amazon SQS</a></li>
+            <li><a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon SNS</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Map your Celery + Redis setup onto SQS and decide whether the swap would be worth it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — rate limiting is a natural ElastiCache workload</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="aws-compute.html">← Compute</a>    <a href="aws-networking.html">Networking &amp; Delivery →</a>    <a href="aws.html">All AWS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="aws.html">← AWS</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

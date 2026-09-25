@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Language — Python — Khushboo</title>
+<meta name="description" content="The foundations — but read as &quot;why does Python behave this way&quot;, not &quot;how do I write a for loop&quot;.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html" class="here">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="python.html">← Python</a>
+  <h1>Core Language</h1>
+  <p>The foundations — but read as "why does Python behave this way", not "how do I write a for loop".</p>
+
+  <div class="pillnav"><a href="python-core.html" style="border-color:var(--accent);color:var(--accent);">Core Language</a> <a href="python-intermediate.html">Intermediate</a> <a href="python-advanced.html">Advanced</a> <a href="python-stdlib.html">Standard Library</a> <a href="python-tooling.html">Tooling &amp; Quality</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="core">
+  <h2>Core Language <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>The data model &amp; everything is an object</h3>
+      <p>Integers, functions, classes and modules are all objects with types. The data model is the contract that makes <code>len(x)</code>, <code>x[0]</code> and <code>a + b</code> work on your own classes — it is the single most useful chapter of the docs.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html">Python — the data model</a></li>
+            <li><a href="https://docs.python.org/3/glossary.html">Python glossary</a> — worth skimming end to end</li>
+            <li><a href="https://www.fluentpython.com/">Fluent Python</a> — built entirely around the data model</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a class that works with <code>len()</code>, <code>in</code>, indexing and iteration.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a> — the pillars in Python</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Built-in data structures</h3>
+      <p>List, dict, set and tuple, and the cost of each operation. <code>list.insert(0, x)</code> and <code>x in list</code> are O(n) while the set and dict equivalents are O(1) — most accidental slowness in Python code is the wrong container choice.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/datastructures.html">Python — data structures</a></li>
+            <li><a href="https://wiki.python.org/moin/TimeComplexity">TimeComplexity wiki</a> — the cost of every operation</li>
+            <li><a href="https://docs.python.org/3/library/collections.html">collections</a> — when the built-ins are not enough</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Rewrite a loop that uses <code>in list</code> to use a set; measure the difference on 100k items.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — a dict used as a cache backing store</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Mutability, references &amp; copying</h3>
+      <p>Names are bindings to objects, not boxes holding values. This is why a mutable default argument persists across calls, why <code>b = a</code> on a list aliases rather than copies, and why shallow and deep copies differ.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/copy.html">copy — shallow and deep copy</a></li>
+            <li><a href="https://docs.python.org/3/reference/executionmodel.html">Python — execution model &amp; binding</a></li>
+            <li><a href="https://nedbatchelder.com/text/names.html">Ned Batchelder — Facts and Myths about Names and Values</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write the mutable-default-argument bug deliberately, then explain it in one sentence.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Comprehensions &amp; iteration</h3>
+      <p>Comprehensions are the idiomatic transform, and they build the whole result in memory; generator expressions do the same lazily. The iterator protocol — <code>__iter__</code> and <code>__next__</code> — is what every for loop actually uses.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">Python — comprehensions</a></li>
+            <li><a href="https://docs.python.org/3/howto/functional.html">Python — functional programming HOWTO</a></li>
+            <li><a href="https://docs.python.org/3/library/itertools.html">itertools</a> — the composable building blocks</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Convert a nested loop into a comprehension, then decide honestly which reads better.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Functions, scope &amp; closures</h3>
+      <p>Positional versus keyword arguments, <code>*args</code> and <code>**kwargs</code>, the LEGB scope rule, and closures capturing variables by reference — which is the reason a lambda in a loop surprises everyone once.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/compound_stmts.html#function-definitions">Python — function definitions</a></li>
+            <li><a href="https://docs.python.org/3/reference/executionmodel.html#naming-and-binding">Python — naming and binding (LEGB)</a></li>
+            <li><a href="https://peps.python.org/pep-3102/">PEP 3102 — keyword-only arguments</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a closure-in-a-loop bug, then fix it with a default argument.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Errors &amp; exceptions</h3>
+      <p>The exception hierarchy, catching narrowly rather than bare <code>except</code>, <code>else</code> and <code>finally</code>, custom exception classes, and exception chaining with <code>raise ... from</code> so you do not lose the original cause.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/errors.html">Python — errors and exceptions</a></li>
+            <li><a href="https://docs.python.org/3/library/exceptions.html">Python — built-in exception hierarchy</a></li>
+            <li><a href="https://peps.python.org/pep-3134/">PEP 3134 — exception chaining</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Design an exception hierarchy for one of your projects and map every failure onto it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — the other half of handling failure</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="python-intermediate.html">Intermediate →</a>    <a href="python.html">All Python tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="python.html">← Python</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

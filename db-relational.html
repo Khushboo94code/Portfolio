@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relational Foundations — DBMS &amp; SQL — Khushboo</title>
+<meta name="description" content="The model underneath every SQL database — and the design decisions you cannot cheaply undo later.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html" class="here">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dbms.html">← DBMS &amp; SQL</a>
+  <h1>Relational Foundations</h1>
+  <p>The model underneath every SQL database — and the design decisions you cannot cheaply undo later.</p>
+
+  <div class="pillnav"><a href="db-relational.html" style="border-color:var(--accent);color:var(--accent);">Relational Foundations</a> <a href="db-sql.html">SQL</a> <a href="db-transactions.html">Transactions &amp; Concurrency</a> <a href="db-performance.html">Performance</a> <a href="db-beyond.html">Beyond Relational</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="relational">
+  <h2>Relational Foundations <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>The relational model &amp; keys</h3>
+      <p>Data as tables of rows, related by values rather than pointers. Primary keys identify a row uniquely, foreign keys reference one, and candidate keys are the alternatives you did not pick. Natural versus surrogate keys is the first real design argument you will have.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/ddl.html">PostgreSQL — data definition</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Relational_model">Relational model — Wikipedia</a></li>
+            <li><a href="https://sqlbolt.com/">SQLBolt</a> — interactive, start-to-finish</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why a surrogate integer key is usually safer than an email address as a primary key.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — vendors, products and orders modelled relationally</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Normalization — 1NF to BCNF</h3>
+      <p>Removing redundancy so one fact lives in one place: 1NF atomic values, 2NF no partial dependency on a composite key, 3NF no transitive dependency, BCNF the strict form. The point is not purity — it is that redundant data drifts out of sync.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Database_normalization">Database normalization — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Boyce%E2%80%93Codd_normal_form">BCNF — Wikipedia</a></li>
+            <li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a> — chapter 2</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take an unnormalised spreadsheet and walk it to 3NF, naming the dependency you removed at each step.</li>
+            <li>Find one place denormalisation would be the right call, and say why.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>ER modelling</h3>
+      <p>Entities, attributes and relationships — and the cardinalities between them. One-to-many becomes a foreign key; many-to-many becomes a join table. Drawing this before writing DDL is what stops you discovering a missing relationship three migrations later.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model">ER model — Wikipedia</a></li>
+            <li><a href="https://mermaid.js.org/syntax/entityRelationshipDiagram.html">Mermaid ER diagrams</a> — keep the diagram in the repo</li>
+            <li><a href="https://www.postgresql.org/docs/current/ddl-constraints.html">PostgreSQL — constraints</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Draw the ER diagram for your marketplace from memory, then check it against the models.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — the schema to check yourself against</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Constraints &amp; integrity</h3>
+      <p>Rules the database enforces so bad rows cannot exist even when application code has a bug: NOT NULL, UNIQUE, CHECK, foreign keys and their ON DELETE behaviour. A constraint is a guarantee; a model validator is only a request.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/ddl-constraints.html">PostgreSQL — constraints</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/constraints/">Django — model constraints</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html">PostgreSQL — generated columns</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a CHECK constraint that makes a negative price impossible.</li>
+            <li>Decide ON DELETE CASCADE vs RESTRICT for each foreign key in one project, with reasons.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — orders and payments, where integrity actually matters</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Schema design in practice</h3>
+      <p>Where theory meets deadlines: choosing types deliberately (never float for money), naming consistently, soft deletes versus hard, storing timestamps in UTC, and designing for the queries you will actually run rather than for elegance.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/datatype.html">PostgreSQL — data types</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — data models and query languages</li>
+            <li><a href="https://github.com/HackSoftware/Django-Styleguide">HackSoft Django Styleguide</a> — model conventions</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Audit one of your schemas for money-as-float, naive timestamps, and missing constraints.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — a real schema to audit</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="db-sql.html">SQL →</a>    <a href="dbms.html">All DBMS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dbms.html">← DBMS &amp; SQL</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

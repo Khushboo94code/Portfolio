@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operations & Architecture — AWS — Khushboo</title>
+<meta name="description" content="Running it, automating it, and the framework AWS will expect you to reason with.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html" class="here">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="aws.html">← AWS</a>
+  <h1>Operations &amp; Architecture</h1>
+  <p>Running it, automating it, and the framework AWS will expect you to reason with.</p>
+
+  <div class="pillnav"><a href="aws-foundations.html">Foundations</a> <a href="aws-compute.html">Compute</a> <a href="aws-storage.html">Storage &amp; Data</a> <a href="aws-networking.html">Networking &amp; Delivery</a> <a href="aws-operations.html" style="border-color:var(--accent);color:var(--accent);">Operations &amp; Architecture</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="operations">
+  <h2>Operations &amp; Architecture <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>CloudWatch — logs, metrics &amp; alarms</h3>
+      <p>The default place logs and metrics land. Log groups per service, custom metrics from your app, alarms that fire on what users feel rather than on CPU. CloudTrail is the separate audit log of who did what in the account.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">Amazon CloudWatch</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">CloudWatch Logs</a></li>
+            <li><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html">AWS CloudTrail</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Ship your Django logs to CloudWatch and alarm on the 5xx rate.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — the application end of this</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Infrastructure as code</h3>
+      <p>Click-ops does not survive an incident. CloudFormation is native, CDK lets you write it in Python, Terraform is the cross-cloud standard. The test of whether you have done it: can you delete the whole environment and rebuild it from a repository?</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html">AWS CloudFormation</a></li>
+            <li><a href="https://docs.aws.amazon.com/cdk/v2/guide/home.html">AWS CDK</a> — infrastructure in Python</li>
+            <li><a href="https://developer.hashicorp.com/terraform/docs">Terraform documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define one small stack in Terraform, destroy it, and recreate it identically.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Deploying on AWS</h3>
+      <p>Where your Deployment track meets this one: images in ECR, a pipeline that builds and pushes on merge, rolling or blue-green releases on ECS, and secrets from Secrets Manager rather than environment files.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">Amazon ECR</a></li>
+            <li><a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html">AWS CodePipeline</a></li>
+            <li><a href="deploy-cicd.html">Your Deployment track</a> — the general principles</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build an image in CI, push to ECR, and deploy it to ECS on merge to main.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — the image this pipeline would ship</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Backups, availability &amp; DR</h3>
+      <p>Multi-AZ for surviving a datacentre, multi-region for surviving a region. Define RPO and RTO before choosing, because the cost difference between them is enormous — and restore a backup at least once so you know the plan works.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html">AWS — disaster recovery options</a></li>
+            <li><a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html">AWS Backup</a></li>
+            <li><a href="https://aws.amazon.com/builders-library/static-stability-using-availability-zones/">AWS — static stability</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write the RPO and RTO for your marketplace, then check your backups actually meet them.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Well-Architected &amp; the SAA mindset</h3>
+      <p>The six pillars — operational excellence, security, reliability, performance, cost, sustainability — are the lens AWS interviews and the certification both use. Every design question is really "which pillar are you trading away, and did you say so out loud?"</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html">AWS Well-Architected Framework</a></li>
+            <li><a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a> — how AWS itself builds</li>
+            <li><a href="hld.html">Your HLD track</a> — the vendor-neutral version of the same ideas</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Review one of your own deployed projects against all six pillars and write down the gaps.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — a real system to run the review against</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="aws-networking.html">← Networking &amp; Delivery</a>    <a href="aws.html">All AWS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="aws.html">← AWS</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

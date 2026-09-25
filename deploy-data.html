@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data in Production — Deployment — Khushboo</title>
+<meta name="description" content="The part that is genuinely unforgiving — everything else you can redeploy, but data you lose is gone.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="deployment.html">← Deployment</a>
+  <h1>Data in Production</h1>
+  <p>The part that is genuinely unforgiving — everything else you can redeploy, but data you lose is gone.</p>
+
+  <div class="pillnav"><a href="deploy-basics.html">Fundamentals</a> <a href="deploy-first.html">Your First Deploy</a> <a href="deploy-data.html" style="border-color:var(--accent);color:var(--accent);">Data in Production</a> <a href="deploy-cicd.html">Automation &amp; CI/CD</a> <a href="deploy-operating.html">Operating It</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="data">
+  <h2>Data in Production <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Managed vs self-hosted databases</h3>
+      <p>A managed Postgres handles backups, patching and failover for real money; self-hosting is cheaper and every one of those becomes your job. For anything with users, take the managed option until you have a specific reason not to.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html">AWS RDS — user guide</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/admin.html">PostgreSQL — server administration</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/databases/">Django — database notes</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Price a managed Postgres against a VPS, and list what the price difference buys you.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Connections &amp; pooling</h3>
+      <p>Every Postgres connection costs memory, and the limit is lower than people expect. Django opens one per worker, so workers × instances can exhaust it fast — <code>CONN_MAX_AGE</code> helps, PgBouncer is the real fix.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.pgbouncer.org/">PgBouncer</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/databases/#persistent-database-connections">Django — persistent connections</a></li>
+            <li><a href="misc-errors.html">Error codes</a> — SQLSTATE 53300, too_many_connections</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Work out your real maximum connection count: workers × instances × 1.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Backups &amp; restore</h3>
+      <p>A backup you have never restored is a hope, not a backup. Know your RPO (how much data you can lose) and RTO (how long you can be down), automate <code>pg_dump</code> or snapshots, store them off the server, and rehearse the restore.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/backup.html">PostgreSQL — backup and restore</a></li>
+            <li><a href="https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html">AWS — disaster recovery options</a></li>
+            <li><a href="https://sre.google/books/">Google SRE books</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Restore a production backup into a scratch database and time how long it took.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Running migrations safely</h3>
+      <p>Migrations run against live data while old code may still be serving requests. The safe pattern is expand → migrate → contract: add the new column, backfill it, switch the code, then drop the old one — never all at once.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/migrations/">Django — migrations</a></li>
+            <li><a href="https://github.com/3YOURMIND/django-migration-linter">django-migration-linter</a> — catches unsafe migrations</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/writing-migrations/">Django — writing migrations</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Rename a column on a live app with zero downtime, using expand and contract.</li>
+            <li>Run <code>sqlmigrate</code> before applying anything to production.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — a real migration history</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="deploy-first.html">← Your First Deploy</a>    <a href="deploy-cicd.html">Automation &amp; CI/CD →</a>    <a href="deployment.html">All Deployment tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="deployment.html">← Deployment</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

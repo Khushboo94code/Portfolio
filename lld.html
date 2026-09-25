@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLD Concepts — Khushboo</title>
+<meta name="description" content="Low-level design learning roadmap — OOP, SOLID, design patterns, concurrency and classic LLD problems, with resources, LeetCode practice and my code.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     LLD ROADMAP — how to edit
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic looks like this — copy one to add a topic:
+
+       <li class="done">
+         <h3>Topic name</h3>
+         <p>One or two lines describing it.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>
+             <ul><li><a href="">Title</a> — why it's good</li></ul>
+             <h5>Practice</h5>
+             <ul><li><a href="">LeetCode problem</a></li></ul>
+             <h5>My code</h5>
+             <ul class="mine"><li><a href="">repo-name</a> — what's in it</li></ul>
+           </div>
+         </details>
+       </li>
+
+     Keep the count in the <h2> and the progress bar on
+     system-design.html in sync when you add items.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html" class="here">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="system-design.html">← System Design</a>
+  <h1>LLD Concepts</h1>
+  <p>
+    Low-level design — how classes and objects are structured. This is the track that decides
+    whether a codebase stays changeable. Open <em>Resources</em> on any topic for the material
+    I learn from, problems to practise on, and my own code.
+  </p>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="lld">
+  <h2>Roadmap <span class="count">— 11 topics</span></h2>
+  <p class="section-intro">
+    <strong>Concurrency &amp; thread safety</strong> moved out of this page — threads, locks,
+    processes and the event loop now have their own track:
+    <a href="concurrency.html">Concurrency →</a>
+  </p>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>OOP fundamentals</h3>
+      <p>
+        The four pillars — encapsulation, abstraction, inheritance, polymorphism — and knowing when
+        each one actually helps. The practical skill is choosing composition ("has-a") over
+        inheritance ("is-a"), because deep hierarchies are the thing that makes code rigid later.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/design-patterns/what-is-pattern">Refactoring Guru — OOP &amp; patterns primer</a> — clearest visual explanations anywhere</li>
+            <li><a href="https://github.com/ashishps1/awesome-low-level-design">awesome-low-level-design</a> — the canonical LLD resource list</li>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html">Python docs — Classes</a> — the language-level details (MRO, name mangling)</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-parking-system/">Design Parking System</a></li>
+            <li><a href="https://leetcode.com/problems/design-an-ordered-stream/">Design an Ordered Stream</a></li>
+            <li><a href="https://leetcode.com/problems/design-browser-history/">Design Browser History</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a> — working through the pillars in Python</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>SOLID principles</h3>
+      <p>
+        Five rules that keep classes small and swappable: single responsibility, open/closed,
+        Liskov substitution, interface segregation, dependency inversion. Dependency inversion is
+        the one that pays off most — depend on an abstraction, inject the concrete thing.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html">Uncle Bob — SOLID Relevance</a> — from the person who named them</li>
+            <li><a href="https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">DigitalOcean — SOLID explained</a> — short, with examples</li>
+            <li><a href="https://github.com/ashishps1/awesome-low-level-design">awesome-low-level-design</a> — SOLID section with code</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">No direct LeetCode equivalent — practise by refactoring one of your own classes until each has a single reason to change.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — the LiteLLM router is dependency inversion in practice: the agent depends on "an LLM", not on OpenAI</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Design principles &amp; code smells</h3>
+      <p>
+        DRY, KISS, YAGNI and the Law of Demeter — plus the ability to name what's wrong with a
+        piece of code. God classes, long methods, feature envy, shotgun surgery and primitive
+        obsession are the smells worth recognising on sight.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/refactoring/smells">Refactoring Guru — Code Smells</a> — each smell with its refactoring</li>
+            <li><a href="https://martinfowler.com/bliki/CodeSmell.html">Martin Fowler — Code Smell</a> — the original framing</li>
+            <li><a href="https://refactoring.guru/refactoring/techniques">Refactoring Guru — Techniques</a> — the fixes, step by step</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">Not a LeetCode skill — pick an old file of yours and refactor it against this list.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a good candidate is a before/after refactor repo.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>UML — class &amp; sequence diagrams</h3>
+      <p>
+        The shared vocabulary for sketching a design before coding it: association, aggregation,
+        composition and inheritance between classes, and sequence diagrams for the flow through
+        them. In an interview this is how you show the design without writing code.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial/">UML class diagram tutorial</a> — relationships and notation</li>
+            <li><a href="https://mermaid.js.org/syntax/classDiagram.html">Mermaid class diagrams</a> — draw them as text, keep them in the repo</li>
+            <li><a href="https://excalidraw.com/">Excalidraw</a> — what to actually use in an interview</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">Draw the class diagram for a system you've already built before looking at the code.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Creational patterns</h3>
+      <p>
+        Patterns that control how objects get made, so construction logic doesn't leak across the
+        codebase: Factory, Abstract Factory, Builder, Singleton, Prototype. The interview cue is
+        "how do you add a new provider without touching existing code?"
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/design-patterns/creational-patterns">Refactoring Guru — Creational patterns</a> — with Python examples</li>
+            <li><a href="https://python-patterns.guide/">python-patterns.guide</a> — which patterns Python actually needs</li>
+            <li><a href="https://sourcemaking.com/design_patterns/creational_patterns">SourceMaking — Creational</a> — alternative explanations</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-a-stack-with-increment-operation/">Design a Stack With Increment Operation</a></li>
+            <li><a href="https://leetcode.com/problems/design-underground-system/">Design Underground System</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a small repo implementing all five in Python would pair well with <a href="https://github.com/Khushboo94code/OOP">OOP</a>.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Structural patterns</h3>
+      <p>
+        How objects compose into bigger structures: Adapter, Decorator, Facade, Proxy, Composite,
+        Bridge, Flyweight. Worth knowing the distinction — a decorator adds capability, a proxy
+        controls access, an adapter changes the interface.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/design-patterns/structural-patterns">Refactoring Guru — Structural patterns</a></li>
+            <li><a href="https://docs.python.org/3/library/functools.html">Python functools</a> — decorators you already use</li>
+            <li><a href="https://sourcemaking.com/design_patterns/structural_patterns">SourceMaking — Structural</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/implement-queue-using-stacks/">Implement Queue using Stacks</a> — adapter in miniature</li>
+            <li><a href="https://leetcode.com/problems/design-front-middle-back-queue/">Design Front Middle Back Queue</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Behavioural patterns</h3>
+      <p>
+        How objects communicate and share responsibility: Strategy, Observer, State, Command,
+        Template Method, Chain of Responsibility, Iterator, Mediator. You've already used two of
+        these — Django middleware is Chain of Responsibility, Django signals are Observer.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/design-patterns/behavioral-patterns">Refactoring Guru — Behavioural patterns</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/middleware/">Django middleware docs</a> — Chain of Responsibility in code you know</li>
+            <li><a href="https://sourcemaking.com/design_patterns/behavioral_patterns">SourceMaking — Behavioural</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/design-an-expression-tree-with-evaluate-function/">Design an Expression Tree</a> — interpreter / composite</li>
+            <li><a href="https://leetcode.com/problems/design-a-text-editor/">Design a Text Editor</a> — command pattern territory</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Layering &amp; clean architecture</h3>
+      <p>
+        Separating domain logic from the application layer and from infrastructure, so the
+        framework sits at the edge rather than through the middle. In Django terms: business rules
+        out of views and models, into a service layer that can be tested without a request.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.cosmicpython.com/book/preface.html">Architecture Patterns with Python</a> — free online, Django/service-layer focused</li>
+            <li><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">Uncle Bob — The Clean Architecture</a> — the original post</li>
+            <li><a href="https://github.com/HackSoftware/Django-Styleguide">HackSoft Django Styleguide</a> — the service-layer pattern, applied</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">Take an existing fat view and pull the logic into a service you can call from a test.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/API-Integration-with-service-layer-">API-Integration-with-service-layer-</a> — third-party integration behind a service layer</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+
+    <li>
+      <h3>Error handling &amp; API contracts</h3>
+      <p>
+        Designing what a method promises and what it does when it can't keep that promise:
+        exception hierarchies, fail-fast vs recover, validating at the boundary, and never letting
+        an infrastructure exception leak into domain code.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/errors.html">Python — Errors and Exceptions</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/exceptions/">DRF exception handling</a> — mapping domain errors to HTTP</li>
+            <li><a href="https://google.github.io/styleguide/pyguide.html">Google Python Style Guide</a> — the exceptions section is opinionated and good</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">Design an exception hierarchy for one of your projects, then make every API error map to exactly one class.</p>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers, the other half of failure handling</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Testability &amp; mocking</h3>
+      <p>
+        Writing classes that can be tested without a database, a network or a clock. The design
+        skill is creating seams — inject dependencies rather than constructing them inside, so a
+        fake can take their place.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.pytest.org/en/stable/">pytest docs</a> — fixtures are the dependency-injection mechanism</li>
+            <li><a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a> — patch, MagicMock, autospec</li>
+            <li><a href="https://martinfowler.com/articles/mocksArentStubs.html">Fowler — Mocks Aren't Stubs</a> — the distinction that matters</li>
+          </ul>
+          <h5>Practice</h5>
+          <p class="none">Add tests to an existing repo without touching a real database — whatever you have to change to do that is the lesson.</p>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — adding a test suite to an existing repo would double as the artefact.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Classic LLD problems</h3>
+      <p>
+        The set that actually gets asked. Always the same method: requirements → entities →
+        relationships → interfaces → patterns → edge cases. Say it in that order out loud, every
+        time, and don't start with code.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/ashishps1/awesome-low-level-design">awesome-low-level-design</a> — parking lot, elevator, Splitwise, BookMyShow, all worked</li>
+            <li><a href="https://www.youtube.com/@ConceptandCoding">Concept &amp; Coding (YouTube)</a> — full LLD walk-throughs in the interview format</li>
+            <li><a href="https://github.com/tssovi/grokking-the-object-oriented-design-interview">Grokking the OOD Interview</a> — the classic problem set</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a> — the single most-asked design problem</li>
+            <li><a href="https://leetcode.com/problems/lfu-cache/">LFU Cache</a></li>
+            <li><a href="https://leetcode.com/problems/min-stack/">Min Stack</a></li>
+            <li><a href="https://leetcode.com/problems/insert-delete-getrandom-o1/">Insert Delete GetRandom O(1)</a></li>
+            <li><a href="https://leetcode.com/problems/design-twitter/">Design Twitter</a></li>
+            <li><a href="https://leetcode.com/problems/design-hashmap/">Design HashMap</a></li>
+            <li><a href="https://leetcode.com/problems/design-a-leaderboard/">Design a Leaderboard</a></li>
+            <li><a href="https://leetcode.com/problems/time-based-key-value-store/">Time Based Key-Value Store</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — cache implementation, the LRU starting point</li>
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — logging framework, a standard LLD question</li>
+            <li><a href="https://github.com/Khushboo94code/URL-Shortner">URL-Shortner</a> — base62 short-link generation</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Next track</h2>
+  <div class="links">
+    <a href="hld.html">HLD Concepts →</a>
+    <a href="case-studies.html">Case Studies →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="system-design.html">← System Design</a> · © 2026 Khushboo ·
+    Some LeetCode design problems are Premium-only.
+  </div>
+</footer>
+
+</body>
+</html>

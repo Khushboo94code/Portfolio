@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORM Depth — Django — Khushboo</title>
+<meta name="description" content="Where Django meets the database chapters of HLD. The group that separates people who use the ORM from people who know what SQL it emits.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django Roadmap</a>
+  <h1>ORM Depth</h1>
+  <p>Where Django meets the database chapters of HLD. The group that separates people who use the ORM from people who know what SQL it emits.</p>
+
+  <div class="pillnav"><a href="django-core.html">Core Django</a> <a href="django-orm.html" style="border-color:var(--accent);color:var(--accent);">ORM Depth</a> <a href="django-api.html">APIs with DRF</a> <a href="django-async.html">Async &amp; Caching</a> <a href="django-production.html">Architecture &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="orm">
+  <h2>ORM Depth <span class="count">— 5 topics</span></h2>
+  <p class="section-intro">Where Django meets the database chapters of HLD. This is the group that separates people who
+    use the ORM from people who know what SQL it emits.</p>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>QuerySets &amp; lazy evaluation</h3>
+      <p>
+        QuerySets don't hit the database until they're iterated, sliced or cast — which is why a
+        filter chain costs nothing and an accidental <code>len()</code> inside a loop costs
+        everything. Knowing exactly when evaluation happens is the whole topic.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/queries/">Django — making queries</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/querysets/">Django — QuerySet API reference</a> — read the "when QuerySets are evaluated" section twice</li>
+            <li><a href="https://django-debug-toolbar.readthedocs.io/en/latest/">django-debug-toolbar</a> — see the SQL your code actually runs</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Print <code>str(qs.query)</code> for five different chains and predict the SQL before you look.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — building queries from request parameters</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>N+1 queries &amp; optimisation</h3>
+      <p>
+        The single most common Django performance bug: one query for a list, then one more per row.
+        <code>select_related</code> solves it with a join for forward FKs; <code>prefetch_related</code>
+        with a second query for reverse and M2M. <code>only</code>, <code>defer</code> and
+        <code>values</code> trim what you fetch.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/optimization/">Django — database access optimization</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/querysets/#select-related">select_related vs prefetch_related</a></li>
+            <li><a href="https://github.com/jmcarp/nplusone">nplusone</a> — detects N+1 automatically in tests</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Find an N+1 in one of your own repos with the debug toolbar and fix it; record the query count drop.</li>
+            <li><a href="https://leetcode.com/problems/employees-earning-more-than-their-managers/">Employees Earning More Than Their Managers</a> — the self-join an ORM query hides</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — the natural place to add optimisation examples</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Transactions, locking &amp; race conditions</h3>
+      <p>
+        <code>atomic()</code> blocks, why <code>ATOMIC_REQUESTS</code> is a blunt instrument, and
+        <code>select_for_update()</code> for the "two users buy the last item" problem.
+        <code>transaction.on_commit</code> is the fix for the classic bug of firing a Celery task
+        before the row it needs is committed.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/transactions/">Django — database transactions</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/querysets/#select-for-update">select_for_update reference</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL — transaction isolation</a> — what Django is sitting on</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Reproduce a double-purchase with two concurrent requests, then fix it with a row lock.</li>
+            <li>Find any <code>delay()</code> called inside <code>atomic()</code> in your code and move it to <code>on_commit</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — checkout and payment, where this actually bites</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Indexes &amp; database constraints</h3>
+      <p>
+        Pushing correctness and speed down into the database: <code>Meta.indexes</code> for read
+        patterns, <code>UniqueConstraint</code> and <code>CheckConstraint</code> so invalid rows
+        can't exist even if application code has a bug. A constraint is a guarantee; a validator is
+        a request.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/indexes/">Django — model indexes</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/constraints/">Django — model constraints</a></li>
+            <li><a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> — the indexing theory underneath</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a composite index for your slowest list view and verify with <code>EXPLAIN ANALYZE</code>.</li>
+            <li>Replace a <code>unique_together</code> with a conditional <code>UniqueConstraint</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing focused on this yet — a good addition to an existing repo.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Aggregation, annotation &amp; raw SQL</h3>
+      <p>
+        Computing in the database rather than in Python: <code>annotate</code> for per-row values,
+        <code>aggregate</code> for totals, <code>Subquery</code> and <code>Window</code> for the
+        harder shapes — and knowing when to stop and write raw SQL instead of a nine-line ORM
+        expression nobody can read.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/aggregation/">Django — aggregation</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/expressions/">Django — query expressions</a> — Subquery, Window, Case/When</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/sql/">Django — raw SQL</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/department-highest-salary/">Department Highest Salary</a> — the Window/Subquery pattern</li>
+            <li><a href="https://leetcode.com/problems/rank-scores/">Rank Scores</a></li>
+            <li><a href="https://leetcode.com/problems/consecutive-numbers/">Consecutive Numbers</a></li>
+            <li><a href="https://leetcode.com/problems/customers-who-never-order/">Customers Who Never Order</a></li>
+            <li><a href="https://leetcode.com/problems/rising-temperature/">Rising Temperature</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — filtering and aggregation over request params</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="django-core.html">← Core Django</a>    <a href="django-api.html">APIs with DRF →</a>    <a href="django.html">All Django tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

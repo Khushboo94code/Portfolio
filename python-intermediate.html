@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intermediate — Python — Khushboo</title>
+<meta name="description" content="The features that make Python code feel like Python — and that show up in every framework you use.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html" class="here">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="python.html">← Python</a>
+  <h1>Intermediate</h1>
+  <p>The features that make Python code feel like Python — and that show up in every framework you use.</p>
+
+  <div class="pillnav"><a href="python-core.html">Core Language</a> <a href="python-intermediate.html" style="border-color:var(--accent);color:var(--accent);">Intermediate</a> <a href="python-advanced.html">Advanced</a> <a href="python-stdlib.html">Standard Library</a> <a href="python-tooling.html">Tooling &amp; Quality</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="intermediate">
+  <h2>Intermediate <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Decorators</h3>
+      <p>A decorator is a function taking a function and returning a replacement. Once that clicks, <code>@property</code>, <code>@staticmethod</code>, Django’s <code>@login_required</code> and Celery’s <code>@task</code> all stop being magic. Use <code>functools.wraps</code> so you do not lose the wrapped function’s identity.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/glossary.html#term-decorator">Python — decorators</a></li>
+            <li><a href="https://docs.python.org/3/library/functools.html#functools.wraps">functools.wraps</a></li>
+            <li><a href="https://peps.python.org/pep-0318/">PEP 318 — function decorators</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a decorator that times a function and logs it, preserving the name and docstring.</li>
+            <li>Write one that takes arguments — that is three nested functions, and worth doing once.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — timing and logging decorators fit naturally here</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Generators &amp; lazy evaluation</h3>
+      <p><code>yield</code> turns a function into something producing values on demand, so you can iterate a 10 GB file in constant memory. The same mechanism underlies streaming responses — which is exactly how LLM output reaches a user token by token.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/howto/functional.html#generators">Python — generators</a></li>
+            <li><a href="https://docs.python.org/3/reference/expressions.html#yieldexpr">Python — yield expressions</a></li>
+            <li><a href="https://peps.python.org/pep-0255/">PEP 255 — simple generators</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Process a file larger than your RAM without loading it.</li>
+            <li>Convert a list-returning function to a generator and find what breaks.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — streaming model output</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Context managers</h3>
+      <p><code>with</code> guarantees cleanup even when an exception fires — the reason you never leak a file handle or an unclosed transaction. Implement <code>__enter__</code>/<code>__exit__</code>, or get it free from <code>@contextlib.contextmanager</code>.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/contextlib.html">contextlib</a></li>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#context-managers">Python — context manager protocol</a></li>
+            <li><a href="https://peps.python.org/pep-0343/">PEP 343 — the with statement</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a context manager that opens a database transaction and rolls back on exception.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>OOP in Python</h3>
+      <p>Classes, inheritance and the MRO, dunder methods, <code>@property</code> for computed attributes, class versus static methods, and <code>@dataclass</code> — which removes most boilerplate from data-holding classes.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html">Python — classes</a></li>
+            <li><a href="https://docs.python.org/3/library/dataclasses.html">dataclasses</a></li>
+            <li><a href="https://docs.python.org/3/howto/mro.html">Python — method resolution order</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Rewrite a class with <code>@dataclass</code> and count the lines removed.</li>
+            <li>Implement <code>__eq__</code> and <code>__hash__</code> correctly together.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a> — OOP worked through in Python</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Type hints</h3>
+      <p>Annotations are not enforced at runtime — they exist for readers and for tools like mypy. On a project past a few thousand lines they pay for themselves, and they make an IDE genuinely useful rather than guessing.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/typing.html">typing — support for type hints</a></li>
+            <li><a href="https://peps.python.org/pep-0484/">PEP 484 — type hints</a></li>
+            <li><a href="https://mypy.readthedocs.io/en/stable/">mypy documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add type hints to one module and run mypy in strict mode; fix everything it finds.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="python-core.html">← Core Language</a>    <a href="python-advanced.html">Advanced →</a>    <a href="python.html">All Python tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="python.html">← Python</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

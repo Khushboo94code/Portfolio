@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your First Deploy — Deployment — Khushboo</title>
+<meta name="description" content="The concrete path from &quot;it runs locally&quot; to &quot;it is on the internet with HTTPS&quot;. Do this once end to end and the rest of the track makes sense.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="deployment.html">← Deployment</a>
+  <h1>Your First Deploy</h1>
+  <p>The concrete path from "it runs locally" to "it is on the internet with HTTPS". Do this once end to end and the rest of the track makes sense.</p>
+
+  <div class="pillnav"><a href="deploy-basics.html">Fundamentals</a> <a href="deploy-first.html" style="border-color:var(--accent);color:var(--accent);">Your First Deploy</a> <a href="deploy-data.html">Data in Production</a> <a href="deploy-cicd.html">Automation &amp; CI/CD</a> <a href="deploy-operating.html">Operating It</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="first">
+  <h2>Your First Deploy <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li>
+      <h3>A server &amp; SSH</h3>
+      <p>Rent a small VM, connect with an SSH key rather than a password, create a non-root user, and open only the ports you need. This is the least glamorous step and the one that teaches the most.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-22-04">Initial server setup — Ubuntu</a></li>
+            <li><a href="https://www.ssh.com/academy/ssh/keygen">SSH keys — generating and using</a></li>
+            <li><a href="https://help.ubuntu.com/community/UFW">UFW — the simple firewall</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Set up key-only SSH, disable password login, and confirm you can still get in.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Gunicorn — the application server</h3>
+      <p>The dev server is single-process and explicitly not for production. Gunicorn runs multiple worker processes and speaks WSGI to Django. Worker count is the first tuning knob you will meet — start around 2×CPU+1 and measure.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/gunicorn/">Django — deploying with Gunicorn</a></li>
+            <li><a href="https://docs.gunicorn.org/">Gunicorn documentation</a> — settings reference</li>
+            <li><a href="https://gunicorn.org/">Gunicorn — design &amp; worker types</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run your app under Gunicorn locally and compare behaviour with <code>runserver</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Gunicorn in a real deployment</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Nginx — the reverse proxy</h3>
+      <p>Sits in front of Gunicorn: terminates TLS, serves static files directly, buffers slow clients so they do not tie up a worker, and routes. Almost every "502 Bad Gateway" is Nginx telling you Gunicorn died or never started.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/">NGINX — reverse proxy guide</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/">Django — WSGI deployment</a></li>
+            <li><a href="misc-errors.html">Error codes reference</a> — 502 vs 503 vs 504</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write an Nginx config from scratch that proxies to Gunicorn and serves <code>/static/</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Nginx + Gunicorn config</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Static &amp; media files</h3>
+      <p>Django does not serve static files in production. <code>collectstatic</code> gathers them for Nginx or a CDN; user uploads (media) belong in object storage like S3, not on the server disk — otherwise they vanish the moment you redeploy to a fresh container.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/static-files/deployment/">Django — static files in production</a></li>
+            <li><a href="https://whitenoise.readthedocs.io/en/stable/">WhiteNoise</a> — static files without a separate server</li>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">AWS — pre-signed URLs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Serve static through Nginx and media from S3; confirm uploads survive a redeploy.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — S3 pre-signed downloads for paid files</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>HTTPS with Let’s Encrypt</h3>
+      <p>Free, automated certificates via certbot, renewed on a timer. HTTPS is not optional — without it credentials travel in clear text. Then redirect HTTP to HTTPS and turn on HSTS so browsers refuse to downgrade.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://certbot.eff.org/">Certbot</a> — step-by-step for your OS and server</li>
+            <li><a href="https://letsencrypt.org/how-it-works/">Let’s Encrypt — how it works</a></li>
+            <li><a href="https://tls13.xargs.org/">The Illustrated TLS 1.3 Connection</a> — what the handshake does</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Get an A grade on SSL Labs for a domain you control.</li>
+            <li>Confirm auto-renewal actually runs before the certificate expires.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Keeping it running — systemd</h3>
+      <p>A process you started over SSH dies when you log out. A systemd unit starts Gunicorn on boot, restarts it on crash, and sends its output to the journal — which is also where you will read the logs when something breaks.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.gunicorn.org/">Gunicorn documentation</a> — see the deployment section</li>
+            <li><a href="https://man7.org/linux/man-pages/man5/systemd.service.5.html">systemd.service — manual</a></li>
+            <li><a href="misc-shell.html">Shell reference</a> — <code>systemctl</code> and <code>journalctl</code></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a systemd unit, reboot the server, and confirm the app comes back by itself.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="deploy-basics.html">← Fundamentals</a>    <a href="deploy-data.html">Data in Production →</a>    <a href="deployment.html">All Deployment tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="deployment.html">← Deployment</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

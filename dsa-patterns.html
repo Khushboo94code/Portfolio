@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Patterns — DSA — Khushboo</title>
+<meta name="description" content="Four shapes that cover a large fraction of array and string questions. Learn to spot them from the problem statement.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html" class="here">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dsa.html">← DSA Roadmap</a>
+  <h1>Core Patterns</h1>
+  <p>Four shapes that cover a large fraction of array and string questions. Learn to spot them from the problem statement.</p>
+
+  <div class="pillnav"><a href="dsa-foundations.html">Foundations</a> <a href="dsa-patterns.html" style="border-color:var(--accent);color:var(--accent);">Core Patterns</a> <a href="dsa-structures.html">Linear Structures</a> <a href="dsa-graphs.html">Trees &amp; Graphs</a> <a href="dsa-algorithms.html">Algorithms</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="patterns">
+  <h2>Core Patterns <span class="count">— 4 topics</span></h2>
+  <p class="section-intro">Four shapes that cover a large fraction of array and string questions. Learn to spot them
+    from the problem statement.</p>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>Two pointers</h3>
+      <p>
+        Two indices moving through a sequence — from both ends inward, or at different speeds. Turns
+        nested loops into a single pass. The tell is a sorted array, a palindrome, or a pair/triplet
+        that must satisfy some condition.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — two pointers</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/array/">Tech Interview Handbook — array techniques</a></li>
+            <li><a href="https://www.youtube.com/@BackToBackSWE">Back To Back SWE (YouTube)</a> — strong on why, not just how</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/valid-palindrome/">Valid Palindrome</a></li>
+            <li><a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/">Two Sum II — Input Array Is Sorted</a></li>
+            <li><a href="https://leetcode.com/problems/3sum/">3Sum</a></li>
+            <li><a href="https://leetcode.com/problems/container-with-most-water/">Container With Most Water</a></li>
+            <li><a href="https://leetcode.com/problems/trapping-rain-water/">Trapping Rain Water</a></li>
+            <li><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/">Remove Duplicates from Sorted Array</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Sliding window</h3>
+      <p>
+        A window that expands on the right and contracts on the left, maintaining some invariant.
+        The signal is "longest / shortest / maximum substring or subarray satisfying X". Fixed-size
+        and variable-size windows are two distinct templates worth memorising separately.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — sliding window</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/string/">Tech Interview Handbook — string techniques</a></li>
+            <li><a href="https://www.youtube.com/@NeetCode">NeetCode (YouTube)</a> — the window template, explained repeatedly</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/">Longest Substring Without Repeating Characters</a></li>
+            <li><a href="https://leetcode.com/problems/longest-repeating-character-replacement/">Longest Repeating Character Replacement</a></li>
+            <li><a href="https://leetcode.com/problems/permutation-in-string/">Permutation in String</a></li>
+            <li><a href="https://leetcode.com/problems/minimum-window-substring/">Minimum Window Substring</a></li>
+            <li><a href="https://leetcode.com/problems/sliding-window-maximum/">Sliding Window Maximum</a></li>
+            <li><a href="https://leetcode.com/problems/fruit-into-baskets/">Fruit Into Baskets</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — a fixed window, applied to real traffic rather than an array</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Prefix sum &amp; difference arrays</h3>
+      <p>
+        Precompute cumulative totals so any range query becomes a single subtraction. The inverse —
+        a difference array — lets you apply many range updates in O(1) each and reconstruct the
+        result once at the end.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://cp-algorithms.com/data_structures/fenwick.html">cp-algorithms — Fenwick tree</a> — where prefix sums go next</li>
+            <li><a href="https://usaco.guide/silver/prefix-sums">USACO Guide — prefix sums</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode roadmap</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/running-sum-of-1d-array/">Running Sum of 1d Array</a></li>
+            <li><a href="https://leetcode.com/problems/find-pivot-index/">Find Pivot Index</a></li>
+            <li><a href="https://leetcode.com/problems/subarray-sum-equals-k/">Subarray Sum Equals K</a></li>
+            <li><a href="https://leetcode.com/problems/range-sum-query-immutable/">Range Sum Query — Immutable</a></li>
+            <li><a href="https://leetcode.com/problems/range-sum-query-2d-immutable/">Range Sum Query 2D — Immutable</a></li>
+            <li><a href="https://leetcode.com/problems/corporate-flight-bookings/">Corporate Flight Bookings</a> — difference array</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Intervals</h3>
+      <p>
+        Sort by start (or by end, for greedy scheduling), then sweep once merging or counting
+        overlaps. Shows up constantly in real systems too — calendar booking, seat holds, rate-limit
+        windows — so it connects straight to the system design track.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — intervals</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/interval/">Tech Interview Handbook — intervals</a></li>
+            <li><a href="https://docs.python.org/3/library/heapq.html">Python heapq</a> — the room-allocation variant needs a heap</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/merge-intervals/">Merge Intervals</a></li>
+            <li><a href="https://leetcode.com/problems/insert-interval/">Insert Interval</a></li>
+            <li><a href="https://leetcode.com/problems/non-overlapping-intervals/">Non-overlapping Intervals</a></li>
+            <li><a href="https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/">Minimum Number of Arrows to Burst Balloons</a></li>
+            <li><a href="https://leetcode.com/problems/my-calendar-i/">My Calendar I</a></li>
+            <li><a href="https://leetcode.com/problems/my-calendar-ii/">My Calendar II</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="dsa-foundations.html">← Foundations</a>    <a href="dsa-structures.html">Linear Structures →</a>    <a href="dsa.html">All DSA tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dsa.html">← DSA Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

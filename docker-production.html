@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production — Docker — Khushboo</title>
+<meta name="description" content="Running containers where uptime matters — limits, logs, security and what comes after a single host.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Production</h1>
+  <p>Running containers where uptime matters — limits, logs, security and what comes after a single host.</p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html">Fundamentals</a> <a href="docker-data-network.html">Data &amp; Networking</a> <a href="docker-compose.html">Compose &amp; Multi-Service</a> <a href="docker-images.html">Image Quality</a> <a href="docker-production.html" style="border-color:var(--accent);color:var(--accent);">Production</a> <a href="docker-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="production">
+  <h2>Production <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Logging &amp; debugging containers</h3>
+      <p>Containers log to stdout/stderr and Docker collects it — so never write to a log file inside a container. <code>docker logs -f</code>, <code>exec</code> into a running container, and <code>inspect</code> for the full config are the three tools you need when something is wrong.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/logging/">Docker — logging</a></li>
+            <li><a href="https://docs.docker.com/reference/cli/docker/container/logs/">docker logs</a></li>
+            <li><a href="https://12factor.net/logs">Twelve-Factor — logs as event streams</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Debug a crashing container using only <code>logs</code>, <code>inspect</code> and <code>exec</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — where the log stream originates</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Resource limits &amp; the OOM killer</h3>
+      <p>Without <code>--memory</code> and <code>--cpus</code>, one runaway container can take down its host. Exceeding a memory limit gets the process SIGKILLed — <strong>exit code 137</strong>, the single most common mystery container death.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/containers/resource_constraints/">Docker — resource constraints</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Cgroups">cgroups — Wikipedia</a></li>
+            <li><a href="misc-errors.html">Exit codes reference</a> — 137 and friends</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Set a low memory limit, trigger an OOM kill deliberately, and confirm the exit code is 137.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Container security</h3>
+      <p>Run as a non-root user — the default is root, and root in the container is root on the host if anything escapes. Then: pin base image versions, scan for CVEs, drop capabilities, and use read-only filesystems where you can.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/security/">Docker — security</a></li>
+            <li><a href="https://docs.docker.com/reference/cli/docker/scout/">Docker Scout — image scanning</a></li>
+            <li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a non-root <code>USER</code> to your Dockerfile and fix the permission errors that follow.</li>
+            <li>Scan one of your images and triage what it reports.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Images in CI/CD</h3>
+      <p>Building once and promoting the same artefact through environments — tagging by git SHA, pushing to a registry, then deploying that exact digest. Rebuilding per environment means you never test what you ship.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/ci/github-actions/">Docker — build with GitHub Actions</a></li>
+            <li><a href="https://12factor.net/build-release-run">Twelve-Factor — build, release, run</a></li>
+            <li><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html">Fowler — blue-green deployment</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Set up a workflow that builds, tags by SHA and pushes on every merge to main.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Beyond one host — orchestration</h3>
+      <p>Where Docker alone stops: restarts, rolling updates, service discovery and scheduling across machines. Kubernetes concepts map onto what you already know — a Pod wraps containers, a Deployment manages replicas, a Service is the stable address.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://kubernetes.io/docs/concepts/">Kubernetes — concepts</a></li>
+            <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/">Kubernetes basics tutorial</a></li>
+            <li><a href="https://docs.docker.com/engine/swarm/">Docker Swarm</a> — the simpler stepping stone</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run your Compose stack on a local Kubernetes (kind or minikube) and note what you had to change.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="docker-images.html">← Image Quality</a>    <a href="docker-commands.html">Commands →</a>    <a href="docker.html">All Docker tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

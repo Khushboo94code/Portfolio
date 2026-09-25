@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents & Tool Use — AI — Khushboo</title>
+<meta name="description" content="Making a model take actions rather than only produce text — the loop, the tools, and what goes wrong.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>Agents &amp; Tool Use</h1>
+  <p>Making a model take actions rather than only produce text — the loop, the tools, and what goes wrong.</p>
+
+  <div class="pillnav"><a href="ai-providers.html">Providers &amp; Models</a> <a href="ai-llm-basics.html">LLM Basics</a> <a href="ai-rag.html">RAG</a> <a href="ai-agents.html" style="border-color:var(--accent);color:var(--accent);">Agents &amp; Tool Use</a> <a href="ai-production.html">Production &amp; Evaluation</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="agents">
+  <h2>Agents &amp; Tool Use <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>The agentic loop</h3>
+      <p>Instead of one call returning an answer, the model is given tools and asked what to do next. It requests a tool call, your code runs it and feeds the result back, and this repeats until the model answers. The loop is the whole idea; everything else is plumbing.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 800 250" role="img" aria-label="Agentic loop with tool calling">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <rect class="box" x="20" y="95" width="140" height="52" rx="7"/>
+  <text class="lbl" x="90.0" y="125.0">User request</text>
+  <rect class="box-a" x="310" y="95" width="150" height="52" rx="7"/>
+  <text class="lbl-a" x="385.0" y="120.0">Model</text>
+  <text class="lbl-s" x="385.0" y="135.0">decides next step</text>
+  <rect class="box" x="620" y="95" width="150" height="52" rx="7"/>
+  <text class="lbl" x="695.0" y="120.0">Tools</text>
+  <text class="lbl-s" x="695.0" y="135.0">search, API, DB</text>
+  <rect class="box-a" x="310" y="190" width="150" height="46" rx="7"/>
+  <text class="lbl-a" x="385.0" y="217.0">Final answer</text>
+  <line class="flow-line" x1="160" y1="121" x2="306" y2="121" marker-end="url(#ah)"/>
+  <path class="flow-line-a" d="M460,108 Q540,78 616,105" marker-end="url(#ah-a)"/>
+  <text class="lbl-a" x="538" y="70">tool call</text>
+  <path class="flow-line" d="M620,138 Q540,168 464,140" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="542" y="182">result fed back in</text>
+  <line class="flow-line-a" x1="385" y1="147" x2="385" y2="186" marker-end="url(#ah-a)"/>
+  <text class="lbl-s" x="215" y="215" style="text-anchor:end">when no tool is needed →</text>
+  <text class="lbl-s" x="400" y="30">the loop runs until the model stops asking for tools</text>
+</svg>
+        <figcaption>The model decides each step. Your code only executes tools and returns results — keeping that boundary clean is what makes an agent debuggable.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview">Claude — tool use overview</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/function-calling">OpenAI — function calling</a></li>
+            <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write the loop yourself, without a framework, so you know what the abstraction hides.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/agents-from-scratch">agents-from-scratch</a> — the loop built from first principles</li>
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — the loop in production</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Designing tools</h3>
+      <p>A tool is a name, a description and a JSON schema — and the model picks it based on that description alone, so the description <em>is</em> the prompt. Few well-named tools beat many overlapping ones, and every tool needs to return errors the model can act on.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.claude.com/en/docs/agents-and-tools/tool-use/implement-tool-use">Claude — implementing tools</a></li>
+            <li><a href="https://json-schema.org/learn/getting-started-step-by-step">JSON Schema — getting started</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/function-calling">OpenAI — function calling</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a tool whose description is so clear the model never misuses it. Then try to break it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/agents-from-scratch">agents-from-scratch</a> — tool definitions</li>
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — custom command skills</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Multi-step reasoning &amp; planning</h3>
+      <p>Chain-of-thought, ReAct-style interleaving of reasoning and action, and explicit plan-then-execute. The practical question is how much autonomy to give: more steps means more capability and more ways to go wrong, so bound the loop.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://arxiv.org/abs/2201.11903">Chain-of-Thought prompting</a></li>
+            <li><a href="https://arxiv.org/abs/2210.03629">ReAct — reasoning and acting</a></li>
+            <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic — agent patterns</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Cap your agent at N steps and make it degrade gracefully when it hits the cap.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/agents-from-scratch">agents-from-scratch</a> — multi-step runs</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Multi-agent orchestration</h3>
+      <p>Splitting work across specialised agents — a researcher, a writer, a critic — with explicit handoffs and shared state. Genuinely useful for separable tasks, and frequently over-applied where one well-prompted agent would do.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://langchain-ai.github.io/langgraph/">LangGraph</a> — graphs, state and handoffs</li>
+            <li><a href="https://www.anthropic.com/engineering/building-effective-agents">When multi-agent is worth it</a></li>
+            <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a> — standardising tool access</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take a task you solved with one agent and split it in two. Decide honestly if it improved.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Failure modes &amp; guardrails</h3>
+      <p>Agents loop forever, call the same tool repeatedly, hallucinate arguments, and act on untrusted input — prompt injection through retrieved content is a real attack, not a theoretical one. Step limits, schema validation, sandboxing and human approval for destructive actions are the defences.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/">OWASP Top 10 for LLM applications</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">MDN — Content Security Policy</a> — for rendering model output</li>
+            <li><a href="https://docs.claude.com/en/docs/test-and-evaluate/strengthen-guardrails/reduce-hallucinations">Claude — reducing hallucinations</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put a prompt injection in a document your RAG retrieves and see whether your agent obeys it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — sanitised HTML, sandboxed iframe and CSP on model output</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="ai-rag.html">← RAG</a>    <a href="ai-production.html">Production &amp; Evaluation →</a>    <a href="ai.html">All AI tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

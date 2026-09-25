@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infrastructure & Security — Networking — Khushboo</title>
+<meta name="description" content="Proxies, load balancers, CDNs, network isolation and the attacks these defend against.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+       <li class="done">   green dot  — revised
+       <li class="doing">  amber dot  — learning now
+       <li>                grey dot   — not started
+     Copy any <li> to add a topic; keep the <h2> count and the
+     progress bar on networking.html in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html" class="here">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="networking.html">← Networking</a>
+  <h1>Infrastructure &amp; Security</h1>
+  <p>Proxies, load balancers, CDNs, network isolation and the attacks these defend against.</p>
+
+  <div class="pillnav"><a href="net-foundations.html">Foundations</a> <a href="net-transport.html">Transport Layer</a> <a href="net-web.html">Application Layer &amp; Web</a> <a href="net-infrastructure.html" style="border-color:var(--accent);color:var(--accent);">Infrastructure &amp; Security</a> <a href="net-debugging.html">Debugging &amp; Performance</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="infrastructure">
+  <h2>Infrastructure &amp; Security <span class="count">— 5 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>Proxies — forward &amp; reverse</h3>
+      <p>
+        A forward proxy sits in front of clients, a reverse proxy in front of servers — same
+        mechanism, opposite direction, completely different purpose. The reverse proxy is the one you
+        deploy: TLS termination, static files, routing, buffering slow clients.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/">NGINX — reverse proxy guide</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Reverse_proxy">Reverse proxy — Wikipedia</a></li>
+            <li><a href="https://www.youtube.com/@hnasr">Hussein Nasser</a> — proxy internals</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write an Nginx config that terminates TLS, serves static files and proxies everything else.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Nginx in front of Gunicorn</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Load balancers — L4 vs L7</h3>
+      <p>
+        An L4 balancer forwards by IP and port without reading the payload; an L7 balancer parses
+        HTTP and can route by path, header or cookie. L7 is more capable and more expensive per
+        request — this is the networking view of the HLD load-balancing topic.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.nginx.com/resources/glossary/load-balancing/">NGINX — load balancing</a></li>
+            <li><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html">AWS — ALB vs NLB</a> — L7 vs L4, concretely</li>
+            <li><a href="https://www.youtube.com/@hnasr">Hussein Nasser</a> — layer 4 vs layer 7 load balancing</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put two app instances behind Nginx and watch requests alternate; then kill one and observe the health check.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/loadbalancer">loadbalancer</a> — round-robin balancer written from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>CDN &amp; the edge</h3>
+      <p>
+        Caching content close to users so most requests never reach your origin. Push versus pull
+        CDNs, cache keys and invalidation, and edge termination of TLS — which also cuts the
+        handshake round trips users pay for.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/CDN">MDN — CDN</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html">AWS CloudFront — developer guide</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching">MDN — HTTP caching</a> — the headers CDNs obey</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Serve your static assets through a CDN and compare load time from a distant region.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — S3 pre-signed URLs, the origin side of edge delivery</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Firewalls, VPN &amp; network isolation</h3>
+      <p>
+        Controlling who can reach what: security groups and network ACLs in a cloud VPC, public
+        versus private subnets, bastion hosts, and VPN tunnels. The principle is that a database
+        should not have a public IP at all, rather than having one that's password-protected.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html">AWS — security groups</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Virtual_private_network">VPN — Wikipedia</a></li>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html">AWS — public vs private subnets</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put a database in a private subnet and reach it only through the app tier.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Network attacks &amp; defence</h3>
+      <p>
+        What goes wrong deliberately: DDoS and volumetric floods, man-in-the-middle when TLS is
+        absent or mis-validated, DNS spoofing, and SSRF where your own server is tricked into making
+        a request. Rate limiting and strict egress rules are the everyday defences.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">Denial-of-service attack — Wikipedia</a></li>
+            <li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a> — SSRF is on the list</li>
+            <li><a href="https://cheatsheetseries.owasp.org/">OWASP Cheat Sheet Series</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Audit an app for SSRF: can any user-supplied URL make your server fetch an internal address?</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — the first line of defence against floods</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="net-web.html">← Application Layer &amp; Web</a>    <a href="net-debugging.html">Debugging &amp; Performance →</a>    <a href="networking.html">All Networking tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="networking.html">← Networking</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

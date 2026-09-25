@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear Structures — DSA — Khushboo</title>
+<meta name="description" content="Linked lists, stacks, queues and heaps — the structures behind most &quot;design a data structure&quot; questions.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html" class="here">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dsa.html">← DSA Roadmap</a>
+  <h1>Linear Structures</h1>
+  <p>Linked lists, stacks, queues and heaps — the structures behind most "design a data structure" questions.</p>
+
+  <div class="pillnav"><a href="dsa-foundations.html">Foundations</a> <a href="dsa-patterns.html">Core Patterns</a> <a href="dsa-structures.html" style="border-color:var(--accent);color:var(--accent);">Linear Structures</a> <a href="dsa-graphs.html">Trees &amp; Graphs</a> <a href="dsa-algorithms.html">Algorithms</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="linear">
+  <h2>Linear Structures <span class="count">— 4 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="doing">
+      <h3>Linked list</h3>
+      <p>
+        Pointer manipulation under interview pressure: reversal, cycle detection with fast/slow
+        pointers, merging, and the dummy-head trick that removes most edge cases. The doubly linked
+        list plus hash map is exactly how an LRU cache is built.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://visualgo.net/en/list">VisuAlgo — linked list</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — linked list</a></li>
+            <li><a href="https://www.techinterviewhandbook.org/algorithms/linked-list/">Tech Interview Handbook — linked list</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/reverse-linked-list/">Reverse Linked List</a></li>
+            <li><a href="https://leetcode.com/problems/merge-two-sorted-lists/">Merge Two Sorted Lists</a></li>
+            <li><a href="https://leetcode.com/problems/linked-list-cycle/">Linked List Cycle</a></li>
+            <li><a href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/">Remove Nth Node From End of List</a></li>
+            <li><a href="https://leetcode.com/problems/reorder-list/">Reorder List</a></li>
+            <li><a href="https://leetcode.com/problems/copy-list-with-random-pointer/">Copy List with Random Pointer</a></li>
+            <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache</a> — the payoff problem</li>
+            <li><a href="https://leetcode.com/problems/merge-k-sorted-lists/">Merge k Sorted Lists</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — the cache that LRU formalises</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Stack &amp; monotonic stack</h3>
+      <p>
+        A stack handles anything with nesting — parentheses, expressions, undo. The monotonic stack
+        is the advanced form: keep elements in sorted order as you scan, and "next greater element"
+        style problems collapse from O(n²) to O(n).
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — stack</a></li>
+            <li><a href="https://cp-algorithms.com/data_structures/stack_queue_modification.html">cp-algorithms — minimum stack / queue</a></li>
+            <li><a href="https://www.youtube.com/@NeetCode">NeetCode (YouTube)</a> — the monotonic stack pattern</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/valid-parentheses/">Valid Parentheses</a></li>
+            <li><a href="https://leetcode.com/problems/min-stack/">Min Stack</a></li>
+            <li><a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/">Evaluate Reverse Polish Notation</a></li>
+            <li><a href="https://leetcode.com/problems/daily-temperatures/">Daily Temperatures</a> — monotonic stack</li>
+            <li><a href="https://leetcode.com/problems/next-greater-element-i/">Next Greater Element I</a></li>
+            <li><a href="https://leetcode.com/problems/car-fleet/">Car Fleet</a></li>
+            <li><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/">Largest Rectangle in Histogram</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Queue &amp; deque</h3>
+      <p>
+        FIFO processing, and the double-ended queue that makes sliding-window maximum linear.
+        <code>collections.deque</code> gives O(1) appends and pops at both ends — using a list
+        instead is the most common accidental O(n²).
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/collections.html#collections.deque">Python deque docs</a></li>
+            <li><a href="https://visualgo.net/en/list">VisuAlgo — queue &amp; deque</a></li>
+            <li><a href="https://cp-algorithms.com/data_structures/stack_queue_modification.html">cp-algorithms — queue with minimum</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/implement-queue-using-stacks/">Implement Queue using Stacks</a></li>
+            <li><a href="https://leetcode.com/problems/design-circular-queue/">Design Circular Queue</a></li>
+            <li><a href="https://leetcode.com/problems/number-of-recent-calls/">Number of Recent Calls</a> — a rate limiter in disguise</li>
+            <li><a href="https://leetcode.com/problems/sliding-window-maximum/">Sliding Window Maximum</a> — monotonic deque</li>
+            <li><a href="https://leetcode.com/problems/design-front-middle-back-queue/">Design Front Middle Back Queue</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — a queue doing real work</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Heap / priority queue</h3>
+      <p>
+        When you need the smallest or largest element repeatedly but don't need full ordering. The
+        "top K" pattern, the two-heaps trick for a running median, and merging k sorted sequences all
+        reduce to this. Python's <code>heapq</code> is a min-heap — negate for a max-heap.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/heapq.html">Python heapq docs</a></li>
+            <li><a href="https://visualgo.net/en/heap">VisuAlgo — heap</a></li>
+            <li><a href="https://neetcode.io/roadmap">NeetCode — heap / priority queue</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/">Kth Largest Element in an Array</a></li>
+            <li><a href="https://leetcode.com/problems/top-k-frequent-elements/">Top K Frequent Elements</a></li>
+            <li><a href="https://leetcode.com/problems/k-closest-points-to-origin/">K Closest Points to Origin</a></li>
+            <li><a href="https://leetcode.com/problems/task-scheduler/">Task Scheduler</a></li>
+            <li><a href="https://leetcode.com/problems/find-median-from-data-stream/">Find Median from Data Stream</a> — two heaps</li>
+            <li><a href="https://leetcode.com/problems/merge-k-sorted-lists/">Merge k Sorted Lists</a></li>
+            <li><a href="https://leetcode.com/problems/design-twitter/">Design Twitter</a> — heap + fan-out on read</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="dsa-patterns.html">← Core Patterns</a>    <a href="dsa-graphs.html">Trees &amp; Graphs →</a>    <a href="dsa.html">All DSA tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dsa.html">← DSA Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

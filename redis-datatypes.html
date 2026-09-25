@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Structures — Redis — Khushboo</title>
+<meta name="description" content="The reason Redis is a data structure server rather than a key-value store — each type exists to make a specific problem trivial.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html" class="here">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="redis.html">← Redis</a>
+  <h1>Data Structures</h1>
+  <p>The reason Redis is a data structure server rather than a key-value store — each type exists to make a specific problem trivial.</p>
+
+  <div class="pillnav"><a href="redis-fundamentals.html">Fundamentals</a> <a href="redis-datatypes.html" style="border-color:var(--accent);color:var(--accent);">Data Structures</a> <a href="redis-patterns.html">Patterns</a> <a href="redis-production.html">Production</a> <a href="misc-redis.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="datatypes">
+  <h2>Data Structures <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Strings &amp; counters</h3>
+      <p>The simplest type, and more capable than it looks: <code>SET</code>/<code>GET</code> for cached blobs, <code>INCR</code>/<code>INCRBY</code> for atomic counters, <code>SETNX</code> for "only if absent", and <code>SET key val EX 60 NX</code> as the one-liner behind locks and limiters.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/strings/">Redis — strings</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/incr/">INCR</a> — atomic counters</li>
+            <li><a href="https://redis.io/docs/latest/commands/set/">SET</a> — NX, XX and EX options</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a page-view counter with <code>INCR</code> and no application-side lock.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — a counter with an expiry window</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Hashes</h3>
+      <p>A map inside a key — ideal for storing an object’s fields without serialising the whole thing. You can read or update one field with <code>HGET</code>/<code>HSET</code> instead of fetching, parsing, mutating and writing back an entire JSON blob.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/hashes/">Redis — hashes</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/hset/">HSET</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/hgetall/">HGETALL</a> — and why HMGET is often better</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Cache a user object as a hash and update one field without touching the rest.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — session and cart data fits this shape</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Lists &amp; queues</h3>
+      <p>A doubly linked list with O(1) push and pop at both ends. <code>LPUSH</code> plus <code>BRPOP</code> gives you a blocking work queue in two commands — which is essentially what Celery does with Redis as its broker.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/lists/">Redis — lists</a></li>
+            <li><a href="https://redis.io/docs/latest/commands/brpop/">BRPOP</a> — blocking pop</li>
+            <li><a href="conc-patterns.html">Your Concurrency track</a> — producer-consumer theory</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a job queue with LPUSH and BRPOP, then explain what happens if a worker dies mid-job.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — the same pattern, hand-built</li>
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Celery on Redis</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Sets &amp; sorted sets</h3>
+      <p>Sets give membership and set algebra in O(1); sorted sets add a score per member, keeping everything ordered. Sorted sets are the single most useful Redis type — leaderboards, priority queues, sliding-window rate limiters and time-series indexes are all <code>ZADD</code> plus <code>ZRANGEBYSCORE</code>.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/sorted-sets/">Redis — sorted sets</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/sets/">Redis — sets</a></li>
+            <li><a href="https://leetcode.com/problems/design-a-leaderboard/">Design a Leaderboard</a> — the structure, as an exercise</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a leaderboard with ZADD and query a player’s rank in one command.</li>
+            <li>Implement a sliding-window rate limiter with a sorted set of timestamps.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — the sliding-window upgrade path</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Streams &amp; probabilistic types</h3>
+      <p>Streams are an append-only log with consumer groups — Kafka’s model inside Redis, with acknowledgement and replay. The probabilistic types trade exactness for memory: HyperLogLog counts uniques in kilobytes, Bloom filters answer "definitely not present".</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/streams/">Redis — streams</a></li>
+            <li><a href="https://redis.io/docs/latest/develop/data-types/probabilistic/">Redis — probabilistic data types</a></li>
+            <li><a href="hld.html">Your HLD track</a> — where these appear in system design</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Count unique daily visitors with HyperLogLog and compare its memory to a set.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="redis-fundamentals.html">← Fundamentals</a>    <a href="redis-patterns.html">Patterns →</a>    <a href="misc-redis.html">Command reference</a>    <a href="redis.html">All Redis tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="redis.html">← Redis</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

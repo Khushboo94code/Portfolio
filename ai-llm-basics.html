@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Basics — AI — Khushboo</title>
+<meta name="description" content="How a language model actually turns your text into more text — enough mechanism to reason about cost, limits and failure modes.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>LLM Basics</h1>
+  <p>How a language model actually turns your text into more text — enough mechanism to reason about cost, limits and failure modes.</p>
+
+  <div class="pillnav"><a href="ai-providers.html">Providers &amp; Models</a> <a href="ai-llm-basics.html" style="border-color:var(--accent);color:var(--accent);">LLM Basics</a> <a href="ai-rag.html">RAG</a> <a href="ai-agents.html">Agents &amp; Tool Use</a> <a href="ai-production.html">Production &amp; Evaluation</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="basics">
+  <h2>LLM Basics <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Tokens &amp; tokenization</h3>
+      <p>Models do not see characters or words — they see tokens, sub-word chunks from a fixed vocabulary. Everything you pay for and every limit you hit is counted in tokens, and roughly 1 token ≈ 4 characters of English (much worse for code and other languages).</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/openai/tiktoken">tiktoken</a> — the tokenizer, readable source</li>
+            <li><a href="https://tiktokenizer.vercel.app/">Tiktokenizer</a> — paste text, see the tokens</li>
+            <li><a href="https://huggingface.co/learn/nlp-course/chapter2/4">HuggingFace — tokenizers</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Tokenize a paragraph of English and the same length of Python — compare the counts.</li>
+            <li>Estimate the cost of one request before you send it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — token budgeting across providers</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Embeddings &amp; vector space</h3>
+      <p>An embedding maps text to a vector where distance means semantic similarity. This is the mechanism behind search, clustering and RAG — and the reason "dog" and "puppy" land near each other while "dog" and "dogma" do not.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://platform.openai.com/docs/guides/embeddings">OpenAI — embeddings guide</a></li>
+            <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB leaderboard</a> — which embedding model to pick</li>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector</a> — distance operators and indexes</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Embed 20 sentences and find nearest neighbours by cosine similarity.</li>
+            <li>Show a case where keyword search wins and one where embeddings win.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — semantic retrieval over pgvector</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>How a transformer generates text</h3>
+      <p>The model runs your tokens through attention layers, produces a score for every token in its vocabulary, and one gets sampled. Then it appends that token and does the whole thing again — which is why output is slow and linear in length while input is processed in parallel.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 175" role="img" aria-label="LLM inference pipeline">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <rect class="box" x="5" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl" x="65.0" y="68.0">Prompt text</text>
+  <rect class="box" x="155" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl" x="215.0" y="63.0">Tokenizer</text>
+  <text class="lbl-s" x="215.0" y="78.0">text → IDs</text>
+  <rect class="box" x="305" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl" x="365.0" y="63.0">Embeddings</text>
+  <text class="lbl-s" x="365.0" y="78.0">IDs → vectors</text>
+  <rect class="box-a" x="455" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl-a" x="515.0" y="63.0">Transformer</text>
+  <text class="lbl-s" x="515.0" y="78.0">attention layers</text>
+  <rect class="box" x="605" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl" x="665.0" y="63.0">Logits</text>
+  <text class="lbl-s" x="665.0" y="78.0">score per token</text>
+  <rect class="box-a" x="755" y="38" width="120" height="52" rx="7"/>
+  <text class="lbl-a" x="815.0" y="63.0">Sample</text>
+  <text class="lbl-s" x="815.0" y="78.0">pick next token</text>
+  <line class="flow-line" x1="125" y1="64" x2="151" y2="64" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="275" y1="64" x2="301" y2="64" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="425" y1="64" x2="451" y2="64" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="575" y1="64" x2="601" y2="64" marker-end="url(#ah)"/>
+  <line class="flow-line" x1="725" y1="64" x2="751" y2="64" marker-end="url(#ah)"/>
+  <path class="flow-line-a" d="M815,90 L815,132 Q815,142 805,142 L225,142 Q215,142 215,132 L215,96" marker-end="url(#ah-a)"/>
+  <text class="lbl-s" x="515" y="160">append the sampled token to the context, then repeat — one token per pass</text>
+</svg>
+        <figcaption>One forward pass produces one token. The sampled token is appended to the context and the whole pass runs again — which is exactly why generation cost scales with output length.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a> — the classic explainer</li>
+            <li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> — the original paper</li>
+            <li><a href="https://huggingface.co/docs/transformers/index">HuggingFace Transformers docs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why 1,000 input tokens are much cheaper and faster than 1,000 output tokens.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Context window &amp; its limits</h3>
+      <p>The context window is everything the model can see at once — system prompt, history, retrieved chunks and the answer being generated all compete for it. Attention cost grows quadratically with length, and models genuinely attend less well to the middle of a long context.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://arxiv.org/abs/2307.03172">Lost in the Middle</a> — why long context degrades</li>
+            <li><a href="https://docs.claude.com/en/docs/build-with-claude/context-windows">Claude — context windows</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/prompt-engineering">OpenAI — prompt engineering guide</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take a long prompt and cut it 50% without losing answer quality — that skill is the job.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — deciding how many retrieved chunks fit</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Sampling — temperature, top-p</h3>
+      <p>The model outputs a probability distribution; sampling decides what to do with it. Temperature 0 is near-deterministic and right for extraction and classification; higher values trade reliability for variety. Most production bugs blamed on "the model" are really sampling settings.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://platform.openai.com/docs/api-reference/chat/create">OpenAI — temperature &amp; top_p</a></li>
+            <li><a href="https://docs.claude.com/en/api/messages">Claude — Messages API parameters</a></li>
+            <li><a href="https://huggingface.co/docs/transformers/generation_strategies">HuggingFace — generation strategies</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run the same extraction prompt at temperature 0 and 1 ten times each; count the disagreements.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Training, fine-tuning &amp; when not to</h3>
+      <p>Pretraining, instruction tuning and RLHF explain why a chat model behaves as it does. Practically: fine-tuning teaches <em>form</em>, retrieval supplies <em>facts</em> — so most problems people reach for fine-tuning to solve are actually RAG or prompting problems.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://huggingface.co/docs/transformers/training">HuggingFace — fine-tuning</a></li>
+            <li><a href="https://platform.openai.com/docs/guides/fine-tuning">OpenAI — when to fine-tune</a></li>
+            <li><a href="https://arxiv.org/abs/2203.02155">InstructGPT — RLHF paper</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>For one real task, write the case for prompting vs RAG vs fine-tuning and pick with reasons.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="ai-rag.html">RAG →</a>    <a href="ai.html">All AI tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

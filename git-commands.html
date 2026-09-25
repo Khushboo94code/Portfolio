@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands — Git &amp; GitHub — Khushboo</title>
+<meta name="description" content="Everyday commands, plus the &quot;how do I undo this&quot; table that is the only thing anyone actually needs at speed.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html" class="here">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="git.html">← Git &amp; GitHub</a>
+  <h1>Git</h1>
+  <p>Everyday commands, plus the "how do I undo this" table that is the only thing anyone actually needs at speed.</p>
+
+  <div class="pillnav"><a href="git-basics.html">Fundamentals</a> <a href="git-workflows.html">Branching &amp; Workflows</a> <a href="git-fixing.html">Fixing Mistakes</a> <a href="git-github.html">GitHub</a> <a href="git-commands.html" style="border-color:var(--accent);color:var(--accent);">Commands</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 29 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Everyday</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>git status -sb</code></td><td>Short status with branch info</td></tr>
+        <tr><td><code>git add -p</code></td><td>Stage changes hunk by hunk — review as you go</td></tr>
+        <tr><td><code>git commit -m &quot;msg&quot;</code></td><td>Commit staged changes</td></tr>
+        <tr><td><code>git push -u origin br</code></td><td>Push and set upstream</td></tr>
+        <tr><td><code>git pull --rebase</code></td><td>Pull without a merge commit</td></tr>
+        <tr><td><code>git fetch --all --prune</code></td><td>Update refs, drop deleted remote branches</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Branching</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>git switch -c feature</code></td><td>Create and switch to a branch (modern <code>checkout -b</code>)</td></tr>
+        <tr><td><code>git switch main</code></td><td>Switch branches</td></tr>
+        <tr><td><code>git merge feature</code></td><td>Merge a branch in</td></tr>
+        <tr><td><code>git rebase main</code></td><td>Replay your commits on top of main</td></tr>
+        <tr><td><code>git rebase -i HEAD~3</code></td><td>Squash / reword the last 3 commits</td></tr>
+        <tr><td><code>git cherry-pick SHA</code></td><td>Apply one commit from elsewhere</td></tr>
+        <tr><td><code>git branch -d br</code></td><td>Delete a merged branch</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Inspecting</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>git log --oneline --graph</code></td><td>Compact visual history</td></tr>
+        <tr><td><code>git log -p file</code></td><td>History of one file, with diffs</td></tr>
+        <tr><td><code>git diff</code> / <code>--staged</code></td><td>Unstaged / staged changes</td></tr>
+        <tr><td><code>git show SHA</code></td><td>One commit in full</td></tr>
+        <tr><td><code>git blame file</code></td><td>Who last changed each line</td></tr>
+        <tr><td><code>git reflog</code></td><td>Every HEAD move — <strong>how you recover "lost" work</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Undoing things</h3>
+    <p class="note">The table to memorise. The difference between <code>reset</code> and <code>revert</code>: reset rewrites history, revert adds a commit that undoes one.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Situation</th><th>Command</th></tr></thead>
+        <tbody>
+        <tr><td>Unstage a file</td><td><code>git restore --staged file</code></td></tr>
+        <tr><td>Discard local changes to a file</td><td><code>git restore file</code></td></tr>
+        <tr><td>Undo last commit, keep changes staged</td><td><code>git reset --soft HEAD~1</code></td></tr>
+        <tr><td>Undo last commit, keep changes unstaged</td><td><code>git reset --mixed HEAD~1</code></td></tr>
+        <tr><td>Undo last commit, destroy changes</td><td><code>git reset --hard HEAD~1</code></td></tr>
+        <tr><td>Undo a pushed commit safely</td><td><code>git revert SHA</code></td></tr>
+        <tr><td>Change the last commit message</td><td><code>git commit --amend</code></td></tr>
+        <tr><td>Save work temporarily</td><td><code>git stash</code> then <code>git stash pop</code></td></tr>
+        <tr><td>Remove untracked files</td><td><code>git clean -fd</code></td></tr>
+        <tr><td>Recover a deleted branch</td><td><code>git reflog</code> then <code>git switch -c br SHA</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="git-github.html">← GitHub</a>
+    <a href="git.html">All Git tracks</a>
+    <a href="misc.html">Other references →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="git.html">← Git &amp; GitHub</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

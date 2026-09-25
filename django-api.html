@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APIs with DRF — Django — Khushboo</title>
+<meta name="description" content="Serializers, ViewSets, authentication, permissions, pagination and testing — building an API that survives growth.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django Roadmap</a>
+  <h1>APIs with DRF</h1>
+  <p>Serializers, ViewSets, authentication, permissions, pagination and testing — building an API that survives growth.</p>
+
+  <div class="pillnav"><a href="django-core.html">Core Django</a> <a href="django-orm.html">ORM Depth</a> <a href="django-api.html" style="border-color:var(--accent);color:var(--accent);">APIs with DRF</a> <a href="django-async.html">Async &amp; Caching</a> <a href="django-production.html">Architecture &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="api">
+  <h2>APIs with DRF <span class="count">— 6 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>Serializers &amp; validation</h3>
+      <p>
+        The boundary between JSON and your models — and the right place for input validation.
+        <code>ModelSerializer</code> for the common case, nested and writable serializers for the
+        hard ones, and <code>validate_&lt;field&gt;</code> / <code>validate</code> for rules that
+        span fields.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/serializers/">DRF — serializers</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/fields/">DRF — serializer fields</a></li>
+            <li><a href="https://www.cdrf.co/">Classy DRF</a> — every DRF class expanded</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a writable nested serializer that creates a parent and its children in one atomic request.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — DRF serializers over the marketplace domain</li>
+            <li><a href="https://github.com/Khushboo94code/API-Integration-with-service-layer-">API-Integration-with-service-layer-</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Views, ViewSets &amp; routers</h3>
+      <p>
+        The ladder from <code>APIView</code> to generic views to <code>ModelViewSet</code> — each
+        step trading explicitness for less code. Routers generate URL patterns from a ViewSet, which
+        is convenient right up until you need a non-CRUD endpoint and reach for <code>@action</code>.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/viewsets/">DRF — ViewSets</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/generic-views/">DRF — generic views</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/routers/">DRF — routers</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build one endpoint as <code>APIView</code>, then as a generic view, then as a ViewSet — and decide which you'd ship.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — the REST layer</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Authentication</h3>
+      <p>
+        Session auth for browsers, token or JWT for clients that aren't. The trade-off worth being
+        able to argue: JWTs scale statelessly but can't be revoked before expiry, which is why short
+        access tokens plus refresh rotation is the usual compromise.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/authentication/">DRF — authentication</a></li>
+            <li><a href="https://django-rest-framework-simplejwt.readthedocs.io/en/latest/">Simple JWT</a> — the standard JWT package</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/auth/customizing/">Django — custom user models</a> — do this on day one of a project</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Implement refresh-token rotation and a logout that actually invalidates the refresh token.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — auth across vendor / customer / admin roles</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Permissions &amp; throttling</h3>
+      <p>
+        Authorisation enforced server-side — object-level permissions so a vendor can only touch
+        their own products, not just a UI that hides the button. DRF throttling is rate limiting
+        applied at the framework layer, the same token-bucket idea from HLD.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/permissions/">DRF — permissions</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/throttling/">DRF — throttling</a></li>
+            <li><a href="https://django-guardian.readthedocs.io/en/stable/">django-guardian</a> — per-object permissions when you outgrow the basics</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a permission class that allows read to everyone and write only to the object's owner, and test both paths.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — role-based access at the API layer</li>
+            <li><a href="https://github.com/Khushboo94code/Rate-limiter">Rate-limiter</a> — the algorithm DRF throttling implements</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Pagination, filtering &amp; versioning</h3>
+      <p>
+        The difference between an API that survives growth and one that doesn't. Offset pagination
+        degrades on large tables — cursor pagination doesn't. Filtering belongs in a declarative
+        layer, and versioning is what lets you change a response shape without breaking clients.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/pagination/">DRF — pagination</a> — note the cursor pagination section</li>
+            <li><a href="https://django-filter.readthedocs.io/en/stable/">django-filter</a></li>
+            <li><a href="https://www.django-rest-framework.org/api-guide/versioning/">DRF — versioning</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Switch a list endpoint from offset to cursor pagination and compare query time at page 1 and page 1000.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — filtering and query params, directly on topic</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Testing APIs</h3>
+      <p>
+        <code>APIClient</code> for request-level tests, factories instead of fixtures, and tests that
+        don't hit the network. The design pressure matters as much as the coverage — code that's hard
+        to test is usually code with the wrong seams.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.django-rest-framework.org/api-guide/testing/">DRF — testing</a></li>
+            <li><a href="https://pytest-django.readthedocs.io/en/latest/">pytest-django</a></li>
+            <li><a href="https://factoryboy.readthedocs.io/en/stable/">factory_boy</a> — test data without fixture files</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Get one of your repos to a test suite that runs with no network and no external services.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — adding a suite to an existing repo would be the artefact.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="django-orm.html">← ORM Depth</a>    <a href="django-async.html">Async &amp; Caching →</a>    <a href="django.html">All Django tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

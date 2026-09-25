@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tooling & Quality — Python — Khushboo</title>
+<meta name="description" content="What turns a script into something another person can run, trust and change.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html" class="here">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="python.html">← Python</a>
+  <h1>Tooling &amp; Quality</h1>
+  <p>What turns a script into something another person can run, trust and change.</p>
+
+  <div class="pillnav"><a href="python-core.html">Core Language</a> <a href="python-intermediate.html">Intermediate</a> <a href="python-advanced.html">Advanced</a> <a href="python-stdlib.html">Standard Library</a> <a href="python-tooling.html" style="border-color:var(--accent);color:var(--accent);">Tooling &amp; Quality</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="tooling">
+  <h2>Tooling &amp; Quality <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Environments &amp; packaging</h3>
+      <p>One virtual environment per project so dependencies cannot collide, and a pinned lockfile so the versions you tested are the versions that deploy. <code>uv</code> is now the fast option; <code>pip-tools</code> and Poetry are the established ones.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://packaging.python.org/en/latest/">Python Packaging User Guide</a></li>
+            <li><a href="https://docs.astral.sh/uv/">uv</a> — very fast installs and resolution</li>
+            <li><a href="https://docs.python.org/3/library/venv.html">venv</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Pin a project with a lockfile and rebuild it from scratch in a clean environment.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — a real dependency set, Dockerized</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Testing with pytest</h3>
+      <p>Plain asserts, fixtures for setup, parametrize for the same test over many inputs, and monkeypatch for isolating external calls. The design pressure matters as much as the coverage — untestable code usually has the wrong seams.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.pytest.org/en/stable/">pytest documentation</a></li>
+            <li><a href="https://docs.pytest.org/en/stable/how-to/fixtures.html">pytest — fixtures</a></li>
+            <li><a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Get one repo to a suite that runs with no network and no database.</li>
+            <li>Parametrize a test that you originally wrote five times.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Linting, formatting &amp; types</h3>
+      <p>Stop arguing about style by automating it: <code>ruff</code> for linting and formatting in one fast tool, <code>mypy</code> for type checking, and <code>pre-commit</code> so all of it runs before a commit rather than in review.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.astral.sh/ruff/">Ruff</a> — linter and formatter</li>
+            <li><a href="https://pre-commit.com/">pre-commit</a></li>
+            <li><a href="https://peps.python.org/pep-0008/">PEP 8 — style guide</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add ruff and pre-commit to a repo and fix everything it reports.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Debugging &amp; logging</h3>
+      <p><code>breakpoint()</code> drops you into a debugger at any line, which beats scattering print statements. And logging with levels and structure beats printing entirely — the moment code runs somewhere you are not watching, prints are gone.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/pdb.html">pdb — the debugger</a></li>
+            <li><a href="https://docs.python.org/3/library/logging.html">logging</a></li>
+            <li><a href="https://docs.python.org/3/howto/logging.html">Python — logging HOWTO</a> — start here, it is better than the reference</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Debug a failing test with <code>breakpoint()</code> instead of prints.</li>
+            <li>Replace every print in one project with structured logging.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="python-stdlib.html">← Standard Library</a>    <a href="python.html">All Python tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="python.html">← Python</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

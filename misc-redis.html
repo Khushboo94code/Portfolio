@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redis Commands — Reference — Khushboo</title>
+<meta name="description" content="Every command worth knowing, grouped by data type. Concepts and patterns live in the Redis track.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>Redis Commands</h1>
+  <p>Every command worth knowing, grouped by data type. Concepts and patterns live in the <a href="redis.html">Redis track</a>.</p>
+
+  <div class="pillnav"><a href="misc-http.html">HTTP Codes</a> <a href="misc-errors.html">Error Codes</a> <a href="misc-shell.html">Shell</a> <a href="misc-python.html">Python &amp; Django</a> <a href="misc-redis.html" style="border-color:var(--accent);color:var(--accent);">Redis</a> <a href="misc-sdlc.html">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 71 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Keys &amp; expiry</h3>
+    <p class="note">Never run <code>KEYS *</code> on a real instance — Redis is single-threaded and it blocks everything. <code>SCAN</code> is the safe iterator.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>SET k v</code></td><td>Set a string value</td></tr>
+        <tr><td><code>GET k</code></td><td>Read it</td></tr>
+        <tr><td><code>DEL k</code></td><td>Delete a key</td></tr>
+        <tr><td><code>EXISTS k</code></td><td>Does it exist</td></tr>
+        <tr><td><code>EXPIRE k 60</code></td><td>Expire in 60 seconds</td></tr>
+        <tr><td><code>TTL k</code></td><td>Seconds left (-1 no expiry, -2 gone)</td></tr>
+        <tr><td><code>PERSIST k</code></td><td>Remove the expiry</td></tr>
+        <tr><td><code>SCAN 0 MATCH u:*</code></td><td><strong>Safe</strong> cursor iteration over keys</td></tr>
+        <tr><td><code>TYPE k</code></td><td>Which data type this key holds</td></tr>
+        <tr><td><code>RENAME k k2</code></td><td>Rename a key</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Strings &amp; counters</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>SET k v EX 60 NX</code></td><td>Set with TTL, only if absent — the <strong>lock primitive</strong></td></tr>
+        <tr><td><code>SETNX k v</code></td><td>Set only if the key does not exist</td></tr>
+        <tr><td><code>INCR k</code> / <code>DECR k</code></td><td>Atomic increment / decrement</td></tr>
+        <tr><td><code>INCRBY k 5</code></td><td>Increment by an amount</td></tr>
+        <tr><td><code>MSET k1 v1 k2 v2</code></td><td>Set several at once</td></tr>
+        <tr><td><code>MGET k1 k2</code></td><td>Read several at once — one round trip</td></tr>
+        <tr><td><code>APPEND k v</code></td><td>Append to a string</td></tr>
+        <tr><td><code>GETSET k v</code></td><td>Set and return the old value</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Hashes</h3>
+    <p class="note">Use these when a key holds an object — you can update one field without rewriting the whole thing.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>HSET k field v</code></td><td>Set one field</td></tr>
+        <tr><td><code>HGET k field</code></td><td>Read one field</td></tr>
+        <tr><td><code>HMGET k f1 f2</code></td><td>Read several fields</td></tr>
+        <tr><td><code>HGETALL k</code></td><td>Read every field — careful on large hashes</td></tr>
+        <tr><td><code>HDEL k field</code></td><td>Delete a field</td></tr>
+        <tr><td><code>HINCRBY k field 1</code></td><td>Atomically increment a field</td></tr>
+        <tr><td><code>HEXISTS k field</code></td><td>Does the field exist</td></tr>
+        <tr><td><code>HKEYS k</code> / <code>HVALS k</code></td><td>All field names / all values</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Lists — queues</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>LPUSH k v</code></td><td>Push onto the head</td></tr>
+        <tr><td><code>RPUSH k v</code></td><td>Push onto the tail</td></tr>
+        <tr><td><code>LPOP k</code> / <code>RPOP k</code></td><td>Pop from head / tail</td></tr>
+        <tr><td><code>BRPOP k 0</code></td><td><strong>Blocking</strong> pop — how a worker waits for jobs</td></tr>
+        <tr><td><code>LRANGE k 0 -1</code></td><td>Read a range (0 to -1 is everything)</td></tr>
+        <tr><td><code>LLEN k</code></td><td>Length — your queue depth metric</td></tr>
+        <tr><td><code>LREM k 1 v</code></td><td>Remove occurrences of a value</td></tr>
+        <tr><td><code>LTRIM k 0 99</code></td><td>Keep only the first 100 — capped lists</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Sets</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>SADD k m</code></td><td>Add a member</td></tr>
+        <tr><td><code>SREM k m</code></td><td>Remove a member</td></tr>
+        <tr><td><code>SISMEMBER k m</code></td><td>Membership test, O(1)</td></tr>
+        <tr><td><code>SMEMBERS k</code></td><td>All members</td></tr>
+        <tr><td><code>SCARD k</code></td><td>Cardinality</td></tr>
+        <tr><td><code>SINTER a b</code></td><td>Intersection — mutual followers, shared tags</td></tr>
+        <tr><td><code>SUNION a b</code> / <code>SDIFF a b</code></td><td>Union / difference</td></tr>
+        <tr><td><code>SRANDMEMBER k 3</code></td><td>Random members</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Sorted sets</h3>
+    <p class="note">The most useful type in Redis — leaderboards, priority queues, sliding-window rate limiters and time indexes are all this.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>ZADD k 100 member</code></td><td>Add with a score</td></tr>
+        <tr><td><code>ZINCRBY k 10 member</code></td><td>Atomically bump a score</td></tr>
+        <tr><td><code>ZSCORE k member</code></td><td>Read a score</td></tr>
+        <tr><td><code>ZRANK k member</code></td><td>Rank ascending; <code>ZREVRANK</code> descending</td></tr>
+        <tr><td><code>ZRANGE k 0 9 REV</code></td><td>Top 10 — the leaderboard query</td></tr>
+        <tr><td><code>ZRANGEBYSCORE k 100 200</code></td><td>Everything in a score range</td></tr>
+        <tr><td><code>ZREMRANGEBYSCORE k 0 t</code></td><td>Drop old entries — <strong>the sliding window trim</strong></td></tr>
+        <tr><td><code>ZCARD k</code> / <code>ZCOUNT k min max</code></td><td>Count all / count in range</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Pub/sub &amp; streams</h3>
+    <p class="note">Pub/sub does not persist — an offline subscriber misses the message. Streams do, with acknowledgement and replay.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>PUBLISH ch msg</code></td><td>Broadcast to subscribers</td></tr>
+        <tr><td><code>SUBSCRIBE ch</code></td><td>Listen on a channel</td></tr>
+        <tr><td><code>PSUBSCRIBE news.*</code></td><td>Pattern subscribe</td></tr>
+        <tr><td><code>XADD s * field v</code></td><td>Append to a stream</td></tr>
+        <tr><td><code>XREAD COUNT 10 STREAMS s 0</code></td><td>Read from a stream</td></tr>
+        <tr><td><code>XGROUP CREATE s grp 0</code></td><td>Create a consumer group</td></tr>
+        <tr><td><code>XACK s grp id</code></td><td>Acknowledge a processed message</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Transactions &amp; scripting</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>MULTI</code> … <code>EXEC</code></td><td>Queue commands, run them without interleaving</td></tr>
+        <tr><td><code>DISCARD</code></td><td>Abandon a queued transaction</td></tr>
+        <tr><td><code>WATCH k</code></td><td>Optimistic lock — EXEC fails if k changed</td></tr>
+        <tr><td><code>EVAL script 1 k arg</code></td><td>Run Lua atomically on the server</td></tr>
+        <tr><td><code>SCRIPT LOAD</code></td><td>Cache a script, then call it by SHA</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Server &amp; operations</h3>
+    <p class="note"><code>INFO</code> is where every metric worth alerting on lives — hit rate, evictions, memory, connected clients.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>INFO</code> / <code>INFO stats</code></td><td>Server metrics</td></tr>
+        <tr><td><code>DBSIZE</code></td><td>Number of keys</td></tr>
+        <tr><td><code>SLOWLOG GET 10</code></td><td>Commands that blocked the server</td></tr>
+        <tr><td><code>MEMORY USAGE k</code></td><td>Bytes used by one key</td></tr>
+        <tr><td><code>CONFIG GET maxmemory</code></td><td>Read config at runtime</td></tr>
+        <tr><td><code>CONFIG SET maxmemory-policy allkeys-lru</code></td><td>Set the eviction policy</td></tr>
+        <tr><td><code>CLIENT LIST</code></td><td>Who is connected</td></tr>
+        <tr><td><code>MONITOR</code></td><td>Live command stream — debugging only, it is expensive</td></tr>
+        <tr><td><code>FLUSHDB</code></td><td><strong>Delete everything in this database</strong> — think twice</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Read more</h2>
+  <ul style="max-width:62ch;">
+      <li><a href="https://redis.io/commands/">Redis — full command reference</a></li>
+      <li><a href="https://redis.io/docs/latest/">Redis documentation</a></li>
+      <li><a href="redis.html">The Redis track</a> — concepts behind these commands</li>
+  </ul>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="misc-python.html">← Python &amp; Django</a>    <a href="misc-sdlc.html">SDLC &amp; Agile →</a>    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

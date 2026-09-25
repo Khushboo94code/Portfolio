@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Standard Library — Python — Khushboo</title>
+<meta name="description" content="The batteries. Knowing these well is the cheapest way to write less code and fewer bugs.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html" class="here">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="python.html">← Python</a>
+  <h1>Standard Library</h1>
+  <p>The batteries. Knowing these well is the cheapest way to write less code and fewer bugs.</p>
+
+  <div class="pillnav"><a href="python-core.html">Core Language</a> <a href="python-intermediate.html">Intermediate</a> <a href="python-advanced.html">Advanced</a> <a href="python-stdlib.html" style="border-color:var(--accent);color:var(--accent);">Standard Library</a> <a href="python-tooling.html">Tooling &amp; Quality</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="stdlib">
+  <h2>Standard Library <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>collections</h3>
+      <p><code>Counter</code>, <code>defaultdict</code>, <code>deque</code>, <code>namedtuple</code> and <code>OrderedDict</code>. <code>deque</code> in particular gives O(1) appends and pops at both ends — using a list as a queue is a quiet O(n) per operation.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/collections.html">collections — container datatypes</a></li>
+            <li><a href="https://docs.python.org/3/library/collections.abc.html">collections.abc</a> — the protocols behind them</li>
+            <li><a href="https://wiki.python.org/moin/TimeComplexity">TimeComplexity wiki</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Replace a hand-rolled counting dict with <code>Counter</code> and a list-as-queue with <code>deque</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — a queue doing real work</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>itertools &amp; functools</h3>
+      <p>Composable iteration — <code>chain</code>, <code>groupby</code>, <code>islice</code>, <code>product</code> — and function tools: <code>cache</code> for memoisation in one decorator, <code>partial</code> for pre-filling arguments, <code>reduce</code> for folds.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/itertools.html">itertools</a></li>
+            <li><a href="https://docs.python.org/3/library/functools.html">functools</a></li>
+            <li><a href="https://docs.python.org/3/howto/functional.html">Python — functional programming HOWTO</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Memoise a recursive function with <code>@functools.cache</code> and measure the speedup.</li>
+            <li>Batch an iterable into chunks of n using itertools alone.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Files, paths &amp; the OS</h3>
+      <p><code>pathlib</code> replaces string path manipulation with objects that work across platforms. Plus <code>os</code> and <code>sys</code> for environment and arguments, <code>shutil</code> for file operations, and <code>tempfile</code> for scratch space that cleans itself up.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/pathlib.html">pathlib — object-oriented paths</a></li>
+            <li><a href="https://docs.python.org/3/library/os.path.html">os.path</a> — what you are replacing</li>
+            <li><a href="https://docs.python.org/3/library/tempfile.html">tempfile</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Convert a script using <code>os.path.join</code> string work to <code>pathlib</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Dates, JSON &amp; serialisation</h3>
+      <p>Timezone-aware datetimes or nothing — naive datetimes are a bug waiting for a deployment in another region. Plus <code>json</code> with custom encoders, <code>csv</code> for the format that never dies, and <code>pickle</code> with its security warning.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/datetime.html">datetime</a></li>
+            <li><a href="https://docs.python.org/3/library/zoneinfo.html">zoneinfo</a> — timezones without a dependency</li>
+            <li><a href="https://docs.python.org/3/library/json.html">json</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Store a timestamp in UTC and render it in two timezones correctly.</li>
+            <li>Write a JSON encoder for a custom class.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="python-advanced.html">← Advanced</a>    <a href="python-tooling.html">Tooling &amp; Quality →</a>    <a href="python.html">All Python tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="python.html">← Python</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

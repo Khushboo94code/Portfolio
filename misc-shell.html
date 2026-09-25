@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux & Shell — Reference — Khushboo</title>
+<meta name="description" content="The commands worth having in muscle memory — file work, text processing, processes, disk and network debugging.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>Linux &amp; Shell</h1>
+  <p>The commands worth having in muscle memory — file work, text processing, processes, disk and network debugging.</p>
+
+  <div class="pillnav"><a href="misc-http.html">HTTP Codes</a> <a href="misc-errors.html">Error Codes</a> <a href="misc-shell.html" style="border-color:var(--accent);color:var(--accent);">Shell</a> <a href="misc-python.html">Python &amp; Django</a> <a href="misc-redis.html">Redis</a> <a href="misc-sdlc.html">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 40 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Files &amp; navigation</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>ls -lah</code></td><td>Long listing, hidden files, human-readable sizes</td></tr>
+        <tr><td><code>cd -</code></td><td>Jump back to the previous directory</td></tr>
+        <tr><td><code>cp -r src dst</code></td><td>Copy a directory recursively</td></tr>
+        <tr><td><code>mv a b</code></td><td>Move or rename</td></tr>
+        <tr><td><code>rm -rf dir</code></td><td>Delete recursively, no prompts — check twice</td></tr>
+        <tr><td><code>ln -s target link</code></td><td>Create a symlink</td></tr>
+        <tr><td><code>tree -L 2</code></td><td>Directory tree, two levels deep</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Finding things</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>find . -name &quot;*.py&quot;</code></td><td>Find by filename pattern</td></tr>
+        <tr><td><code>find . -type f -mtime -1</code></td><td>Files modified in the last day</td></tr>
+        <tr><td><code>grep -rn &quot;text&quot; .</code></td><td>Recursive search with line numbers</td></tr>
+        <tr><td><code>grep -i -E &quot;a|b&quot; f</code></td><td>Case-insensitive regex search</td></tr>
+        <tr><td><code>which python</code></td><td>Which binary a command resolves to</td></tr>
+        <tr><td><code>history | grep git</code></td><td>Search your shell history</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Text processing</h3>
+    <p class="note">The classic pipeline: cut a field, sort it, count duplicates, show the top offenders.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>head -n 20 f</code></td><td>First 20 lines</td></tr>
+        <tr><td><code>tail -f app.log</code></td><td>Follow a log as it is written</td></tr>
+        <tr><td><code>wc -l f</code></td><td>Count lines</td></tr>
+        <tr><td><code>sort | uniq -c | sort -rn</code></td><td>Count occurrences, most frequent first</td></tr>
+        <tr><td><code>awk &#x27;{print $1}&#x27;</code></td><td>Print the first whitespace-separated field</td></tr>
+        <tr><td><code>sed &#x27;s/old/new/g&#x27; f</code></td><td>Substitute text</td></tr>
+        <tr><td><code>cut -d, -f2 f.csv</code></td><td>Take the second comma-separated column</td></tr>
+        <tr><td><code>jq .key file.json</code></td><td>Query JSON</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Processes</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>ps aux | grep python</code></td><td>Find a running process</td></tr>
+        <tr><td><code>top</code> / <code>htop</code></td><td>Live process and resource view</td></tr>
+        <tr><td><code>kill -15 PID</code></td><td>Ask a process to stop gracefully (SIGTERM)</td></tr>
+        <tr><td><code>kill -9 PID</code></td><td>Force kill (SIGKILL) — last resort</td></tr>
+        <tr><td><code>nohup cmd &amp;amp;</code></td><td>Run detached, survives logout</td></tr>
+        <tr><td><code>jobs</code> / <code>fg</code> / <code>bg</code></td><td>Manage background jobs in this shell</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Disk, network &amp; services</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>df -h</code></td><td>Disk space by filesystem</td></tr>
+        <tr><td><code>du -sh *</code></td><td>Size of each item in the current directory</td></tr>
+        <tr><td><code>lsof -i :8000</code></td><td>What is holding a port</td></tr>
+        <tr><td><code>ss -tan</code></td><td>Socket states (replaces <code>netstat</code>)</td></tr>
+        <tr><td><code>curl -v URL</code></td><td>Full HTTP request and response</td></tr>
+        <tr><td><code>dig +trace domain</code></td><td>Follow DNS resolution from the roots</td></tr>
+        <tr><td><code>traceroute host</code></td><td>Show the network path</td></tr>
+        <tr><td><code>systemctl status svc</code></td><td>Service state</td></tr>
+        <tr><td><code>journalctl -u svc -f</code></td><td>Follow a service log</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Permissions</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>chmod +x script.sh</code></td><td>Make executable</td></tr>
+        <tr><td><code>chmod 644 file</code></td><td>Owner read/write, others read</td></tr>
+        <tr><td><code>chown user:group f</code></td><td>Change ownership</td></tr>
+        <tr><td><code>sudo -u www-data cmd</code></td><td>Run as another user</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="misc-errors.html">← Error Codes</a>
+    <a href="misc-python.html">Python &amp; Django →</a>
+    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

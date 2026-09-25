@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Branching & Workflows — Git &amp; GitHub — Khushboo</title>
+<meta name="description" content="How a team shares a repository without standing on each other — and the merge-versus-rebase argument, settled practically.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="git.html">← Git &amp; GitHub</a>
+  <h1>Branching &amp; Workflows</h1>
+  <p>How a team shares a repository without standing on each other — and the merge-versus-rebase argument, settled practically.</p>
+
+  <div class="pillnav"><a href="git-basics.html">Fundamentals</a> <a href="git-workflows.html" style="border-color:var(--accent);color:var(--accent);">Branching &amp; Workflows</a> <a href="git-fixing.html">Fixing Mistakes</a> <a href="git-github.html">GitHub</a> <a href="git-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="workflows">
+  <h2>Branching &amp; Workflows <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Feature branch workflow</h3>
+      <p>Branch off main, commit small and often, push, open a pull request, merge. Short-lived branches are the whole trick: a branch open for three weeks is a merge conflict with a countdown timer.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.github.com/en/get-started/quickstart/github-flow">GitHub Flow</a></li>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows">Pro Git — branching workflows</a></li>
+            <li><a href="https://trunkbaseddevelopment.com/">Trunk Based Development</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Keep every branch under two days for a week and see what changes.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Merge vs rebase</h3>
+      <p>Merge preserves history exactly and adds a merge commit; rebase replays your commits on top of the target for a linear history but rewrites them. The rule worth memorising: <strong>never rebase a branch someone else has pulled</strong>.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing">Pro Git — rebasing</a> — including when not to</li>
+            <li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Atlassian — merging vs rebasing</a></li>
+            <li><a href="https://learngitbranching.js.org/">Learn Git Branching</a> — watch both happen</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Do the same integration twice, once with merge and once with rebase; compare the logs.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Resolving conflicts</h3>
+      <p>A conflict is git saying two people changed the same lines and it will not guess. Read both sides, keep what is correct rather than what is yours, remove the markers, test, then continue. Panic is the only real failure mode here.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging">Pro Git — advanced merging</a></li>
+            <li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts">GitHub — about merge conflicts</a></li>
+            <li><a href="git-commands.html">Command reference</a> — <code>merge --abort</code> is always available</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Create a conflict deliberately and resolve it without a GUI.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Commit hygiene</h3>
+      <p>One logical change per commit, and a message saying <em>why</em> rather than what — the diff already shows what. Conventional Commits gives a format; <code>add -p</code> is how you split messy work into clean commits.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.conventionalcommits.org/">Conventional Commits</a></li>
+            <li><a href="https://cbea.ms/git-commit/">How to write a git commit message</a> — the standard reference</li>
+            <li><a href="https://git-scm.com/docs/git-add">git add -p — interactive staging</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take one messy working tree and split it into three clean commits with <code>add -p</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="git-basics.html">← Fundamentals</a>    <a href="git-fixing.html">Fixing Mistakes →</a>    <a href="git.html">All Git &amp; GitHub tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="git.html">← Git &amp; GitHub</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

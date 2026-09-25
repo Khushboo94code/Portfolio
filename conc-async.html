@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Async & the Event Loop — Concurrency — Khushboo</title>
+<meta name="description" content="One thread, thousands of concurrent waits — and one rule you must never break.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html" class="here">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="concurrency.html">← Concurrency</a>
+  <h1>Async &amp; the Event Loop</h1>
+  <p>One thread, thousands of concurrent waits — and one rule you must never break.</p>
+
+  <div class="pillnav"><a href="conc-foundations.html">Foundations</a> <a href="conc-threading.html">Threading</a> <a href="conc-multiprocessing.html">Multiprocessing</a> <a href="conc-async.html" style="border-color:var(--accent);color:var(--accent);">Async &amp; the Event Loop</a> <a href="conc-patterns.html">Patterns &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="async">
+  <h2>Async &amp; the Event Loop <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>The event loop</h3>
+      <p>A single thread running a queue of ready tasks. It runs one coroutine until that coroutine hits an <code>await</code>, parks it while the I/O is outstanding, and picks the next ready task. There is no preemption at all — cooperation is the entire model.</p>
+      <figure class="diagram">
+<svg viewBox="0 0 880 290" role="img" aria-label="How the asyncio event loop works">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+    <marker id="ah-a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+  <rect class="box-a" x="330" y="20" width="220" height="50" rx="7"/>
+  <text class="lbl-a" x="440.0" y="44.0">Event loop</text>
+  <text class="lbl-s" x="440.0" y="59.0">picks the next ready task</text>
+  <rect class="box" x="20" y="120" width="230" height="50" rx="7"/>
+  <text class="lbl" x="135.0" y="144.0">Ready queue</text>
+  <text class="lbl-s" x="135.0" y="159.0">tasks that can run now</text>
+  <rect class="box" x="620" y="120" width="240" height="50" rx="7"/>
+  <text class="lbl" x="740.0" y="144.0">Waiting on I/O</text>
+  <text class="lbl-s" x="740.0" y="159.0">socket, disk, timer</text>
+  <rect class="box" x="330" y="120" width="220" height="50" rx="7"/>
+  <text class="lbl" x="440.0" y="144.0">Run the coroutine</text>
+  <text class="lbl-s" x="440.0" y="159.0">until the next await</text>
+  <line class="flow-line-a" x1="440" y1="70" x2="440" y2="116" marker-end="url(#ah-a)"/>
+  <path class="flow-line-a" d="M550,145 L616,145" marker-end="url(#ah-a)"/>
+  <text class="lbl-a" x="583" y="136">await</text>
+  <path class="flow-line" d="M740,170 L740,215 Q740,225 730,225 L145,225 Q135,225 135,215 L135,174" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="440" y="243">when the I/O completes, the task becomes ready again</text>
+  <path class="flow-line" d="M135,120 L135,95 Q135,85 145,85 L320,85" marker-end="url(#ah)"/>
+  <text class="lbl-s" x="230" y="268">One thread. Nothing is preempted — a task that never awaits blocks everything.</text>
+</svg>
+        <figcaption>The loop only regains control at an <code>await</code>. This is why one blocking call — <code>time.sleep</code>, a sync DB driver, a CPU-heavy function — freezes every other task in the process.</figcaption>
+      </figure>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/asyncio-eventloop.html">asyncio — event loop</a></li>
+            <li><a href="https://www.youtube.com/watch?v=MCs5OvhV9S4">David Beazley — concurrency from scratch</a> — builds one live</li>
+            <li><a href="https://docs.python.org/3/library/asyncio.html">asyncio — asynchronous I/O</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain what happens between two <code>await</code>s in one sentence.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Coroutines, await &amp; tasks</h3>
+      <p><code>async def</code> defines a coroutine that does nothing until awaited or scheduled. <code>await</code> on one coroutine is still sequential — concurrency only starts when you create tasks or use <code>gather</code>, which is the mistake almost everyone makes first.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html">asyncio — coroutines and tasks</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html#asyncio.gather">asyncio.gather</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html#task-groups">asyncio — TaskGroup</a> — the modern structured form</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Await ten coroutines sequentially, then with <code>gather</code>; compare total time.</li>
+            <li>Explain why the first version was not concurrent at all.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Blocking the loop</h3>
+      <p>The cardinal sin. One synchronous call — <code>time.sleep</code>, <code>requests.get</code>, a sync database driver, a heavy computation — freezes every task in the process, because nothing can preempt it. The fixes are an async library, or <code>run_in_executor</code> to push it to a thread or process.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/asyncio-dev.html">asyncio — development mode &amp; debugging</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.loop.run_in_executor">loop.run_in_executor</a></li>
+            <li><a href="https://www.aeracode.org/2018/02/19/python-async-simplified/">Async Python simplified</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Put a <code>time.sleep(5)</code> inside a coroutine and watch every other task stall.</li>
+            <li>Fix it two ways — <code>asyncio.sleep</code>, and an executor.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Async in web frameworks</h3>
+      <p>FastAPI is async-first; Django supports async views under ASGI with <code>sync_to_async</code> bridging the ORM. The trap is a sync database call inside an async view — it blocks the loop and makes the app slower than the sync version would have been.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/async/">Django — async support</a></li>
+            <li><a href="https://fastapi.tiangolo.com/async/">FastAPI — async and await</a> — unusually good explanation</li>
+            <li><a href="https://channels.readthedocs.io/en/latest/">Django Channels</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write one endpoint two ways — sync and async — and load-test both.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — FastAPI with streaming responses</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Cancellation, timeouts &amp; errors</h3>
+      <p>Async tasks can be cancelled, and cancellation arrives as an exception you must let propagate. Every external call needs a timeout; <code>gather</code> hides failures unless you ask for them, and an un-awaited task that raises fails silently.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html#timeouts">asyncio — timeouts</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html#task-groups">TaskGroup</a> — errors propagate properly</li>
+            <li><a href="https://docs.python.org/3/library/asyncio-dev.html">asyncio — debugging</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a task that never finishes, then cancel it cleanly with a timeout.</li>
+            <li>Find an un-awaited task in your code and see whether its error was ever reported.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="conc-multiprocessing.html">← Multiprocessing</a>    <a href="conc-patterns.html">Patterns &amp; Production →</a>    <a href="concurrency.html">All Concurrency tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="concurrency.html">← Concurrency</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

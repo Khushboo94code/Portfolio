@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands — Docker — Khushboo</title>
+<meta name="description" content="Docker and Compose command reference, plus every Dockerfile instruction and what to watch out for.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Commands</h1>
+  <p>
+    The lookup half of this track — Docker and Compose commands, and every Dockerfile instruction
+    with the thing that catches people out.
+  </p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html">Fundamentals</a> <a href="docker-data-network.html">Data &amp; Networking</a> <a href="docker-compose.html">Compose</a> <a href="docker-images.html">Image Quality</a> <a href="docker-production.html">Production</a> <a href="docker-commands.html" style="border-color:var(--accent);color:var(--accent);">Commands</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 50 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Images</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>docker build -t app:tag .</code></td><td>Build from the Dockerfile in this directory</td></tr>
+        <tr><td><code>docker build --no-cache .</code></td><td>Rebuild ignoring the layer cache</td></tr>
+        <tr><td><code>docker images</code></td><td>List local images</td></tr>
+        <tr><td><code>docker history app:tag</code></td><td><strong>Layer-by-layer size</strong> — how you find bloat</td></tr>
+        <tr><td><code>docker pull image:tag</code></td><td>Fetch from a registry</td></tr>
+        <tr><td><code>docker push user/app:tag</code></td><td>Publish to a registry</td></tr>
+        <tr><td><code>docker rmi image</code></td><td>Remove an image</td></tr>
+        <tr><td><code>docker tag src user/app:v1</code></td><td>Add another tag to an image</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Containers</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>docker run -it --rm img sh</code></td><td>Run interactively and clean up on exit</td></tr>
+        <tr><td><code>docker run -d -p 8000:8000 img</code></td><td>Run detached with a published port</td></tr>
+        <tr><td><code>docker ps</code> / <code>docker ps -a</code></td><td>Running / all containers</td></tr>
+        <tr><td><code>docker exec -it name bash</code></td><td>Shell into a running container</td></tr>
+        <tr><td><code>docker logs -f name</code></td><td>Follow the log stream</td></tr>
+        <tr><td><code>docker inspect name</code></td><td>Full JSON config — env, mounts, network</td></tr>
+        <tr><td><code>docker stop</code> / <code>docker start</code></td><td>SIGTERM then stop / start again</td></tr>
+        <tr><td><code>docker rm -f name</code></td><td>Force-remove a container</td></tr>
+        <tr><td><code>docker stats</code></td><td>Live CPU and memory per container</td></tr>
+        <tr><td><code>docker cp name:/path ./here</code></td><td>Copy files out of a container</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Compose</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>docker compose up -d</code></td><td>Start the whole stack detached</td></tr>
+        <tr><td><code>docker compose up --build</code></td><td>Rebuild images, then start</td></tr>
+        <tr><td><code>docker compose down</code></td><td>Stop and remove containers and networks</td></tr>
+        <tr><td><code>docker compose down -v</code></td><td><strong>Also deletes volumes</strong> — destroys your database</td></tr>
+        <tr><td><code>docker compose logs -f web</code></td><td>Follow one service’s logs</td></tr>
+        <tr><td><code>docker compose exec web bash</code></td><td>Shell into a running service</td></tr>
+        <tr><td><code>docker compose run --rm web migrate</code></td><td>One-off command in a fresh container</td></tr>
+        <tr><td><code>docker compose ps</code></td><td>Service status</td></tr>
+        <tr><td><code>docker compose restart web</code></td><td>Restart one service</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Volumes &amp; networks</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>docker volume ls</code></td><td>List volumes</td></tr>
+        <tr><td><code>docker volume inspect v</code></td><td>Where it lives on the host</td></tr>
+        <tr><td><code>docker volume rm v</code></td><td>Delete a volume — data is gone</td></tr>
+        <tr><td><code>docker network ls</code></td><td>List networks</td></tr>
+        <tr><td><code>docker network inspect n</code></td><td>Which containers are attached</td></tr>
+        <tr><td><code>docker network create n</code></td><td>Create a user-defined bridge (gives you DNS by name)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Cleanup</h3>
+    <p class="note">Disk fills up quietly. <code>system prune -a</code> is the one that actually reclaims space — and the one that deletes images you still wanted.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>docker system df</code></td><td>What is using disk</td></tr>
+        <tr><td><code>docker system prune</code></td><td>Remove stopped containers, unused networks, dangling images</td></tr>
+        <tr><td><code>docker system prune -a --volumes</code></td><td>Remove everything unused, volumes included — destructive</td></tr>
+        <tr><td><code>docker image prune -a</code></td><td>Remove all unreferenced images</td></tr>
+        <tr><td><code>docker container prune</code></td><td>Remove stopped containers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Dockerfile instructions</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Instruction</th><th>Does</th><th>Watch out for</th></tr></thead>
+        <tbody>
+        <tr><td><code>FROM</code></td><td>Base image</td><td>Pin a version; <code>:latest</code> is mutable</td></tr>
+        <tr><td><code>WORKDIR</code></td><td>Set and create the working directory</td><td>Use it instead of <code>RUN cd</code></td></tr>
+        <tr><td><code>COPY</code></td><td>Copy files from build context</td><td>Copy requirements before source for cache hits</td></tr>
+        <tr><td><code>ADD</code></td><td>Copy, plus URL fetch and auto-extract</td><td>Prefer <code>COPY</code> — <code>ADD</code> surprises people</td></tr>
+        <tr><td><code>RUN</code></td><td>Execute at build time</td><td>Chain with <code>&amp;&amp;</code> to avoid extra layers</td></tr>
+        <tr><td><code>ENV</code></td><td>Set an environment variable</td><td>Baked into the image — never secrets</td></tr>
+        <tr><td><code>ARG</code></td><td>Build-time variable</td><td>Visible in <code>docker history</code></td></tr>
+        <tr><td><code>EXPOSE</code></td><td>Document a port</td><td>Publishes nothing — <code>-p</code> does that</td></tr>
+        <tr><td><code>USER</code></td><td>Switch user</td><td><strong>Set a non-root user</strong> before CMD</td></tr>
+        <tr><td><code>HEALTHCHECK</code></td><td>Define readiness</td><td>Required for <code>service_healthy</code> in Compose</td></tr>
+        <tr><td><code>ENTRYPOINT</code></td><td>The executable</td><td>Combine with CMD for default args</td></tr>
+        <tr><td><code>CMD</code></td><td>Default command or args</td><td>Overridden by anything after <code>docker run img</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="docker-production.html">← Production</a>
+    <a href="docker.html">All Docker tracks</a>
+    <a href="misc.html">Other references →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

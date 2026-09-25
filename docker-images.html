@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Quality — Docker — Khushboo</title>
+<meta name="description" content="The difference between a 1.2 GB image that rebuilds in four minutes and a 180 MB one that rebuilds in six seconds.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Image Quality</h1>
+  <p>The difference between a 1.2 GB image that rebuilds in four minutes and a 180 MB one that rebuilds in six seconds.</p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html">Fundamentals</a> <a href="docker-data-network.html">Data &amp; Networking</a> <a href="docker-compose.html">Compose &amp; Multi-Service</a> <a href="docker-images.html" style="border-color:var(--accent);color:var(--accent);">Image Quality</a> <a href="docker-production.html">Production</a> <a href="docker-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="images">
+  <h2>Image Quality <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Layer caching &amp; build speed</h3>
+      <p>Docker caches each layer and invalidates everything after the first change — so <code>COPY . .</code> before <code>pip install</code> means every source edit reinstalls all dependencies. Copy the requirements file first, install, then copy source.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/cache/">Docker — optimise the build cache</a></li>
+            <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — build best practices</a></li>
+            <li><a href="https://docs.docker.com/build/cache/invalidation/">Docker — cache invalidation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Reorder a Dockerfile so a one-line source change rebuilds in seconds, and time both versions.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Multi-stage builds</h3>
+      <p>Build in one stage with compilers and dev headers, copy only the artefact into a clean runtime stage. Shrinks images dramatically and removes the build toolchain from what you ship — which is a security win as much as a size one.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/building/multi-stage/">Docker — multi-stage builds</a></li>
+            <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — best practices</a></li>
+            <li><a href="https://github.com/wagoodman/dive">dive</a> — confirm what ended up in the final stage</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Convert one of your Dockerfiles to multi-stage and record the size before and after.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Base images &amp; image size</h3>
+      <p>Choosing between <code>python:3.12</code>, <code>-slim</code> and Alpine. Alpine is smallest but uses musl instead of glibc, which breaks some Python wheels and can make builds slower — slim is usually the right default.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/building/base-images/">Docker — base images</a></li>
+            <li><a href="https://hub.docker.com/_/python">Official Python images</a> — read the variants section</li>
+            <li><a href="https://pythonspeed.com/articles/alpine-docker-python/">Why Alpine is often the wrong choice for Python</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build the same app on <code>slim</code> and <code>alpine</code>; compare size and build time.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>.dockerignore &amp; reproducibility</h3>
+      <p>Without a <code>.dockerignore</code>, your build context ships <code>.git</code>, <code>.venv</code>, node_modules and local <code>.env</code> files into the daemon — slow, bloated, and a genuine secret-leak risk. Pinning versions is the other half of a reproducible build.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/concepts/context/#dockerignore-files">Docker — .dockerignore</a></li>
+            <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — best practices</a></li>
+            <li><a href="https://12factor.net/dependencies">Twelve-Factor — dependencies</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a <code>.dockerignore</code> and measure how much the build context shrinks.</li>
+            <li>Check whether any image of yours contains a <code>.env</code> file.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="docker-compose.html">← Compose &amp; Multi-Service</a>    <a href="docker-production.html">Production →</a>    <a href="docker.html">All Docker tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Async & Caching — Django — Khushboo</title>
+<meta name="description" content="Celery task design, scheduling, Django’s caching layers, and the async/ASGI story.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django Roadmap</a>
+  <h1>Async &amp; Caching</h1>
+  <p>Celery task design, scheduling, Django’s caching layers, and the async/ASGI story.</p>
+
+  <div class="pillnav"><a href="django-core.html">Core Django</a> <a href="django-orm.html">ORM Depth</a> <a href="django-api.html">APIs with DRF</a> <a href="django-async.html" style="border-color:var(--accent);color:var(--accent);">Async &amp; Caching</a> <a href="django-production.html">Architecture &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="async">
+  <h2>Async &amp; Caching <span class="count">— 4 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>Celery task design</h3>
+      <p>
+        Moving slow work off the request cycle. The design rules are the distributed-systems ones:
+        tasks should be small, idempotent and retryable, arguments should be IDs rather than objects,
+        and every task needs a defined failure path.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/tasks.html">Celery — task guide</a></li>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/calling.html">Celery — calling tasks</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/transactions/#performing-actions-after-commit">Django — on_commit</a> — the fix for tasks racing the transaction</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a task idempotent so running it twice produces the same result.</li>
+            <li>Add a retry policy with exponential backoff and a dead-letter path.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Celery for email and post-purchase work</li>
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — the queue mechanics underneath</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Periodic tasks &amp; scheduling</h3>
+      <p>
+        Celery beat for recurring work, with schedules as configuration rather than code. Two things
+        bite in production: overlapping runs when a job outlasts its interval, and more than one beat
+        process firing the same schedule — both need a lock.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html">Celery — periodic tasks</a></li>
+            <li><a href="https://django-celery-beat.readthedocs.io/en/latest/">django-celery-beat</a> — schedules in the database</li>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/distributed-locks/">Redis — distributed locks</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a Redis lock so a long-running scheduled job can never overlap with itself.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">The Q-Commerce crawler used Celery beat heavily, but isn't public.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Caching layers in Django</h3>
+      <p>
+        Django gives you four levels — per-site, per-view, template fragment and the low-level cache
+        API — and the low-level one is where real work happens. The hard part is the same as in HLD:
+        invalidation, and choosing a key scheme you can reason about.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/cache/">Django — caching</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/conditional-view-processing/">Django — conditional view processing</a> — ETags and 304s</li>
+            <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Cache an expensive queryset with the low-level API and invalidate it correctly on write.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cache-">Cache-</a> — cache mechanics built from scratch</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Async views, ASGI &amp; Channels</h3>
+      <p>
+        Django's async story: <code>async def</code> views under ASGI, <code>sync_to_async</code> and
+        the ORM's async API, and Channels for WebSockets. Worth knowing what async actually buys —
+        concurrency on I/O waits, not faster CPU-bound code.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/async/">Django — async support</a></li>
+            <li><a href="https://channels.readthedocs.io/en/latest/">Django Channels</a> — WebSockets</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/deployment/asgi/">Django — ASGI deployment</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a two-user chat over Channels — it doubles as the chat system design case study.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="django-api.html">← APIs with DRF</a>    <a href="django-production.html">Architecture &amp; Production →</a>    <a href="django.html">All Django tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

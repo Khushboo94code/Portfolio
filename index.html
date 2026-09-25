@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khushboo — AI / Forward-Deployed Engineer</title>
+<meta name="description" content="Khushboo — AI / Applied &amp; Forward-Deployed Engineer. Builds and ships agentic AI end to end: RAG, tool calling, FastAPI, Django, PostgreSQL + pgvector.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">KHUSHBOO</a>
+    <ul>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <h1>Khushboo</h1>
+  <p class="role">AI / Applied &amp; Forward-Deployed Engineer</p>
+  <p class="lede">
+    Self-taught engineer who builds and ships agentic AI end to end. I recently built
+    <strong>Lenny</strong>, a full-stack agentic AI assistant (RAG, tool/function calling,
+    multi-provider and local LLMs), and <strong>Boxpacker</strong>, a live optimisation app.
+  </p>
+
+  <div class="links">
+    <a class="primary" href="resume.pdf">Résumé (PDF)</a>
+    <a href="https://github.com/Khushboo94code">GitHub</a>
+    <a href="https://www.linkedin.com/in/khushboo-b-b20115423">LinkedIn</a>
+    <a href="mailto:khushboob1694@gmail.com">Email</a>
+  </div>
+
+  <p class="meta">Delhi NCR, India · Open to work · Immediate joiner</p>
+</header>
+
+<main>
+
+<section class="wrap" id="about">
+  <h2>About</h2>
+  <p>
+    Strong Python and backend foundation — Django/DRF, FastAPI, PostgreSQL, Celery/Redis, Docker.
+    I like turning ambiguous, real-world problems into reliable, deployed AI products, and working
+    directly with the people who use them. High-agency and a fast learner.
+  </p>
+</section>
+
+<section class="wrap" id="skills">
+  <h2>Skills</h2>
+  <div class="skills">
+    <div class="skill">
+      <h3>AI / GenAI</h3>
+      <p>LLM apps (OpenAI, Gemini, Claude), RAG, embeddings &amp; semantic search (pgvector),
+         AI agents, tool / function calling, prompt engineering, LiteLLM, LangGraph-style
+         orchestration, LLM evaluation, Ollama (local LLMs)</p>
+    </div>
+    <div class="skill">
+      <h3>Languages</h3>
+      <p>Python (Advanced), SQL (Expert)</p>
+    </div>
+    <div class="skill">
+      <h3>Backend &amp; APIs</h3>
+      <p>FastAPI, Django, Django REST Framework, REST APIs, third-party integrations</p>
+    </div>
+    <div class="skill">
+      <h3>Data &amp; Infra</h3>
+      <p>PostgreSQL + pgvector, Redis, Celery, BigQuery, Docker, AWS, Git, CI/CD</p>
+    </div>
+    <div class="skill">
+      <h3>Core CS</h3>
+      <p>Data Structures &amp; Algorithms, System Design (HLD/LLD)</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     PROJECTS — each card carries what it does, how it's built
+     (the .flow diagram), and the decisions behind it.
+     To add a project: copy one <article class="project"> block.
+     Diagram = .node boxes separated by <span class="arrow">→</span>;
+     use class="node hl" to highlight the interesting box.
+     ========================================================= -->
+<section class="wrap" id="projects">
+  <h2>Projects</h2>
+  <p class="section-intro">
+    What I've built, how each one is actually put together, and the decisions behind it.
+  </p>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>Lenny — Full-Stack Agentic AI Assistant</h3>
+      <span class="when">2026</span>
+    </div>
+    <p class="why">An assistant that takes actions and cites its sources, without being locked to one LLM provider.</p>
+
+    <ul>
+      <li>Built an <strong>agentic loop with tool / function calling</strong> (Claude Agent SDK) so the
+          assistant takes actions, not just answers, with a LiteLLM fallback for reliability.</li>
+      <li>Implemented <strong>RAG over pgvector</strong> with grounded, cited answers over a knowledge base.</li>
+      <li>Ran <strong>cloud and fully-local LLMs</strong> (OpenAI, Gemini, Claude, and Llama 3.1 via Ollama),
+          swappable via one config.</li>
+      <li>Added custom command skills and output guardrails (sanitised HTML, sandboxed iframe + CSP);
+          Dockerized end to end.</li>
+    </ul>
+
+    <h4>Architecture</h4>
+    <div class="flow">
+      <span class="node">React UI</span>
+      <span class="arrow">→</span>
+      <span class="node">FastAPI</span>
+      <span class="arrow">→</span>
+      <span class="node hl">Agent loop<br>(Claude Agent SDK)</span>
+      <span class="arrow">→</span>
+      <span class="branch">
+        <span class="node">Tools / skills</span>
+        <span class="node">Retriever → pgvector</span>
+      </span>
+      <span class="arrow">→</span>
+      <span class="node hl">LiteLLM router</span>
+      <span class="arrow">→</span>
+      <span class="branch">
+        <span class="node">OpenAI · Gemini · Claude</span>
+        <span class="node">Ollama (Llama 3.1, local)</span>
+      </span>
+    </div>
+
+    <h4>Key decisions</h4>
+    <ul>
+      <li><strong>Agentic loop over a single call</strong> — the model plans, calls a tool, reads the
+          result and continues, so it can act rather than only answer.</li>
+      <li><strong>Provider abstraction via LiteLLM</strong> — one config swaps cloud for fully-local
+          models, and gives a fallback path when a provider fails or rate-limits.</li>
+      <li><strong>One Postgres for both</strong> — relational data and vectors live in the same
+          database, avoiding a separate vector store to operate.</li>
+      <li><strong>Output guardrails</strong> — model output is sanitised HTML rendered in a sandboxed
+          iframe under a CSP, so generated markup can't execute against the app.</li>
+    </ul>
+
+    <div class="tags">
+      <span>Python</span><span>FastAPI</span><span>React</span><span>Claude Agent SDK</span>
+      <span>LiteLLM</span><span>pgvector</span><span>Ollama</span><span>Docker</span>
+    </div>
+    <p class="project-links">
+      <a href="https://github.com/Khushboo94code/lenny-growth-assistant">Code →</a>
+      <a href="https://youtu.be/SrJ6qE4g2kE">Demo →</a>
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>Q-Commerce Price Intelligence Dashboard</h3>
+      <span class="when">June 2026</span>
+    </div>
+    <p class="why">Continuously collect competitor pricing at scale without getting blocked or losing data.</p>
+
+    <ul>
+      <li>Built Scrapy crawlers + Celery/Redis scheduling to continuously collect competitor pricing
+          at scale, with throttling, retries and error handling.</li>
+      <li>Exposed REST APIs powering price comparison, filtering and historical pricing insights
+          on a live dashboard.</li>
+    </ul>
+
+    <h4>Architecture</h4>
+    <div class="flow">
+      <span class="node">Celery beat<br>(schedule)</span>
+      <span class="arrow">→</span>
+      <span class="node hl">Redis queue</span>
+      <span class="arrow">→</span>
+      <span class="node">Scrapy workers</span>
+      <span class="arrow">→</span>
+      <span class="node">Normalise</span>
+      <span class="arrow">→</span>
+      <span class="node hl">PostgreSQL<br>(price history)</span>
+      <span class="arrow">→</span>
+      <span class="node">DRF API</span>
+      <span class="arrow">→</span>
+      <span class="node">Dashboard</span>
+    </div>
+
+    <h4>Key decisions</h4>
+    <ul>
+      <li><strong>Queue-backed workers</strong> — crawling is decoupled from the API, so a slow or
+          failing target never blocks a user request.</li>
+      <li><strong>Throttling and retries with backoff</strong> — keeps crawls polite and survives
+          transient failures instead of dropping a run.</li>
+      <li><strong>Append-only price history</strong> — every observation is stored with a timestamp,
+          which is what makes historical trend queries possible later.</li>
+      <li><strong>Scheduling in Celery beat</strong> — collection cadence is configuration, not code,
+          so different sources can run at different frequencies.</li>
+    </ul>
+
+    <div class="tags">
+      <span>Python</span><span>Django REST Framework</span><span>Scrapy</span>
+      <span>Celery</span><span>Redis</span><span>PostgreSQL</span>
+    </div>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3>Multi-Vendor Digital Marketplace</h3>
+      <span class="when">2026</span>
+    </div>
+    <p class="why">Many sellers, real money, and paid files that must not leak.</p>
+
+    <ul>
+      <li>Built and deployed a role-based marketplace with secure Stripe Connect payments,
+          S3 pre-signed downloads, and full vendor / customer / admin workflows.</li>
+    </ul>
+
+    <h4>Architecture</h4>
+    <div class="flow">
+      <span class="node">Nginx</span>
+      <span class="arrow">→</span>
+      <span class="node">Gunicorn / Django</span>
+      <span class="arrow">→</span>
+      <span class="branch">
+        <span class="node">PostgreSQL</span>
+        <span class="node">Redis + Celery</span>
+        <span class="node hl">Stripe Connect</span>
+        <span class="node hl">S3 pre-signed URLs</span>
+      </span>
+    </div>
+
+    <h4>Key decisions</h4>
+    <ul>
+      <li><strong>Stripe Connect for split payments</strong> — money routes to vendors through Stripe,
+          so the platform never has to hold or reconcile balances itself.</li>
+      <li><strong>Pre-signed S3 downloads</strong> — paid files are served straight from S3 with a
+          short-lived signed URL, keeping large downloads off the app servers and links unshareable.</li>
+      <li><strong>Role-based access</strong> — vendor, customer and admin permissions enforced at the
+          API layer rather than hidden in the UI.</li>
+      <li><strong>Celery for the slow path</strong> — emails, webhooks and post-purchase work happen
+          off the request cycle.</li>
+    </ul>
+
+    <div class="tags">
+      <span>Django</span><span>DRF</span><span>PostgreSQL</span><span>Redis</span>
+      <span>Celery</span><span>Stripe Connect</span><span>AWS S3</span><span>Docker</span>
+      <span>Nginx</span>
+    </div>
+  </article>
+</section>
+
+<!-- Gateway card → the study / revision pages. Add more of these
+     (DSA, AI Engineering, …) as you build each one out. -->
+<section class="wrap" id="notes">
+  <h2>Engineering Notes</h2>
+  <p class="section-intro">
+    Structured notes I keep and revise from — organised as roadmaps rather than a dump.
+  </p>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="ai.html" style="text-decoration:none;">AI →</a></h3>
+      <span class="when">27 topics · 5 pages</span>
+    </div>
+    <p class="why">LLM basics through RAG, agents and production — with diagrams of the pipelines I have actually shipped.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="aws.html" style="text-decoration:none;">AWS →</a></h3>
+      <span class="when">23 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      Regions and IAM, compute, S3 and RDS, VPC networking and operations — read through the
+      Well-Architected lens the SAA certification uses.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="deployment.html" style="text-decoration:none;">Deployment →</a></h3>
+      <span class="when">24 topics · 5 pages</span>
+    </div>
+    <p class="why">Beginner-first: what deploying means, then the concrete path to an app online with HTTPS, then operating it.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="git.html" style="text-decoration:none;">Git &amp; GitHub →</a></h3>
+      <span class="when">18 topics · 5 pages</span>
+    </div>
+    <p class="why">The model underneath the commands, workflows, the recovery commands that make git safe, and GitHub itself.</p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="python.html" style="text-decoration:none;">Python →</a></h3>
+      <span class="when">22 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      The data model, decorators and generators, memory and the GIL, the standard library, and the
+      tooling that makes code trustworthy.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="system-design.html" style="text-decoration:none;">System Design →</a></h3>
+      <span class="when">58 topics · 3 pages</span>
+    </div>
+    <p class="why">
+      A revision roadmap covering low-level design concepts, high-level design building blocks,
+      and full system design walk-throughs — each topic expandable with notes.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="redis.html" style="text-decoration:none;">Redis →</a></h3>
+      <span class="when">20 topics · 4 pages</span>
+    </div>
+    <p class="why">
+      Data structures, caching, rate limiting, queues and locks, and running it in production —
+      the thing already doing four jobs in systems I have built.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="dbms.html" style="text-decoration:none;">DBMS &amp; SQL →</a></h3>
+      <span class="when">24 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      The relational model and normalization, SQL through window functions, transactions and
+      isolation, indexing and query planning — with 32 LeetCode SQL problems by topic.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="os.html" style="text-decoration:none;">Operating Systems →</a></h3>
+      <span class="when">20 topics · 4 pages</span>
+    </div>
+    <p class="why">
+      Kernel and system calls, processes and scheduling, virtual memory and paging, files and I/O —
+      with diagrams of the address space and address translation.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="networking.html" style="text-decoration:none;">Networking →</a></h3>
+      <span class="when">24 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      Computer networks from the wire up to HTTP — OSI and TCP/IP, TCP internals, TLS, proxies and
+      CDNs, and the debugging toolkit.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="docker.html" style="text-decoration:none;">Docker →</a></h3>
+      <span class="when">22 topics · 6 pages</span>
+    </div>
+    <p class="why">
+      Containers from first principles to production — images and layers, Compose, image size and
+      build speed, resource limits and security, plus a command reference.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="misc.html" style="text-decoration:none;">Miscellaneous →</a></h3>
+      <span class="when">256 entries · 6 pages</span>
+    </div>
+    <p class="why">
+      The lookup section — HTTP status codes, error and exit codes, shell, Python/Django and Redis commands,
+      plus SDLC and Agile vocabulary.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="dsa.html" style="text-decoration:none;">DSA →</a></h3>
+      <span class="when">26 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      Data structures and algorithms organised by pattern — two pointers, sliding window, graphs,
+      dynamic programming — each with a curated LeetCode set.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="concurrency.html" style="text-decoration:none;">Concurrency →</a></h3>
+      <span class="when">24 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      Threads, processes, the GIL and the asyncio event loop in one place — plus producer-consumer,
+      worker pools, backpressure and testing nondeterministic code.
+    </p>
+  </article>
+
+  <article class="project">
+    <div class="project-head">
+      <h3><a href="django.html" style="text-decoration:none;">Django →</a></h3>
+      <span class="when">27 topics · 5 pages</span>
+    </div>
+    <p class="why">
+      Django and DRF read as a system design problem — ORM depth, API design, Celery, caching,
+      architecture and what breaks first under load.
+    </p>
+  </article>
+</section>
+
+<section class="wrap" id="education">
+  <h2>Education &amp; Certifications</h2>
+  <div class="stack">
+    <div class="item">
+      <div>
+        <strong>Bachelor of Engineering — Electrical Engineering</strong>
+        <span class="sub">YMCA University of Science and Technology</span>
+      </div>
+      <span class="when">2013–17</span>
+    </div>
+    <div class="item">
+      <div>
+        <strong>Django Masterclass by AP</strong>
+        <span class="sub">Udemy</span>
+      </div>
+      <span class="when">2026</span>
+    </div>
+    <div class="item">
+      <div>
+        <strong>Ultimate AWS Certified Solutions Architect Professional</strong>
+        <span class="sub">Udemy</span>
+      </div>
+      <span class="when">2026</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="contact">
+  <h2>Contact</h2>
+  <p>Open to AI / forward-deployed and backend engineering roles. The fastest way to reach me is email.</p>
+  <div class="links">
+    <a class="primary" href="mailto:khushboob1694@gmail.com">khushboob1694@gmail.com</a>
+    <a href="https://www.linkedin.com/in/khushboo-b-b20115423">LinkedIn</a>
+    <a href="https://github.com/Khushboo94code">GitHub</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Khushboo · Delhi NCR, India · Built with plain HTML &amp; CSS.</div>
+</footer>
+
+</body>
+</html>

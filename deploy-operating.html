@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operating It — Deployment — Khushboo</title>
+<meta name="description" content="What happens after the first deploy — seeing what the app is doing, and fixing it when it is not.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+__NAV__
+
+<header class="page-head wrap">
+  <a class="back" href="deployment.html">← Deployment</a>
+  <h1>Operating It</h1>
+  <p>What happens after the first deploy — seeing what the app is doing, and fixing it when it is not.</p>
+
+  <div class="pillnav"><a href="deploy-basics.html">Fundamentals</a> <a href="deploy-first.html">Your First Deploy</a> <a href="deploy-data.html">Data in Production</a> <a href="deploy-cicd.html">Automation &amp; CI/CD</a> <a href="deploy-operating.html" style="border-color:var(--accent);color:var(--accent);">Operating It</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="operate">
+  <h2>Operating It <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>Logs you can actually use</h3>
+      <p>Log to stdout in structured form and let the platform collect it. Include a request ID so one user’s journey can be followed across services, and never log credentials or tokens.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://12factor.net/logs">Twelve-Factor — logs as event streams</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/logging/">Django — logging</a></li>
+            <li><a href="misc-shell.html">Shell reference</a> — <code>journalctl</code> and <code>tail -f</code></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a request ID to every log line and trace one request end to end.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Monitoring &amp; alerting</h3>
+      <p>Track what users feel — error rate, p95 latency, availability — not CPU. Alert on symptoms, and only on things a human should wake up for; an alert nobody acts on trains everyone to ignore alerts.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE — monitoring</a></li>
+            <li><a href="https://sre.google/workbook/implementing-slos/">Google SRE — implementing SLOs</a></li>
+            <li><a href="https://prometheus.io/docs/introduction/overview/">Prometheus — overview</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define one SLO for your app and an alert that fires only when it is genuinely at risk.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Error tracking</h3>
+      <p>Logs tell you something happened; an error tracker groups the same exception, counts it, and gives you the stack trace with request context. It is the single highest-value thing to add after your first deploy.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.sentry.io/platforms/python/integrations/django/">Sentry — Django integration</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/error-reporting/">Django — error reporting</a></li>
+            <li><a href="https://opentelemetry.io/docs/">OpenTelemetry docs</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Wire up error tracking and deliberately trigger an exception to confirm it arrives.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Scaling up and out</h3>
+      <p>Up means a bigger machine and is the easy first answer. Out means more instances and requires that your app holds no local state. Measure before either — most "we need to scale" turns out to be one missing database index.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="hld.html">Your HLD track</a> — scaling, caching and statelessness</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/performance/">Django — performance and optimization</a></li>
+            <li><a href="https://12factor.net/processes">Twelve-Factor — stateless processes</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Load-test one endpoint, find the first bottleneck, and fix that rather than adding a server.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Rollback &amp; incidents</h3>
+      <p>Know how to get back to the last good version before you need to, and practise it. During an incident: restore service first, investigate afterwards. A short blameless write-up afterwards is what stops the same outage twice.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://sre.google/sre-book/postmortem-culture/">Google SRE — postmortem culture</a></li>
+            <li><a href="https://sre.google/sre-book/emergency-response/">Google SRE — emergency response</a></li>
+            <li><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html">Fowler — blue-green</a> — rollback as a switch</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Roll back a deploy deliberately and time it. If it takes more than a few minutes, fix that.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="deploy-cicd.html">← Automation &amp; CI/CD</a>    <a href="deployment.html">All Deployment tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="deployment.html">← Deployment</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

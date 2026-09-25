@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Networking & Delivery — AWS — Khushboo</title>
+<meta name="description" content="The VPC is where most AWS confusion lives, and where most security incidents are prevented.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html" class="here">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="aws.html">← AWS</a>
+  <h1>Networking &amp; Delivery</h1>
+  <p>The VPC is where most AWS confusion lives, and where most security incidents are prevented.</p>
+
+  <div class="pillnav"><a href="aws-foundations.html">Foundations</a> <a href="aws-compute.html">Compute</a> <a href="aws-storage.html">Storage &amp; Data</a> <a href="aws-networking.html" style="border-color:var(--accent);color:var(--accent);">Networking &amp; Delivery</a> <a href="aws-operations.html">Operations &amp; Architecture</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="networking">
+  <h2>Networking &amp; Delivery <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>VPC, subnets &amp; routing</h3>
+      <p>Your own private network in AWS. Public subnets have a route to an internet gateway; private subnets do not, and reach out through a NAT gateway instead. Anything holding data belongs in a private subnet with no public IP at all.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC — user guide</a></li>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html">VPC — public vs private subnets</a></li>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">VPC — NAT gateways</a> — and what they cost</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Draw the VPC for the architecture at the top of this track, labelling every route.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Security groups vs NACLs</h3>
+      <p>Security groups are stateful firewalls attached to resources — return traffic is allowed automatically. Network ACLs are stateless and attached to subnets, so you must allow both directions. Almost all day-to-day work is security groups.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html">VPC — security groups</a></li>
+            <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html">VPC — network ACLs</a></li>
+            <li><a href="net-infrastructure.html">Your Networking track</a> — firewalls and isolation generally</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write security groups so only the ALB can reach the app, and only the app can reach RDS.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Route 53 &amp; DNS</h3>
+      <p>AWS’s DNS: hosted zones, record types, health checks, and routing policies that send users to the nearest or healthiest endpoint. Alias records point at AWS resources without an extra lookup.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html">Amazon Route 53</a></li>
+            <li><a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html">Route 53 — routing policies</a></li>
+            <li><a href="net-foundations.html">Your Networking track</a> — how DNS resolution works</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Point a domain at an ALB with an alias record and verify with <code>dig</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>CloudFront &amp; the edge</h3>
+      <p>The CDN. Caches your content at edge locations near users, terminates TLS there, and cuts both latency and origin load. Pair it with S3 for static assets and it is the cheapest performance win available.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html">Amazon CloudFront</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html">CloudFront — cache behaviour</a></li>
+            <li><a href="net-web.html">Your Networking track</a> — HTTP caching headers</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Serve your static assets through CloudFront and measure the difference from another region.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — S3 origin already in place</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="aws-storage.html">← Storage &amp; Data</a>    <a href="aws-operations.html">Operations &amp; Architecture →</a>    <a href="aws.html">All AWS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="aws.html">← AWS</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

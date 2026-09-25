@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patterns & Production — Concurrency — Khushboo</title>
+<meta name="description" content="The shapes that recur, and what changes when concurrent code runs somewhere you are not watching.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html" class="here">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="concurrency.html">← Concurrency</a>
+  <h1>Patterns &amp; Production</h1>
+  <p>The shapes that recur, and what changes when concurrent code runs somewhere you are not watching.</p>
+
+  <div class="pillnav"><a href="conc-foundations.html">Foundations</a> <a href="conc-threading.html">Threading</a> <a href="conc-multiprocessing.html">Multiprocessing</a> <a href="conc-async.html">Async &amp; the Event Loop</a> <a href="conc-patterns.html" style="border-color:var(--accent);color:var(--accent);">Patterns &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="patterns">
+  <h2>Patterns &amp; Production <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Producer-consumer</h3>
+      <p>The most useful concurrency pattern there is: producers put work on a bounded queue, consumers take it off, and the queue decouples their speeds. A bounded queue also gives you backpressure for free — producers block when consumers fall behind.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">Producer-consumer — Wikipedia</a></li>
+            <li><a href="https://docs.python.org/3/library/queue.html">queue</a></li>
+            <li><a href="https://leetcode.com/problems/design-bounded-blocking-queue/">Design Bounded Blocking Queue</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build it with threads, then with asyncio, and compare the code.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — a working mini message queue</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Worker pools &amp; task queues</h3>
+      <p>The same pattern across machines rather than threads: Celery workers pulling from Redis is producer-consumer with a network in the middle. Everything you know about queue depth, worker count and backpressure carries straight over.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/tasks.html">Celery — task guide</a></li>
+            <li><a href="https://docs.celeryq.dev/en/stable/userguide/workers.html">Celery — workers</a></li>
+            <li><a href="hld.html">Your HLD track</a> — queues as a system design building block</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Work out the right worker count for one of your Celery queues from throughput.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — Celery workers in a deployed app</li>
+            <li><a href="https://github.com/Khushboo94code/producer-consumer-demo">producer-consumer-demo</a> — the same idea in miniature</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Backpressure &amp; bounded resources</h3>
+      <p>Unbounded queues do not remove overload, they hide it until you run out of memory. Bounding a queue makes the pressure visible and forces a decision: block the producer, shed load, or scale consumers. Connection pools are the same idea.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/">AWS — load shedding to avoid overload</a></li>
+            <li><a href="https://docs.python.org/3/library/queue.html#queue.Queue">queue.Queue</a> — the maxsize argument</li>
+            <li><a href="https://sre.google/sre-book/handling-overload/">Google SRE — handling overload</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Set maxsize on a queue and decide what should happen when it fills.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Testing concurrent code</h3>
+      <p>Race conditions are nondeterministic, so a passing test proves very little. The practical answers: make the concurrency injectable so tests can run it serially, stress the hot path in a loop, and use timeouts so a deadlocked test fails instead of hanging CI forever.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.pytest.org/en/stable/">pytest</a></li>
+            <li><a href="https://pytest-asyncio.readthedocs.io/en/latest/">pytest-asyncio</a></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-dev.html">asyncio — debug mode</a> — surfaces blocking calls</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a test that reliably catches a race by running the operation 10,000 times.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Debugging &amp; observability</h3>
+      <p>Concurrent failures are the hardest to reproduce, so instrumentation matters more than usual. Log the thread or task id on every line, use <code>faulthandler</code> to dump stacks from a hung process, and remember the standard logging module is thread-safe by design.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/faulthandler.html">faulthandler</a> — dump tracebacks from a hung process</li>
+            <li><a href="https://docs.python.org/3/howto/logging.html">Python — logging HOWTO</a></li>
+            <li><a href="https://opentelemetry.io/docs/">OpenTelemetry</a> — tracing across workers</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add thread/task ids to your log format and trace one request through a worker pool.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/logging">logging</a> — loggers and handlers, thread-safe by design</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="conc-async.html">← Async &amp; the Event Loop</a>    <a href="concurrency.html">All Concurrency tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="concurrency.html">← Concurrency</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond Relational — DBMS &amp; SQL — Khushboo</title>
+<meta name="description" content="When SQL is not the right answer — and the honest version of that decision.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html" class="here">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dbms.html">← DBMS &amp; SQL</a>
+  <h1>Beyond Relational</h1>
+  <p>When SQL is not the right answer — and the honest version of that decision.</p>
+
+  <div class="pillnav"><a href="db-relational.html">Relational Foundations</a> <a href="db-sql.html">SQL</a> <a href="db-transactions.html">Transactions &amp; Concurrency</a> <a href="db-performance.html">Performance</a> <a href="db-beyond.html" style="border-color:var(--accent);color:var(--accent);">Beyond Relational</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="beyond">
+  <h2>Beyond Relational <span class="count">— 4 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>NoSQL families</h3>
+      <p>Four shapes: key-value (Redis), document (MongoDB), wide-column (Cassandra) and graph (Neo4j). Each drops something relational databases guarantee in exchange for scale or flexibility, and each requires you to model around known access patterns.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://dataintensive.net/">DDIA</a> — chapter 2, data models</li>
+            <li><a href="https://www.mongodb.com/docs/manual/">MongoDB manual</a></li>
+            <li><a href="https://redis.io/docs/latest/">Redis documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>For each of your projects, name the store you would pick and what you would be giving up.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Choosing a database</h3>
+      <p>The honest default is Postgres until you have a specific reason to leave — it does JSON, full-text search, geospatial and vectors. "We need NoSQL for scale" is usually a schema or indexing problem wearing a costume.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/datatype-json.html">PostgreSQL — JSON types</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — the trade-offs, properly argued</li>
+            <li><a href="hld.html">Your HLD track</a> — SQL vs NoSQL as a design decision</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write the case for and against moving one workload off Postgres, then decide.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>OLTP vs OLAP</h3>
+      <p>Transactional systems serve many small reads and writes; analytical systems scan huge ranges to aggregate. They want opposite things — row storage versus columnar, normalised versus star schema — which is why you do not run reporting queries against your production database.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Online_transaction_processing">OLTP — Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP — Wikipedia</a></li>
+            <li><a href="https://dataintensive.net/">DDIA</a> — chapter 3, storage and retrieval</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Explain why your price-history dashboard is an analytical workload, not a transactional one.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Extensions &amp; vector search</h3>
+      <p>Postgres extensions let one database do more: pgvector for embeddings and semantic search, PostGIS for geospatial, full-text search built in. Keeping vectors beside relational data is why Lenny needs no separate vector store.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://github.com/pgvector/pgvector">pgvector</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/textsearch.html">PostgreSQL — full-text search</a></li>
+            <li><a href="https://postgis.net/documentation/">PostGIS documentation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run a hybrid query that combines full-text and vector similarity in one statement.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — pgvector holding relational data and embeddings together</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="db-performance.html">← Performance</a>    <a href="dbms.html">All DBMS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dbms.html">← DBMS &amp; SQL</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

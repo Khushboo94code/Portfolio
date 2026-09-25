@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Django — Django — Khushboo</title>
+<meta name="description" content="The request/response cycle, models, migrations, views, forms and the admin — the framework itself.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     HOW TO EDIT
+
+     Status = class on the <li>:
+       class="done"   green dot  — revised / confident
+       class="doing"  amber dot  — currently learning
+       (no class)     grey dot   — not started yet
+
+     Each topic is:
+       <li class="done">
+         <h3>Topic</h3>
+         <p>Description.</p>
+         <details>
+           <summary>Resources</summary>
+           <div class="reslist">
+             <h5>Learn</h5>    <ul>…</ul>
+             <h5>Practice</h5> <ul>…</ul>
+             <h5>My code</h5>  <ul class="mine">…</ul>
+           </div>
+         </details>
+       </li>
+
+     To add a topic, copy any <li>. Keep the count in the <h2>
+     and the progress bar on the track hub page in sync.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django Roadmap</a>
+  <h1>Core Django</h1>
+  <p>The request/response cycle, models, migrations, views, forms and the admin — the framework itself.</p>
+
+  <div class="pillnav"><a href="django-core.html" style="border-color:var(--accent);color:var(--accent);">Core Django</a> <a href="django-orm.html">ORM Depth</a> <a href="django-api.html">APIs with DRF</a> <a href="django-async.html">Async &amp; Caching</a> <a href="django-production.html">Architecture &amp; Production</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="core">
+  <h2>Core Django <span class="count">— 6 topics</span></h2>
+
+<ol class="timeline">
+
+    <li class="done">
+      <h3>MVT &amp; the request/response cycle</h3>
+      <p>
+        What actually happens between a request arriving at WSGI and a response going out: URL
+        resolution, middleware on the way in and out, the view, then rendering. Knowing this order
+        is what lets you answer "where should this logic live?" with something other than a guess.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/">Django — handling HTTP requests</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/intro/tutorial01/">Django official tutorial</a> — still the best starting point</li>
+            <li><a href="https://adamj.eu/tech/">Adam Johnson's Django blog</a> — deep, practical, consistently correct</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Trace one request end to end with <code>django-debug-toolbar</code> and list every middleware it passes through.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/instahyre">instahyre</a> — a full Django app, front to back</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Models &amp; the ORM</h3>
+      <p>
+        Modelling your domain as tables without writing SQL: field types, relationships
+        (<code>ForeignKey</code>, <code>ManyToMany</code>, <code>OneToOne</code>), <code>related_name</code>,
+        and model methods. This is where the data-modelling half of HLD actually gets expressed.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/db/models/">Django — models</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/fields/">Django — model field reference</a></li>
+            <li><a href="https://books.agiliq.com/projects/django-orm-cookbook/en/latest/">Django ORM Cookbook</a> — recipe per question</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Model a marketplace (vendors, products, orders, payouts) and justify every relationship type.</li>
+            <li><a href="https://leetcode.com/problems/combine-two-tables/">Combine Two Tables</a> — the SQL a <code>select_related</code> join generates</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — vendor / product / order modelling</li>
+            <li><a href="https://github.com/Khushboo94code/instahyre">instahyre</a> — job-board domain model</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Migrations</h3>
+      <p>
+        Schema change as versioned, reviewable code. The skill worth having is the zero-downtime
+        kind: expand, migrate data, then contract — so old and new code can run against the same
+        database during a deploy. Data migrations and <code>RunPython</code> belong here too.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/migrations/">Django — migrations</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/howto/writing-migrations/">Django — writing migrations</a></li>
+            <li><a href="https://github.com/3YOURMIND/django-migration-linter">django-migration-linter</a> — catches backwards-incompatible migrations</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Rename a column on a live app with zero downtime using add → backfill → switch → drop.</li>
+            <li>Write a data migration that backfills a new field, and make it re-runnable.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — migration history of a real schema</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Views — FBV, CBV &amp; generics</h3>
+      <p>
+        Function views are explicit; class-based views trade that for reuse through mixins and a
+        fixed method flow. Knowing the CBV method resolution order — <code>dispatch</code>,
+        <code>get_queryset</code>, <code>get_context_data</code> — is what makes generic views
+        predictable rather than magic.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/class-based-views/">Django — class-based views</a></li>
+            <li><a href="https://ccbv.co.uk/">Classy Class-Based Views</a> — every CBV's methods, expanded</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/class-based-views/">Django — CBV reference</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write the same list-and-detail page three times: FBV, CBV, then generic view.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/instahyre">instahyre</a> — views across a real app</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>URLs, forms &amp; templates</h3>
+      <p>
+        Routing with path converters and namespaces, forms as the validation boundary for untrusted
+        input, and template inheritance with autoescaping. Forms matter more than they look —
+        validation belongs at the edge, not scattered through views.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/http/urls/">Django — URL dispatcher</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/forms/">Django — forms</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/templates/">Django — templates</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a multi-step form with server-side validation and no JavaScript.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Cart-session-cookie-Django">Cart-session-cookie-Django</a> — session and cookie handling across requests</li>
+            <li><a href="https://github.com/Khushboo94code/instahyre">instahyre</a> — forms and templates in context</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>The Django admin</h3>
+      <p>
+        A free internal tool, and genuinely a competitive advantage when you customise it rather than
+        just register models — <code>list_select_related</code> to kill N+1s, custom actions, inlines,
+        and read-only fields. Worth knowing its limits, too: it is not a customer-facing UI.
+      </p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/contrib/admin/">Django — admin reference</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/contrib/admin/actions/">Django — admin actions</a></li>
+            <li><a href="https://adamj.eu/tech/">Adam Johnson's blog</a> — several strong admin performance posts</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take an admin list page with an N+1 and fix it with <code>list_select_related</code>; measure before and after.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — admin workflows for vendors and orders</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="django-orm.html">ORM Depth →</a>    <a href="django.html">All Django tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django Roadmap</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

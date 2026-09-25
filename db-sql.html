@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL — DBMS &amp; SQL — Khushboo</title>
+<meta name="description" content="The language itself, in the order it is worth learning. Every topic here has a LeetCode set — their database section is the best free drill available.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html" class="here">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="dbms.html">← DBMS &amp; SQL</a>
+  <h1>SQL</h1>
+  <p>The language itself, in the order it is worth learning. Every topic here has a LeetCode set — their database section is the best free drill available.</p>
+
+  <div class="pillnav"><a href="db-relational.html">Relational Foundations</a> <a href="db-sql.html" style="border-color:var(--accent);color:var(--accent);">SQL</a> <a href="db-transactions.html">Transactions &amp; Concurrency</a> <a href="db-performance.html">Performance</a> <a href="db-beyond.html">Beyond Relational</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="sql">
+  <h2>SQL <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>SELECT, filtering &amp; ordering</h3>
+      <p>The clause execution order is the thing worth internalising: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. It explains why you cannot use a SELECT alias in WHERE but can in ORDER BY, which confuses people for years.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/tutorial-select.html">PostgreSQL — querying a table</a></li>
+            <li><a href="https://sqlbolt.com/">SQLBolt</a> — lessons 1-6</li>
+            <li><a href="https://pgexercises.com/">PG Exercises</a> — graded practice against a real schema</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/big-countries/">Big Countries</a></li>
+            <li><a href="https://leetcode.com/problems/find-customer-referee/">Find Customer Referee</a></li>
+            <li><a href="https://leetcode.com/problems/recyclable-and-low-fat-products/">Recyclable and Low Fat Products</a></li>
+            <li><a href="https://leetcode.com/problems/not-boring-movies/">Not Boring Movies</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Django-Query-Params">Django-Query-Params</a> — turning request parameters into filters</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Joins</h3>
+      <p>INNER, LEFT, RIGHT, FULL and CROSS — plus the self-join, which is how you compare rows in the same table. The interview favourite is "find rows with no match", which is a LEFT JOIN with an IS NULL filter, or a NOT EXISTS.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/tutorial-join.html">PostgreSQL — joins between tables</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Join_(SQL)">SQL joins — Wikipedia</a></li>
+            <li><a href="https://sqlbolt.com/">SQLBolt</a> — the join lessons</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/combine-two-tables/">Combine Two Tables</a></li>
+            <li><a href="https://leetcode.com/problems/customers-who-never-order/">Customers Who Never Order</a></li>
+            <li><a href="https://leetcode.com/problems/employees-earning-more-than-their-managers/">Employees Earning More Than Their Managers</a></li>
+            <li><a href="https://leetcode.com/problems/rising-temperature/">Rising Temperature</a></li>
+            <li><a href="https://leetcode.com/problems/sales-person/">Sales Person</a></li>
+            <li><a href="https://leetcode.com/problems/managers-with-at-least-5-direct-reports/">Managers with at Least 5 Direct Reports</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Aggregation &amp; GROUP BY</h3>
+      <p>COUNT, SUM, AVG, MIN, MAX collapsed by group — and the distinction that trips everyone: WHERE filters rows before grouping, HAVING filters groups after. COUNT(*) and COUNT(column) differ on NULLs, which is a real bug source.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/tutorial-agg.html">PostgreSQL — aggregate functions</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/functions-aggregate.html">PostgreSQL — aggregate function reference</a></li>
+            <li><a href="https://pgexercises.com/">PG Exercises</a> — the aggregation section</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/duplicate-emails/">Duplicate Emails</a></li>
+            <li><a href="https://leetcode.com/problems/classes-with-at-least-5-students/">Classes With at Least 5 Students</a></li>
+            <li><a href="https://leetcode.com/problems/project-employees-i/">Project Employees I</a></li>
+            <li><a href="https://leetcode.com/problems/average-selling-price/">Average Selling Price</a></li>
+            <li><a href="https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/">Unique Subjects Taught by Each Teacher</a></li>
+            <li><a href="https://leetcode.com/problems/count-salary-categories/">Count Salary Categories</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Subqueries &amp; CTEs</h3>
+      <p>A subquery nests a query inside another; a CTE (<code>WITH</code>) names it so the whole thing stays readable. Correlated subqueries run per row and are often the slow path — and recursive CTEs are how you walk a tree in SQL.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/queries-with.html">PostgreSQL — WITH queries (CTEs)</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/functions-subquery.html">PostgreSQL — subquery expressions</a></li>
+            <li><a href="https://pgexercises.com/">PG Exercises</a> — recursive section</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/second-highest-salary/">Second Highest Salary</a></li>
+            <li><a href="https://leetcode.com/problems/nth-highest-salary/">Nth Highest Salary</a></li>
+            <li><a href="https://leetcode.com/problems/tree-node/">Tree Node</a></li>
+            <li><a href="https://leetcode.com/problems/biggest-single-number/">Biggest Single Number</a></li>
+            <li><a href="https://leetcode.com/problems/customers-who-bought-all-products/">Customers Who Bought All Products</a></li>
+            <li><a href="https://leetcode.com/problems/investments-in-2016/">Investments in 2016</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>Window functions</h3>
+      <p>Aggregate across a set of rows without collapsing them — ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, and running totals with SUM OVER. This is the single highest-leverage SQL feature and the one that separates comfortable from expert.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/tutorial-window.html">PostgreSQL — window functions tutorial</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/functions-window.html">PostgreSQL — window function reference</a></li>
+            <li><a href="https://pgexercises.com/">PG Exercises</a> — window function problems</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/rank-scores/">Rank Scores</a></li>
+            <li><a href="https://leetcode.com/problems/consecutive-numbers/">Consecutive Numbers</a></li>
+            <li><a href="https://leetcode.com/problems/department-highest-salary/">Department Highest Salary</a></li>
+            <li><a href="https://leetcode.com/problems/department-top-three-salaries/">Department Top Three Salaries</a></li>
+            <li><a href="https://leetcode.com/problems/exchange-seats/">Exchange Seats</a></li>
+            <li><a href="https://leetcode.com/problems/last-person-to-fit-in-the-bus/">Last Person to Fit in the Bus</a></li>
+            <li><a href="https://leetcode.com/problems/human-traffic-of-stadium/">Human Traffic of Stadium</a></li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <h3>DML, DDL &amp; upserts</h3>
+      <p>INSERT, UPDATE, DELETE, and the schema side — CREATE, ALTER, DROP. Plus <code>INSERT ... ON CONFLICT</code>, which is how you write an idempotent upsert, and why a DELETE without a WHERE is the most expensive keystroke in the industry.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.postgresql.org/docs/current/dml.html">PostgreSQL — data manipulation</a></li>
+            <li><a href="https://www.postgresql.org/docs/current/sql-insert.html">PostgreSQL — INSERT and ON CONFLICT</a></li>
+            <li><a href="https://docs.djangoproject.com/en/stable/ref/models/querysets/">Django — the ORM equivalents</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/delete-duplicate-emails/">Delete Duplicate Emails</a></li>
+            <li><a href="https://leetcode.com/problems/reformat-department-table/">Reformat Department Table</a></li>
+            <li><a href="https://leetcode.com/problems/triangle-judgement/">Triangle Judgement</a></li>
+            <li><a href="https://leetcode.com/problems/calculate-special-bonus/">Calculate Special Bonus</a></li>
+            <li><a href="https://leetcode.com/problems/fix-names-in-a-table/">Fix Names in a Table</a></li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — where an idempotent upsert belongs</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="db-relational.html">← Relational Foundations</a>    <a href="db-transactions.html">Transactions &amp; Concurrency →</a>    <a href="dbms.html">All DBMS tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="dbms.html">← DBMS &amp; SQL</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

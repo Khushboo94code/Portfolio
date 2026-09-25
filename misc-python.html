@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python, Django & Celery — Reference — Khushboo</title>
+<meta name="description" content="Project and environment commands you type daily, plus the management commands worth knowing beyond runserver.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html" class="here">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="misc.html">← Miscellaneous</a>
+  <h1>Python, Django &amp; Celery</h1>
+  <p>Project and environment commands you type daily, plus the management commands worth knowing beyond <code>runserver</code>.</p>
+
+  <div class="pillnav"><a href="misc-http.html">HTTP Codes</a> <a href="misc-errors.html">Error Codes</a> <a href="misc-shell.html">Shell</a> <a href="misc-python.html" style="border-color:var(--accent);color:var(--accent);">Python &amp; Django</a> <a href="misc-redis.html">Redis</a> <a href="misc-sdlc.html">SDLC &amp; Agile</a></div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Reference <span class="count">— 38 entries</span></h2>
+
+  <div class="refgroup">
+    <h3>Environments &amp; packages</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>python -m venv .venv</code></td><td>Create a virtual environment</td></tr>
+        <tr><td><code>source .venv/bin/activate</code></td><td>Activate it</td></tr>
+        <tr><td><code>pip install -r requirements.txt</code></td><td>Install from a lockfile</td></tr>
+        <tr><td><code>pip freeze &amp;gt; requirements.txt</code></td><td>Record exact versions</td></tr>
+        <tr><td><code>pip list --outdated</code></td><td>What could be upgraded</td></tr>
+        <tr><td><code>python -m pip install -U pip</code></td><td>Upgrade pip itself, safely</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Django management</h3>
+    <p class="note">Run <code>check --deploy</code> before every launch — it catches insecure settings you will otherwise ship.</p>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>django-admin startproject cfg .</code></td><td>New project in the current directory</td></tr>
+        <tr><td><code>manage.py startapp name</code></td><td>New app</td></tr>
+        <tr><td><code>manage.py runserver 0:8000</code></td><td>Dev server, reachable from outside</td></tr>
+        <tr><td><code>manage.py makemigrations</code></td><td>Generate migrations from model changes</td></tr>
+        <tr><td><code>manage.py migrate</code></td><td>Apply migrations</td></tr>
+        <tr><td><code>manage.py showmigrations</code></td><td>What is applied and what is pending</td></tr>
+        <tr><td><code>manage.py sqlmigrate app 0003</code></td><td><strong>Show the SQL</strong> a migration will run</td></tr>
+        <tr><td><code>manage.py createsuperuser</code></td><td>Admin user</td></tr>
+        <tr><td><code>manage.py shell_plus</code></td><td>Shell with models imported (django-extensions)</td></tr>
+        <tr><td><code>manage.py dbshell</code></td><td>Drop into psql for this database</td></tr>
+        <tr><td><code>manage.py collectstatic</code></td><td>Gather static files for production</td></tr>
+        <tr><td><code>manage.py check --deploy</code></td><td>Audit settings for production readiness</td></tr>
+        <tr><td><code>manage.py test</code></td><td>Run the test suite</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>Celery</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>celery -A proj worker -l info</code></td><td>Start a worker</td></tr>
+        <tr><td><code>celery -A proj beat -l info</code></td><td>Start the scheduler</td></tr>
+        <tr><td><code>celery -A proj inspect active</code></td><td>Currently running tasks</td></tr>
+        <tr><td><code>celery -A proj inspect registered</code></td><td>Tasks the worker knows about</td></tr>
+        <tr><td><code>celery -A proj purge</code></td><td>Empty the queue — destructive</td></tr>
+        <tr><td><code>celery -A proj status</code></td><td>Which workers are alive</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>pytest</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>pytest -x</code></td><td>Stop at the first failure</td></tr>
+        <tr><td><code>pytest -k &quot;name&quot;</code></td><td>Run tests matching an expression</td></tr>
+        <tr><td><code>pytest --lf</code></td><td>Re-run only last-failed tests</td></tr>
+        <tr><td><code>pytest -q --tb=short</code></td><td>Quiet output, short tracebacks</td></tr>
+        <tr><td><code>pytest --cov=app</code></td><td>With coverage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="refgroup">
+    <h3>psql</h3>
+    <div class="tablewrap">
+      <table class="ref">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+        <tr><td><code>\l</code></td><td>List databases</td></tr>
+        <tr><td><code>\c dbname</code></td><td>Connect to a database</td></tr>
+        <tr><td><code>\dt</code></td><td>List tables</td></tr>
+        <tr><td><code>\d tablename</code></td><td>Describe a table, with indexes</td></tr>
+        <tr><td><code>\di</code></td><td>List indexes</td></tr>
+        <tr><td><code>\x</code></td><td>Toggle expanded output — vital for wide rows</td></tr>
+        <tr><td><code>\timing</code></td><td>Show query execution time</td></tr>
+        <tr><td><code>\q</code></td><td>Quit</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="misc-shell.html">← Shell</a>
+    <a href="misc-redis.html">Redis →</a>
+    <a href="misc.html">All references</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="misc.html">← Miscellaneous</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

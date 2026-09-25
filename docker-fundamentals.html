@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentals — Docker — Khushboo</title>
+<meta name="description" content="What a container actually is, how images are built from layers, and the lifecycle you drive with the CLI.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html" class="here">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="docker.html">← Docker</a>
+  <h1>Fundamentals</h1>
+  <p>What a container actually is, how images are built from layers, and the lifecycle you drive with the CLI.</p>
+
+  <div class="pillnav"><a href="docker-fundamentals.html" style="border-color:var(--accent);color:var(--accent);">Fundamentals</a> <a href="docker-data-network.html">Data &amp; Networking</a> <a href="docker-compose.html">Compose &amp; Multi-Service</a> <a href="docker-images.html">Image Quality</a> <a href="docker-production.html">Production</a> <a href="docker-commands.html">Commands</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="fundamentals">
+  <h2>Fundamentals <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Containers vs virtual machines</h3>
+      <p>A container is a process on the host kernel with namespaces for isolation and cgroups for limits — not a virtual machine. That is why it starts in milliseconds and why a Linux container cannot run on a Windows kernel without a VM underneath.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/get-started/docker-overview/">Docker — overview &amp; architecture</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Linux_namespaces">Linux namespaces — Wikipedia</a> — the isolation primitive</li>
+            <li><a href="https://en.wikipedia.org/wiki/Cgroups">cgroups — Wikipedia</a> — the resource-limit primitive</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run a container and find its process on the host with <code>ps aux</code> — prove it is just a process.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — Dockerized end to end</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Images, layers &amp; the union filesystem</h3>
+      <p>An image is a stack of read-only layers; a container adds one writable layer on top. Every Dockerfile instruction creates a layer, layers are cached and shared between images, and that sharing is why a second image built on the same base is nearly free.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/build/cache/">Docker — build cache &amp; layers</a></li>
+            <li><a href="https://docs.docker.com/reference/dockerfile/">Dockerfile reference</a></li>
+            <li><a href="https://github.com/wagoodman/dive">dive</a> — inspect an image layer by layer</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Run <code>docker history</code> on one of your images and account for the size of every layer.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/lenny-growth-assistant">lenny-growth-assistant</a> — a real multi-service image build</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Writing a Dockerfile</h3>
+      <p>The instruction set and what each one costs: <code>FROM</code>, <code>RUN</code>, <code>COPY</code>, <code>WORKDIR</code>, <code>ENV</code>, <code>EXPOSE</code>, and the difference between <code>CMD</code> and <code>ENTRYPOINT</code> — entrypoint is the binary, cmd is the default arguments.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/reference/dockerfile/">Dockerfile reference</a></li>
+            <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — Dockerfile best practices</a></li>
+            <li><a href="https://docs.docker.com/reference/dockerfile/#entrypoint">CMD vs ENTRYPOINT</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a Dockerfile for a Django app from scratch, without copying a template.</li>
+            <li>Change <code>CMD</code> to <code>ENTRYPOINT</code> and observe how argument handling changes.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — containerised Django + Gunicorn</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Registries, tags &amp; digests</h3>
+      <p>Pushing and pulling from Docker Hub or ECR, and why <code>:latest</code> is a trap — it is just a mutable tag, so a rebuild can silently change what deploys. Digests (<code>@sha256:…</code>) are the only truly immutable reference.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/docker-hub/repos/">Docker Hub — repositories</a></li>
+            <li><a href="https://docs.docker.com/engine/reference/commandline/tag/">docker tag reference</a></li>
+            <li><a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">AWS ECR — user guide</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Tag one build three ways — semver, git SHA, latest — and decide which your deploy should reference.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Container lifecycle</h3>
+      <p>Create, start, stop, restart, remove — and what survives each. Stopping sends SIGTERM then SIGKILL after a grace period, which is why your app needs to handle SIGTERM if in-flight requests matter.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.docker.com/engine/containers/run/">Docker — running containers</a></li>
+            <li><a href="https://docs.docker.com/engine/reference/commandline/container_stop/">docker stop &amp; signals</a></li>
+            <li><a href="https://github.com/Khushboo94code/Multithreading">Your Multithreading repo</a> — graceful shutdown needs this</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Trap SIGTERM in a container and log it, then run <code>docker stop</code> and confirm you see it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    
+<a href="docker-data-network.html">Data &amp; Networking →</a>    <a href="docker.html">All Docker tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="docker.html">← Docker</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>
