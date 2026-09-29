@@ -541,7 +541,7 @@ hash(t)  →  TypeError: unhashable type: 'list'</code></pre>
 </section>
 
 <section class="wrap" id="django">
-  <h2>Django &amp; DRF <span class="count">— 11 questions</span> <a href="django.html" style="font-weight:400;font-size:13px;text-transform:none;letter-spacing:0;">— track →</a></h2>
+  <h2>Django &amp; DRF <span class="count">— 12 questions</span> <a href="django.html" style="font-weight:400;font-size:13px;text-transform:none;letter-spacing:0;">— track →</a></h2>
 
   <!-- Add questions here. Copy this block:
 
@@ -1375,6 +1375,107 @@ Customer.objects.prefetch_related(
           <p style="margin-top:12px;">See also <a href="#django">What is the N+1 problem</a> and <a href="#django">select_related vs prefetch_related</a> above, and <a href="django-orm.html">Django → ORM Depth</a>.</p>
 
           <div class="tagrow"><span>Django</span><span>ORM</span><span>N+1</span><span>prefetch_related</span><span>performance</span></div>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <details>
+        <summary>What is Celery? <span class="asked-at">Unknown</span></summary>
+        <div class="answer">
+          <p><strong>A distributed task queue for Python</strong> — it runs work <em>outside</em> the request/response cycle, in separate worker processes.</p>
+          <p style="margin-top:8px;">The problem it solves: a request that sends an email, generates a PDF or calls a slow third-party API holds a worker for the whole duration. The user waits, and under load you run out of workers. Celery lets you hand that work off and respond immediately.</p>
+
+          <div class="flow" style="margin-top:10px;">
+            <span class="node">Django view</span>
+            <span class="arrow">→</span>
+            <span class="node hl">Broker<br>Redis / RabbitMQ</span>
+            <span class="arrow">→</span>
+            <span class="node hl">Worker</span>
+            <span class="arrow">→</span>
+            <span class="node">Result backend<br><span style="font-weight:400">optional</span></span>
+          </div>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">The three pieces</h5>
+          <ul>
+            <li><strong>Producer</strong> — your Django code, calling <code>task.delay(...)</code>. It writes a message and returns instantly.</li>
+            <li><strong>Broker</strong> — Redis or RabbitMQ. Holds the queue. Celery does not store anything itself.</li>
+            <li><strong>Worker</strong> — a separate process (often a separate container) pulling messages and executing them.</li>
+          </ul>
+          <p style="margin-top:8px;">A fourth, optional: the <strong>result backend</strong>. Without one, return values are discarded — and that is the default. If you never check a result, do not configure one.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">What it looks like</h5>
+<pre><code>from celery import shared_task
+
+@shared_task(bind=True, max_retries=3)
+def send_invoice(self, order_id):
+    order = Order.objects.get(pk=order_id)
+    try:
+        email.send(order)
+    except SMTPException as exc:
+        raise self.retry(exc=exc, countdown=60)   # try again in 60s</code></pre>
+<pre><code># in the view — returns immediately
+send_invoice.delay(order.id)
+
+# or with options
+send_invoice.apply_async(args=[order.id], countdown=30, queue="email")</code></pre>
+<pre><code>celery -A proj worker -l info     # run the workers
+celery -A proj beat   -l info     # run the scheduler</code></pre>
+
+          <div class="worked">
+            <h4>The four rules that separate working Celery from broken Celery</h4>
+
+            <h5>1. Pass IDs, never objects</h5>
+<pre><code>send_invoice.delay(order)      <span class="bad">✗ serialises a stale snapshot</span>
+send_invoice.delay(order.id)   <span class="ok">✓ worker re-fetches current state</span></code></pre>
+            <p style="margin-top:8px;">Arguments are serialised to JSON and may run seconds or minutes later. An object pickled now is out of date by the time it runs.</p>
+
+            <h5>2. Tasks must be idempotent</h5>
+            <p>Celery is <strong>at-least-once</strong>. A worker can die after doing the work but before acknowledging, and the task will be redelivered. If it charges a card, it must be safe to run twice — an idempotency key, or a status check before acting.</p>
+
+            <h5>3. Beware the transaction race</h5>
+<pre><code>with transaction.atomic():
+    order = Order.objects.create(...)
+    send_invoice.delay(order.id)     <span class="bad">✗ worker may run before COMMIT</span>
+                                     <span class="bad">  → DoesNotExist</span></code></pre>
+<pre><code>transaction.on_commit(lambda: send_invoice.delay(order.id))   <span class="ok">✓</span></code></pre>
+            <p style="margin-top:8px;">The task can start before the transaction commits, and then the row does not exist yet. This is the classic Celery bug, and naming it unprompted is a strong signal.</p>
+
+            <h5>4. Keep tasks small and give them timeouts</h5>
+            <p>A task with no time limit can hang forever and hold a worker. Set <code>time_limit</code>, split long work into chunks, and use separate queues so a slow job cannot starve a fast one.</p>
+          </div>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">Celery Beat — scheduled work</h5>
+          <p>The companion scheduler, for cron-style jobs — nightly reports, cache warming, the crawler run:</p>
+<pre><code>from celery.schedules import crontab
+
+app.conf.beat_schedule = {
+    "nightly-report": {
+        "task": "reports.generate",
+        "schedule": crontab(hour=7, minute=30),
+    },
+}</code></pre>
+          <p style="margin-top:8px;">Two production traps: <strong>only one beat process may run</strong> (two means every job fires twice — use a lock), and a job that outlives its interval will <strong>overlap with itself</strong> unless you prevent it.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">Redis or RabbitMQ?</h5>
+          <ul>
+            <li><strong>Redis</strong> — simpler, and you probably already run it for caching. Fine for most workloads; durability depends on your persistence config.</li>
+            <li><strong>RabbitMQ</strong> — a real message broker with stronger delivery guarantees, routing and dead-letter queues. The choice when losing a task is unacceptable.</li>
+          </ul>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">What to use it for</h5>
+<pre><code>emails and notifications      PDF and report generation
+image or video processing     third-party API calls
+data imports and exports      scheduled jobs (via beat)
+anything slow, retryable, or not needed for the response</code></pre>
+          <p style="margin-top:8px;"><strong>Not</strong> for work the user is waiting on — a queue adds latency, not removes it. If the answer must appear on the page now, it belongs in the request.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">The one-line answer</h5>
+          <p>Celery moves slow or unreliable work out of the request cycle into worker processes, using Redis or RabbitMQ as the queue. The engineering comes from delivery being at-least-once: pass IDs not objects, make tasks idempotent, and fire them on commit rather than inside the transaction.</p>
+
+          <p style="margin-top:12px;">Where I use it: <a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> runs Celery on Redis for post-purchase work, and the Q-Commerce crawler used Beat for scheduling. Depth: <a href="django-async.html">Django → Async &amp; Caching</a> · <a href="conc-patterns.html">Concurrency → Patterns</a>. Commands: <a href="misc-python.html">Python &amp; Django reference</a>.</p>
+
+          <div class="tagrow"><span>Celery</span><span>Django</span><span>queues</span><span>async</span><span>Redis</span></div>
         </div>
       </details>
     </li>
