@@ -28,6 +28,7 @@
       <li><a href="aws.html">AWS</a></li>
       <li><a href="deployment.html">Deploy</a></li>
       <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
       <li><a href="misc.html">Misc</a></li>
     </ul>
   </div>
@@ -57,6 +58,78 @@
     <li class="doing">
       <h3>ACID</h3>
       <p>Atomicity — all or nothing. Consistency — constraints hold before and after. Isolation — concurrent transactions do not see each other’s partial work. Durability — committed means survived a power cut. Four words you will be asked to expand and justify.</p>
+
+      <div class="tablewrap" style="margin-top:14px;">
+        <table class="ref">
+          <thead><tr><th>Property</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong> — Atomicity</td><td>All operations succeed, or all are rolled back</td><td>Money transfer</td></tr>
+            <tr><td><strong>C</strong> — Consistency</td><td>Database stays valid before and after the transaction</td><td>Balance cannot become invalid</td></tr>
+            <tr><td><strong>I</strong> — Isolation</td><td>Concurrent transactions don’t interfere incorrectly</td><td>Two users booking the same seat</td></tr>
+            <tr><td><strong>D</strong> — Durability</td><td>Once committed, data is permanently saved</td><td>Payment survives a server restart</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="worked">
+        <h4>Worked example — transferring &#8377;1,000 from A to B</h4>
+        <p>Two operations make up one transfer:</p>
+        <ol>
+          <li>Deduct &#8377;1,000 from A</li>
+          <li>Add &#8377;1,000 to B</li>
+        </ol>
+
+        <h5>1. Atomicity — all or nothing</h5>
+        <p>Either both operations happen, or neither does.</p>
+<pre><code>A: &#8377;5000 → &#8377;4000
+B: &#8377;2000 → &#8377;3000</code></pre>
+        <p style="margin-top:8px;">If adding to B fails, the deduction from A must roll back too:</p>
+<pre><code>A: &#8377;5000   <span class="ok">(unchanged)</span>
+B: &#8377;2000   <span class="ok">(unchanged)</span></code></pre>
+        <p style="margin-top:8px;">This is exactly what <code>transaction.atomic()</code> gives you in Django:</p>
+<pre><code>from django.db import transaction
+
+with transaction.atomic():
+    task1()
+    task2()</code></pre>
+        <p style="margin-top:8px;">If <code>task2()</code> raises, <code>task1()</code> is rolled back with it.</p>
+
+        <h5>2. Consistency — the rules still hold</h5>
+        <p>Constraints must be satisfied before and after. Say the rule is <em>balance cannot go negative</em>, and A has only &#8377;500:</p>
+<pre><code>Before: A = &#8377;500
+After:  A = -&#8377;500   <span class="bad">✗ invalid</span></code></pre>
+        <p style="margin-top:8px;">The transaction must <strong>fail</strong> rather than leave the database in that state — which is why this belongs in a <code>CheckConstraint</code>, not only in application code.</p>
+
+        <h5>3. Isolation — concurrent transactions don’t corrupt each other</h5>
+        <p>Two users try to book the last seat at the same moment:</p>
+<pre><code>User A → checks seat → Available
+User B → checks seat → Available   <span class="bad">✗ both now book it</span></code></pre>
+        <p style="margin-top:8px;">With the right isolation level or an explicit row lock (<code>SELECT … FOR UPDATE</code>), only one booking succeeds.</p>
+
+        <h5>4. Durability — committed means committed</h5>
+        <p>After <code>COMMIT</code>, the data survives anything:</p>
+<pre><code>Transaction
+    ↓
+COMMIT
+    ↓
+Data permanently stored
+    ↓
+Server crashes
+    ↓
+Server restarts
+    ↓
+Data is still there   <span class="ok">✓</span></code></pre>
+      </div>
+
+      <div class="mnemonic">
+        <h4>Easy way to remember</h4>
+        <ul>
+          <li><strong>A</strong> — All or Nothing</li>
+          <li><strong>C</strong> — Correct / valid state</li>
+          <li><strong>I</strong> — Transactions don’t interfere incorrectly</li>
+          <li><strong>D</strong> — Data stays after commit</li>
+        </ul>
+      </div>
       <details>
         <summary>Resources</summary>
         <div class="reslist">

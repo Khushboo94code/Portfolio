@@ -54,6 +54,7 @@
       <li><a href="aws.html">AWS</a></li>
       <li><a href="deployment.html">Deploy</a></li>
       <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
       <li><a href="misc.html">Misc</a></li>
     </ul>
   </div>
@@ -270,7 +271,7 @@
           <h5>Learn</h5>
           <ul>
             <li><a href="https://aws.amazon.com/builders-library/caching-challenges-and-strategies/">AWS Builders' Library — Caching challenges and strategies</a></li>
-            <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
+            <li><a href="redis-patterns.html">Redis → Caching with Redis</a> — the same ideas, implemented</li>
             <li><a href="https://github.com/donnemartin/system-design-primer#cache">System Design Primer — cache</a></li>
           </ul>
           <h5>Practice</h5>
@@ -421,7 +422,11 @@
 
 <!-- ===================== DISTRIBUTED SYSTEMS ===================== -->
 <section class="wrap" id="distributed">
-  <h2>Distributed Systems <span class="count">— 9 topics</span></h2>
+  <h2>Distributed Systems <span class="count">— 8 topics</span></h2>
+  <p class="section-intro">
+    <strong>ACID, isolation levels and MVCC</strong> moved to the database track, where they are
+    worked through with examples: <a href="db-transactions.html">DBMS → Transactions &amp; Concurrency →</a>
+  </p>
   <ol class="timeline">
 
     <li>
@@ -448,31 +453,6 @@
       </details>
     </li>
 
-    <li class="doing">
-      <h3>Transactions &amp; isolation levels</h3>
-      <p>
-        ACID in practice: which anomalies each isolation level permits — dirty reads,
-        non-repeatable reads, phantoms — and what that costs in lock contention. Postgres uses MVCC,
-        so readers don't block writers, which changes the trade-offs from what textbooks assume.
-      </p>
-      <details>
-        <summary>Resources</summary>
-        <div class="reslist">
-          <h5>Learn</h5>
-          <ul>
-            <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL — transaction isolation</a> — with the anomaly table</li>
-            <li><a href="https://www.postgresql.org/docs/current/mvcc.html">PostgreSQL — MVCC</a></li>
-            <li><a href="https://dataintensive.net/">DDIA chapter 7</a> — weak isolation levels and write skew</li>
-          </ul>
-          <h5>Practice</h5>
-          <p class="none">No LeetCode — open two psql sessions and reproduce a phantom read at each isolation level.</p>
-          <h5>My code</h5>
-          <ul class="mine">
-            <li><a href="https://github.com/Khushboo94code/Digital-market-place-app">Digital-market-place-app</a> — order and payment flows are where isolation actually bites</li>
-          </ul>
-        </div>
-      </details>
-    </li>
 
     <li>
       <h3>Distributed transactions</h3>

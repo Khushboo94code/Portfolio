@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practise — Django — Khushboo</title>
+<meta name="description" content="Code I have written while practising — each snippet with its output and what it demonstrates.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     PRACTISE — how to add a snippet
+
+       <li class="done">
+         <h3>NN — short title</h3>
+         <p>One line on what it shows.</p>
+     <pre><code>the code</code></pre>
+         <p><strong>Output</strong></p>
+     <pre><code>what it printed</code></pre>
+         <details>
+           <summary>Notes</summary>
+           <div class="reslist">
+             <h5>What to notice</h5>
+             <ul><li>…</li></ul>
+           </div>
+         </details>
+       </li>
+
+     Keep the count in the <h2> in sync. Run the code before
+     pasting the output — never write output from memory.
+     ========================================================= -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html" class="here">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="django.html">← Django</a>
+  <h1>Practise</h1>
+  <p>
+    Code I have actually written and run while practising, each snippet with its real output and
+    a note on what it demonstrates. A log rather than a lesson — it grows as I go.
+  </p>
+
+  <div class="pillnav"><a href="django-core.html">Core Django</a> <a href="django-orm.html">ORM Depth</a> <a href="django-api.html">APIs with DRF</a> <a href="django-async.html">Async &amp; Caching</a> <a href="django-production.html">Architecture &amp; Production</a> <a href="django-practise.html" style="border-color:var(--accent);color:var(--accent);">Practise</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Run &amp; understood</span>
+    <span><i class="dot doing"></i> Still unclear</span>
+    <span><i class="dot next"></i> To revisit</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="practise">
+  <h2>Snippets <span class="count">— 6 snippets</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>01 — classmethod</h3>
+      <p>A method bound to the <em>class</em> rather than an instance. It receives <code>cls</code> instead of <code>self</code>, so you can call it without creating an object.</p>
+<pre><code>class MyClass:
+    @classmethod
+    def displayinfo(cls):
+        print("This is MyClass.")
+
+MyClass.displayinfo()</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>This is MyClass.</code></pre>
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>What to notice</h5>
+          <ul>
+            <li>No <code>MyClass()</code> anywhere — it is called straight on the class.</li>
+            <li><code>cls</code> is the class itself, the way <code>self</code> is the instance.</li>
+            <li>It still works if you call it on an instance: <code>MyClass().displayinfo()</code>.</li>
+            <li><strong><code>cls</code> follows the subclass</strong> — this is the whole point:
+<pre><code>class Child(MyClass): pass
+
+MyClass.displayinfo()   # cls is MyClass
+Child.displayinfo()     # cls is <span class="ok">Child</span></code></pre>
+              which is why classmethods are used for alternative constructors — <code>Model.objects.create()</code>, <code>datetime.fromtimestamp()</code>.</li>
+          </ul>
+          <h5>classmethod vs staticmethod vs instance method</h5>
+          <ul>
+            <li><code>def m(self)</code> — needs an instance, can read instance state</li>
+            <li><code>@classmethod def m(cls)</code> — needs the class, can create instances of it</li>
+            <li><code>@staticmethod def m()</code> — neither; just a function living in the class namespace</li>
+          </ul>
+          <h5>Where you have seen it</h5>
+          <ul>
+            <li><a href="python-intermediate.html">Python → OOP in Python</a></li>
+            <li><a href="interview.html#python">Interview → What are decorators?</a> — <code>@classmethod</code> is one</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>02 — __init__ and instance attributes</h3>
+      <p>The constructor. It runs when you create an object, and <code>self.name = name</code> is what makes the value stick to <em>that</em> instance.</p>
+<pre><code>class Parent:
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        print(f"Hello from Parent class. My name is {self.name}.")
+
+p = Parent("Alice")
+p.greet()</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Hello from Parent class. My name is Alice.</code></pre>
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>What to notice</h5>
+          <ul>
+            <li><code>Parent("Alice")</code> calls <code>__init__</code> automatically — you never call it yourself.</li>
+            <li><code>self</code> is passed automatically too. <code>p.greet()</code> is really <code>Parent.greet(p)</code>.</li>
+            <li><code>self.name</code> is an <strong>instance</strong> attribute — each object gets its own. A variable defined directly in the class body would be shared by all of them.</li>
+            <li><code>__init__</code> is not really a constructor — <code>__new__</code> creates the object, <code>__init__</code> initialises it. Worth knowing if asked.</li>
+          </ul>
+          <h5>The trap worth remembering</h5>
+          <ul>
+            <li>A mutable default in a signature is created <em>once</em>, at definition time, and shared:
+<pre><code>def __init__(self, items=[]):   <span class="bad">✗ shared between every instance</span>
+def __init__(self, items=None):  <span class="ok">✓</span>
+    self.items = items or []</code></pre></li>
+          </ul>
+          <h5>Next step</h5>
+          <ul>
+            <li>Add a <code>Child(Parent)</code> and call <code>super().__init__(name)</code> — that is inheritance, and the natural follow-up to this snippet.</li>
+            <li><a href="python-core.html">Python → OOP fundamentals</a> · <a href="lld.html">LLD → OOP &amp; SOLID</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>03 — inheritance and super()</h3>
+      <p><code>Child</code> extends <code>Parent</code>, adds its own attribute, and calls <code>super().__init__()</code> so the parent’s setup still runs. <code>greet()</code> is never redefined — it is inherited.</p>
+<pre><code>class Parent:
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        print(f"Hello from Parent class. My name is {self.name}.")
+
+
+class Child(Parent):
+    def __init__(self, name, age):
+        super().__init__(name)      # run Parent's __init__ first
+        self.age = age
+
+
+child1 = Child("Khushboo", 10)
+child1.greet()</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Hello from Parent class. My name is Khushboo.</code></pre>
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>What to notice</h5>
+          <ul>
+            <li><code>Child</code> defines no <code>greet()</code>. Python does not find it on <code>Child</code>, looks at <code>Parent</code>, finds it there, and uses it. That is inheritance doing its job.</li>
+            <li><code>super().__init__(name)</code> runs the parent constructor, which is what sets <code>self.name</code>. Without it, <code>greet()</code> would have nothing to print.</li>
+            <li>Both attributes land on the <em>same</em> object:
+<pre><code>child1.__dict__  →  {'name': 'Khushboo', 'age': 10}</code></pre></li>
+            <li>The object is both types at once:
+<pre><code>isinstance(child1, Child)   → True
+isinstance(child1, Parent)  → True</code></pre></li>
+          </ul>
+
+          <h5>What happens if you forget super()</h5>
+          <p>This is the bug worth seeing once, so you recognise it instantly:</p>
+<pre><code>class Broken(Parent):
+    def __init__(self, name, age):
+        self.age = age          # <span class="bad">forgot super().__init__(name)</span>
+
+b = Broken("X", 5)
+b.__dict__   →  {'age': 5}      <span class="bad">← no 'name'</span>
+b.greet()    →  <span class="bad">AttributeError: 'Broken' object has no attribute 'name'</span></code></pre>
+          <p style="margin-top:8px;">Overriding <code>__init__</code> <strong>replaces</strong> the parent’s — it does not extend it. If you want the parent’s setup, you have to ask for it.</p>
+
+          <h5>MRO — the order Python searches</h5>
+<pre><code>Child.__mro__  →  [Child, Parent, object]</code></pre>
+          <p style="margin-top:8px;">Method Resolution Order. Python walks this list left to right and uses the first match. <code>super()</code> does not mean "my parent" — it means "the next class in the MRO", which is why it behaves correctly under multiple inheritance where naming the parent directly does not.</p>
+
+          <h5>Worth trying next</h5>
+          <ul>
+            <li>Override <code>greet()</code> in <code>Child</code> and call <code>super().greet()</code> inside it — extend rather than replace.</li>
+            <li>Add <code>__str__</code> so <code>print(child1)</code> shows something useful.</li>
+            <li>Give <code>Child</code> two parents and print the MRO — that is where <code>super()</code> earns its design.</li>
+          </ul>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="python-core.html">Python → OOP fundamentals</a> · <a href="python-intermediate.html">Python → OOP in Python</a></li>
+            <li><a href="lld.html">LLD → OOP &amp; SOLID</a> — and why composition often beats inheritance</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>04 — inheritance vs method overriding</h3>
+      <p>I wrote this thinking it showed method overriding. It runs, but it does not — worth keeping as the contrast, because the distinction is exactly what gets asked.</p>
+<pre><code>class sum:
+    def add(self, x, y):
+        return x + y
+
+class multiply(sum):
+    def multiply(self, x, y):
+        return x * y
+
+my_calculation = multiply()
+print("Addition:", my_calculation.add(5, 3))
+print("Multiplication:", my_calculation.multiply(5, 3))</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Addition: 8
+Multiplication: 15</code></pre>
+
+      <div class="worked">
+        <h4>Why this is not overriding</h4>
+        <p>Overriding means the child defines a method with the <strong>same name</strong> as the parent, replacing it. Here nothing overlaps:</p>
+<pre><code>methods on parent (sum)     : ['add']
+methods on child  (multiply): ['multiply']
+names defined in BOTH       : <span class="bad">none → nothing is overridden</span></code></pre>
+        <p style="margin-top:8px;">What it actually shows is <strong>inheritance + extension</strong>: <code>multiply</code> inherits <code>add</code> and adds a new method beside it. Both calls work — <code>add</code> was simply never replaced.</p>
+
+        <h5>Overriding, for comparison</h5>
+<pre><code>class Calculator:
+    def describe(self):     return "generic calculator"
+    def add(self, x, y):    return x + y
+
+class ScientificCalculator(Calculator):
+    def describe(self):     return "scientific calculator"   <span class="ok">← overrides</span>
+    def power(self, x, y):  return x ** y                    <span class="lbl-s">← extends</span></code></pre>
+<pre><code>Calculator().describe()            → generic calculator
+ScientificCalculator().describe()  → <span class="ok">scientific calculator</span>
+names in both classes              → {'describe'}</code></pre>
+
+        <h5>Override to <em>extend</em>, not just replace</h5>
+<pre><code>class Extended(Calculator):
+    def describe(self):
+        return super().describe() + " (extended)"
+
+Extended().describe()  → "generic calculator (extended)"</code></pre>
+        <p style="margin-top:8px;">Calling <code>super()</code> inside the override keeps the parent’s behaviour and adds to it — the same idea as <code>super().__init__()</code> in snippet 03.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Two naming problems in the original</h5>
+          <ul>
+            <li><strong><code>class sum</code> shadows the builtin.</strong> Once that class exists, <code>sum([1, 2, 3])</code> fails:
+<pre><code>TypeError: sum() takes no arguments</code></pre>
+              Same risk with <code>list</code>, <code>dict</code>, <code>type</code>, <code>id</code>, <code>max</code>.</li>
+            <li><strong>Class and method share the name <code>multiply</code>.</strong> Legal, but <code>multiply().multiply()</code> reads badly. PEP 8 wants <code>PascalCase</code> for classes and <code>snake_case</code> for methods, which keeps them visibly different.</li>
+          </ul>
+
+          <h5>The three words, kept straight</h5>
+          <ul>
+            <li><strong>Inheritance</strong> — the child gets the parent’s methods</li>
+            <li><strong>Overriding</strong> — the child redefines a method the parent already has <em>(same name, same class hierarchy)</em></li>
+            <li><strong>Overloading</strong> — several methods with the same name and different signatures. <strong>Python does not have it</strong> — a second <code>def</code> of the same name simply replaces the first. Use default arguments or <code>*args</code> instead. This is a standard interview trap.</li>
+          </ul>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="python-core.html">Python → OOP fundamentals</a> · <a href="python-intermediate.html">Python → OOP in Python</a></li>
+            <li><a href="lld.html">LLD → OOP &amp; SOLID</a> — Liskov substitution is about overriding <em>safely</em></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>05 — method overloading (Python does not have it)</h3>
+      <p>Two methods with the same name and different parameter counts. In a language with real overloading both would coexist and the call would pick one. In Python the second <code>def</code> simply <strong>replaces</strong> the first.</p>
+<pre><code>class sum:
+    def add(self, x, y):
+        return x + y
+
+    def add(self, x, y, z):     # replaces the one above
+        return x + y + z
+
+s = sum()
+print(s.add(2, 3, 4))</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>9</code></pre>
+
+      <div class="worked">
+        <h4>The rule, and the proof</h4>
+        <p><strong>The last definition wins — and the earlier one is gone, not hidden.</strong></p>
+<pre><code>s.add(2, 3, 4)  →  <span class="ok">9</span>
+s.add(2, 3)     →  <span class="bad">TypeError: sum.add() missing 1 required
+                   positional argument: 'z'</span></code></pre>
+        <p style="margin-top:8px;">That error is the whole point. The two-argument version did not "lose a tie" — it no longer exists. The class body runs top to bottom like ordinary code, and the second <code>def</code> rebinds the name:</p>
+<pre><code>how many 'add' the class holds  →  ['add']      <span class="lbl-s">one entry</span>
+signature that survived         →  (self, x, y, z)</code></pre>
+        <p style="margin-top:8px;">A class body is not a declaration — it is a block of statements that builds a namespace. <code>def</code> is an assignment, so defining <code>add</code> twice is no different from writing <code>x = 1</code> then <code>x = 2</code>.</p>
+
+        <h5>Confirmed — the default-argument fix, run</h5>
+<pre><code>class sum:
+    def add(self, x, y, z=0):
+        return x + y + z
+
+s = sum()
+print(s.add(2, 3))</code></pre>
+<pre><code>s.add(2, 3)        →  <span class="ok">5</span>     z defaults to 0
+s.add(2, 3, 4)     →  <span class="ok">9</span>     z supplied
+
+s.add(2)           →  <span class="bad">TypeError: missing 1 required positional argument: 'y'</span>
+s.add(2, 3, 4, 5)  →  <span class="bad">TypeError: takes from 3 to 4 positional arguments but 5 were given</span></code></pre>
+        <p style="margin-top:8px;">One method, two valid call shapes — which is the behaviour overloading would have given, without overloading existing. The signature is still a single fixed thing:</p>
+<pre><code>inspect.signature(sum.add)  →  (self, x, y, z=0)</code></pre>
+        <p style="margin-top:8px;">Note the bounds are real: it accepts <strong>2 or 3</strong> arguments and nothing else. Defaults widen the accepted calls, they do not make the method variadic — that is what <code>*args</code> is for.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>How to actually get overloading behaviour</h5>
+          <ul>
+            <li><strong>Default arguments</strong> — simplest, and usually right:
+<pre><code>def add(self, x, y, z=0):
+    return x + y + z
+
+add(2, 3)     → 5
+add(2, 3, 4)  → 9</code></pre></li>
+            <li><strong><code>*args</code></strong> — when the count is genuinely variable:
+<pre><code>def add(self, *nums):
+    return sum(nums)
+
+add(2, 3)        → 5
+add(2, 3, 4, 5)  → 14</code></pre></li>
+            <li><strong><code>functools.singledispatchmethod</code></strong> — real dispatch, on the <em>type</em> of the first argument:
+<pre><code>@singledispatchmethod
+def add(self, a, b): raise NotImplementedError
+
+@add.register
+def _(self, a: int, b: int): return a + b
+
+@add.register
+def _(self, a: str, b: str): return a + " " + b
+
+add(2, 3)       → 5
+add("a", "b")   → 'a b'</code></pre></li>
+            <li><strong><code>typing.overload</code></strong> — declares several signatures for type checkers only. <em>No runtime effect whatsoever</em>; you still write one real implementation.</li>
+          </ul>
+
+          <h5>Saying it well in an interview</h5>
+          <p>"Python does not support method overloading. Defining a method twice rebinds the name, so only the last one survives — calling it with the old signature raises a <code>TypeError</code>. The equivalent is default arguments or <code>*args</code>, and <code>functools.singledispatch</code> when you genuinely need to branch on type."</p>
+          <p style="margin-top:8px;">Overloading is the one of the three that Python lacks — overriding and inheritance both work normally. See <a href="#practise">snippet 04</a> for that distinction.</p>
+
+          <h5>Also</h5>
+          <ul>
+            <li><code>class sum</code> shadows the builtin again — noted in snippet 04. Ironically the <code>*args</code> fix above <em>needs</em> the real <code>sum()</code>, so inside this class it would break.</li>
+            <li><a href="python-core.html">Python → OOP fundamentals</a> · <a href="python-intermediate.html">Python → functools</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>06 — Serializer vs ModelSerializer</h3>
+      <p>The same <code>Task</code> serialized two ways. One declares every field and writes <code>create()</code>; the other derives both from the model.</p>
+
+<pre><code>from rest_framework import serializers
+from .models import Task
+
+# fields and create() written by hand
+class TaskSerializer(serializers.Serializer):
+    title       = serializers.CharField(max_length=100)
+    description = serializers.CharField()
+    completed   = serializers.BooleanField()
+
+    def create(self, validated_data):
+        return Task.objects.create(**validated_data)
+
+
+# derived from the model
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Task
+        fields = "__all__"</code></pre>
+
+      <p style="margin-top:8px;"><strong>Output — both save successfully</strong></p>
+<pre><code>Serializer       is_valid: True  saved: Task object (1)
+  → {'title': 'Write tests', 'description': 'for the API', 'completed': False}
+
+ModelSerializer  is_valid: True  saved: Task object (2)
+  → {<span class="ok">'id': 2</span>, 'title': 'Write tests', 'description': 'for the API', 'completed': False}</code></pre>
+      <p style="margin-top:8px;">Note the <code>id</code>. The plain <code>Serializer</code> only knows the three fields I typed; <code>ModelSerializer</code> found the primary key too.</p>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>What each one actually declared</h5>
+<pre><code>PlainTaskSerializer():
+    title       = CharField(max_length=100)
+    description = CharField()
+    completed   = BooleanField()
+
+TaskModelSerializer():
+    id          = BigIntegerField(label='ID', <span class="ok">read_only=True</span>)
+    title       = CharField(max_length=100)
+    description = CharField(<span class="ok">style={'base_template': 'textarea.html'}</span>)
+    completed   = BooleanField(<span class="ok">required=False</span>)</code></pre>
+          <p style="margin-top:8px;">Three things it inferred that I did not write: the primary key as <strong>read-only</strong>, <code>description</code> as a <strong>textarea</strong> because the model uses <code>TextField</code>, and <code>completed</code> as <strong>optional</strong> because the model has <code>default=False</code>.</p>
+
+          <h5>Where the plain Serializer stops</h5>
+          <p>I wrote <code>create()</code>, so saving a new object works. Updating one does not:</p>
+<pre><code>ModelSerializer update  →  <span class="ok">completed = True</span>
+Serializer update       →  <span class="bad">NotImplementedError: `update()` must be implemented.</span></code></pre>
+          <p style="margin-top:8px;">Both methods are needed, and each has to be written separately. <code>ModelSerializer</code> supplies both.</p>
+
+          <h5>The short answer for an interview</h5>
+          <p><em>"<code>Serializer</code> requires us to define the fields and usually <code>create()</code>/<code>update()</code> manually, whereas <code>ModelSerializer</code> generates the fields and default create/update behaviour from the Django model."</em></p>
+          <p style="margin-top:8px;">Add one sentence on <em>when</em> to use each and it is a complete answer: <code>ModelSerializer</code> for anything backed by a model; plain <code>Serializer</code> when there is no model — a login payload, a search request, a webhook body.</p>
+
+          <h5>Careful with <code>fields = "__all__"</code></h5>
+          <p>Convenient here, risky in production — add a field to the model and the API silently exposes it. List the fields explicitly once the model has anything private on it.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="interview.html#django">Interview → Serializer vs ModelSerializer</a> — the full version with generated validators</li>
+            <li><a href="django-api.html">Django → APIs with DRF</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="django-production.html">← Architecture &amp; Production</a>
+    <a href="django.html">All Django tracks</a>
+    <a href="python.html">Python track →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="django.html">← Django</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

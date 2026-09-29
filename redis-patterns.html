@@ -28,6 +28,7 @@
       <li><a href="aws.html">AWS</a></li>
       <li><a href="deployment.html">Deploy</a></li>
       <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
       <li><a href="misc.html">Misc</a></li>
     </ul>
   </div>
@@ -55,15 +56,15 @@
   <ol class="timeline">
 
     <li class="done">
-      <h3>Caching</h3>
-      <p>The original use. Cache-aside is the default: check Redis, miss, read the database, write it back with a TTL. The hard parts are invalidation and the three failure modes — stampede, penetration and avalanche — which TTL jitter, locking and negative caching address.</p>
+      <h3>Caching with Redis</h3>
+      <p>The original use, and the Redis mechanics for it: <code>SET key val EX</code> for cache-aside with a TTL, jittered expiry so a thousand keys do not drop at once, <code>SET … NX</code> as the lock that stops a stampede, and caching a negative result so a miss is not re-queried forever. The strategies and failure modes themselves are in <a href="hld.html">HLD → Caching</a>.</p>
       <details>
         <summary>Resources</summary>
         <div class="reslist">
           <h5>Learn</h5>
           <ul>
             <li><a href="https://redis.io/docs/latest/develop/use/patterns/">Redis — programming patterns</a></li>
-            <li><a href="https://aws.amazon.com/builders-library/caching-challenges-and-strategies/">AWS — caching challenges and strategies</a></li>
+            <li><a href="hld.html">HLD → Caching</a> — the strategies, eviction policies and failure modes</li>
             <li><a href="https://docs.djangoproject.com/en/stable/topics/cache/">Django — caching with Redis</a></li>
           </ul>
           <h5>Practice</h5>
