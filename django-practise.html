@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 9 snippets</span></h2>
+  <h2>Snippets <span class="count">— 10 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -651,6 +651,79 @@ print(x)</code></pre>
           <h5>Full write-up</h5>
           <ul>
             <li><a href="interview.html#python">Interview → Reverse the words in a string</a> — the slice reference, the three ways to reverse, the <code>split()</code> vs <code>split(" ")</code> difference, and the LeetCode set</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>10 — find the student with the highest marks</h3>
+      <p>Same shape as snippet 08, and this time the logic is <strong>right</strong> — it stores the value, not the position.</p>
+<pre><code>marks = {
+    "John": 70,
+    "Alice": 92,
+    "Bob": 85
+}
+
+max = 0
+for key, value in marks.items():
+    if value &gt; max:
+        student = key
+        max = value          # <span class="ok">the VALUE — this is the fix</span>
+
+print(student)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Alice   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>Trace</h4>
+<pre><code>John=70  &gt; max=0   →  student=John,  max=70
+Alice=92 &gt; max=70  →  student=Alice, max=92
+Bob=85   &gt; max=92? no</code></pre>
+
+        <h5>Compare with snippet 08</h5>
+<pre><code>08:  max = i        ← the index     <span class="bad">✗ compares a length against a position</span>
+10:  max = value    ← the value     <span class="ok">✓ compares like with like</span></code></pre>
+        <p style="margin-top:8px;">Identical structure, one line different, and that line is the whole difference between working and accidentally-working. Good instinct to keep the accumulator and the comparison in the same units.</p>
+
+        <h5><code>.items()</code> is what makes it readable</h5>
+<pre><code>for key, value in marks.items():   both at once  <span class="ok">✓</span>
+for key in marks:                  keys only, then marks[key]
+for value in marks.values():       values only — loses the name</code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>The one-liners</h5>
+<pre><code>max(marks, key=marks.get)                 →  'Alice'
+max(marks.items(), key=lambda x: x[1])    →  ('Alice', 92)    name and mark
+sorted(marks.items(), key=lambda x: -x[1])
+  →  [('Alice', 92), ('Bob', 85), ('John', 70)]               full ranking</code></pre>
+          <p style="margin-top:8px;"><code>key=marks.get</code> tells <code>max</code> to compare by the dict’s values while still returning the key.</p>
+
+          <h5>Two edge cases the loop gets wrong — tested</h5>
+          <p><strong>Empty dict</strong> — the loop never runs, so <code>student</code> is never assigned:</p>
+<pre><code>marks = {}
+print(student)  →  <span class="bad">NameError: name 'student' is not defined</span></code></pre>
+          <p style="margin-top:8px;"><strong>Negative values</strong> — starting at <code>max = 0</code> assumes every mark is positive:</p>
+<pre><code>{"A": -5, "B": -2}
+  loop        →  <span class="bad">None</span>   nothing ever beats 0
+  max(key=..) →  <span class="ok">'B'</span>    correct</code></pre>
+          <p style="margin-top:8px;">Fine for marks, wrong for temperatures, balances or profit/loss. Starting from <code>float("-inf")</code>, or from the first item, avoids the assumption entirely.</p>
+<pre><code>max(marks, key=marks.get, default=None)   →  None on an empty dict</code></pre>
+
+          <h5>Ties</h5>
+<pre><code>{"A": 90, "B": 90}  →  'A'</code></pre>
+          <p style="margin-top:8px;"><code>&gt;</code> keeps the <strong>first</strong>; <code>&gt;=</code> would keep the last. <code>max()</code> also keeps the first. Worth stating which you intend if asked — "who scored highest" is ambiguous when two people did.</p>
+
+          <h5>And again</h5>
+          <p><code>max = 0</code> shadows the builtin — fifth time in this log after <code>sum</code>, <code>dict</code>, <code>max</code> and <code>input</code>. It is also the function that solves this in one line.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 08 — find the longest word</a> — the same pattern, with the bug</li>
+            <li><a href="python-stdlib.html">Python → collections</a> — <code>Counter.most_common()</code> for the same job on counts</li>
           </ul>
         </div>
       </details>
