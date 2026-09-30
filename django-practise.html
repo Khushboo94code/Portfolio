@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 8 snippets</span></h2>
+  <h2>Snippets <span class="count">— 9 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -608,6 +608,49 @@ max([], key=len, default=None)      →  None</code></pre>
           <ul>
             <li><a href="interview.html#python">Interview → Reverse the words in a string</a> — same split-and-process shape</li>
             <li><a href="python-core.html">Python → Comprehensions &amp; iteration</a> — iterating values instead of indices</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>09 — reverse the words in a string</h3>
+      <p>Split into words, reverse the list, join back into a string. The corrected version — my first attempt stopped at <code>[::-1]</code> and left a list.</p>
+<pre><code>input = "I love Python"
+# output = "Python love I"
+
+x = " ".join(input.split()[::-1])
+print(x)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Python love I   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>The three steps</h4>
+<pre><code>input.split()          →  ['I', 'love', 'Python']     string  → list
+[::-1]                 →  ['Python', 'love', 'I']     list    → reversed list
+" ".join(...)          →  'Python love I'             list    → string</code></pre>
+        <p style="margin-top:8px;">Each does one job, and the <code>join</code> is the step that is easy to forget — without it you print a list, not a sentence.</p>
+
+        <h5>Free bonus: messy whitespace just works</h5>
+<pre><code>"   I   love   Python   "
+  → same code →  <span class="ok">'Python love I'</span></code></pre>
+        <p style="margin-top:8px;"><code>split()</code> with no argument collapses runs of whitespace and strips the ends, so no cleanup is needed. <code>split(" ")</code> would have produced a list full of empty strings.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Why <code>[::-1]</code> behaves differently on each</h5>
+<pre><code>"I love Python"[::-1]     →  'nohtyP evol I'          characters
+['I','love','Python'][::-1] →  ['Python','love','I']   elements</code></pre>
+          <p style="margin-top:8px;">Same syntax, and a slice always returns the type it was given. That is the whole reason the two attempts differ.</p>
+
+          <h5><code>input</code> shadows the builtin — again</h5>
+          <p>Fourth time in this log after <code>sum</code>, <code>dict</code> and <code>max</code>. <code>text</code> or <code>s</code> costs nothing.</p>
+
+          <h5>Full write-up</h5>
+          <ul>
+            <li><a href="interview.html#python">Interview → Reverse the words in a string</a> — the slice reference, the three ways to reverse, the <code>split()</code> vs <code>split(" ")</code> difference, and the LeetCode set</li>
           </ul>
         </div>
       </details>
