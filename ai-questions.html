@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions — AI — Khushboo</title>
+<meta name="description" content="AI questions and answers, each tagged with the sub-track it belongs to — RAG, LLM basics, agents, production or providers.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html" class="here">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="ai.html">← AI</a>
+  <h1>Questions</h1>
+  <p>Things I have had to actually work out while building AI systems — kept as questions so they are revisable. Each one carries a badge for the sub-track it belongs to, so a question about chunking reads as a RAG question even though it is really a Python one.</p>
+
+  <div class="pillnav"><a href="ai-providers.html">Providers &amp; Models</a> <a href="ai-llm-basics.html">LLM Basics</a> <a href="ai-rag.html">RAG</a> <a href="ai-agents.html">Agents &amp; Tool Use</a> <a href="ai-production.html">Production &amp; Evaluation</a> <a href="ai-questions.html" style="border-color:var(--accent);color:var(--accent);">Questions</a></div>
+
+</header>
+
+<main>
+
+<!--
+  ============================================================
+  HOW TO ADD A QUESTION
+  ============================================================
+  Copy this block into the <ul class="qa"> below.
+  The badge is the AI sub-track the question belongs to — one of:
+      RAG · LLM Basics · Agents · Production · Providers
+  (replace the word Topic with whichever one fits)
+
+  <li>
+    <details>
+      <summary>The question <span class="asked-at">Topic</span></summary>
+      <div class="answer">
+        <p>The answer.</p>
+        <div class="tagrow"><span>keyword</span> <span>keyword</span></div>
+      </div>
+    </details>
+  </li>
+  ============================================================
+-->
+
+<section class="wrap" id="questions">
+  <h2>Questions <span class="count">— 1 question</span></h2>
+
+  <ul class="qa">
+
+      <li>
+        <details>
+          <summary>Why does <code>enumerate()</code> show up everywhere in a RAG ingestion pipeline? <span class="asked-at">RAG</span></summary>
+          <div class="answer">
+            <p>Because a retrieved chunk on its own is an anonymous string. <code>enumerate()</code> is the cheapest way to give every chunk a stable position, and that position becomes the <code>chunk_id</code> in its metadata — which is what lets you say <em>where the answer came from</em> instead of just producing text.</p>
+
+            <p><strong>Attaching the id while chunking</strong></p>
+<pre><code>chunks = [
+    "Django is a Python web framework.",
+    "Django follows the MVT architecture.",
+    "Django ORM is used to interact with databases."
+]
+
+documents = []
+for index, chunk in enumerate(chunks):
+    documents.append({
+        "text": chunk,
+        "metadata": {"chunk_id": index}
+    })</code></pre>
+
+            <p><strong>Output</strong></p>
+<pre><code>[
+  {"text": "Django is a Python web framework.",
+   "metadata": {"chunk_id": 0}},
+
+  {"text": "Django follows the MVT architecture.",
+   "metadata": {"chunk_id": 1}},
+
+  {"text": "Django ORM is used to interact with databases.",
+   "metadata": {"chunk_id": 2}}
+]   <span class="ok">✓</span></code></pre>
+
+            <p><code>enumerate(chunks)</code> hands the loop a <em>(position, item)</em> pair on each turn:</p>
+<pre><code>(0, "Django is a Python web framework.")
+(1, "Django follows the MVT architecture.")
+(2, "Django ORM is used to interact with databases.")</code></pre>
+
+            <p><strong>Where this sits in the pipeline</strong></p>
+            <figure class="diagram">
+<svg viewBox="0 0 880 118" role="img" aria-label="RAG ingest pipeline, with the metadata step highlighted">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="var(--text-soft)" opacity="0.7"/>
+    </marker>
+  </defs>
+  <text class="lbl-s" x="20" y="24" style="text-anchor:start">INGEST  ·  offline, once per document  ·  this is where enumerate() lives</text>
+  <rect class="box" x="20" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl" x="79.0" y="65">PDF</text>
+  <text class="lbl-s" x="79.0" y="80">source file</text>
+  <rect class="box" x="164" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl" x="223.0" y="65">Extract text</text>
+  <text class="lbl-s" x="223.0" y="80">per page</text>
+  <line class="flow-line" x1="138" y1="70.0" x2="160" y2="70.0" marker-end="url(#ah)"/>
+  <rect class="box" x="308" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl" x="367.0" y="65">Chunk</text>
+  <text class="lbl-s" x="367.0" y="80">split + overlap</text>
+  <line class="flow-line" x1="282" y1="70.0" x2="304" y2="70.0" marker-end="url(#ah)"/>
+  <rect class="box-a" x="452" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl-a" x="511.0" y="65">Add metadata</text>
+  <text class="lbl-s" x="511.0" y="80">enumerate()</text>
+  <line class="flow-line" x1="426" y1="70.0" x2="448" y2="70.0" marker-end="url(#ah)"/>
+  <rect class="box" x="596" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl" x="655.0" y="65">Embed</text>
+  <text class="lbl-s" x="655.0" y="80">→ vector</text>
+  <line class="flow-line" x1="570" y1="70.0" x2="592" y2="70.0" marker-end="url(#ah)"/>
+  <rect class="box" x="740" y="44" width="118" height="52" rx="7"/>
+  <text class="lbl" x="799.0" y="65">Vector DB</text>
+  <text class="lbl-s" x="799.0" y="80">pgvector</text>
+  <line class="flow-line" x1="714" y1="70.0" x2="736" y2="70.0" marker-end="url(#ah)"/>
+</svg>
+              <figcaption>Metadata is attached <em>before</em> embedding, because the vector store saves the text and the metadata together. Anything you forget here is unrecoverable later — the embedding is just numbers.</figcaption>
+            </figure>
+
+            <div class="worked">
+              <h4>Why the id matters: retrieval gives you back a chunk with no origin</h4>
+              <p>Vector search returns the nearest chunks. Without metadata all you have is text, so you cannot cite, cannot show the user a source, and cannot debug a bad answer. With metadata you can:</p>
+<pre><code>{"source": "django.pdf", "page": 5, "chunk_id": 12}
+
+→ "Django uses the MVT pattern (django.pdf, p.5)"
+→ and you can pull chunk 11 and 13 to widen the context</code></pre>
+
+              <h5>The <code>start=1</code> trap</h5>
+              <p><code>enumerate(chunks, start=1)</code> is fine for <em>printing</em> a numbered list:</p>
+<pre><code>for i, chunk in enumerate(chunks, start=1):
+    print(i, chunk)
+
+1 Django is a Python web framework.
+2 Django follows the MVT architecture.
+3 Django ORM is used to interact with databases.</code></pre>
+              <p>But if you store that number as <code>chunk_id</code>, the id no longer matches the list position, and every lookup back into the source is off by one:</p>
+<pre><code>docs = [{"text": c, "metadata": {"chunk_id": i}}
+        for i, c in enumerate(chunks, start=1)]
+
+chunks[docs[0]["metadata"]["chunk_id"]]
+  →  "Django follows the MVT architecture."   <span class="bad">wrong chunk</span>
+
+chunks[docs[-1]["metadata"]["chunk_id"]]
+  →  <span class="bad">IndexError: list index out of range</span></code></pre>
+              <p><strong>Rule:</strong> <code>start=1</code> for anything a human reads, plain <code>enumerate()</code> for anything a machine indexes with.</p>
+
+              <h5><code>enumerate</code> is lazy and single-pass</h5>
+<pre><code>e = enumerate(chunks)
+list(e)   →  [(0, 'A.'), (1, 'B.'), (2, 'C.')]
+list(e)   →  <span class="bad">[]</span>   already exhausted</code></pre>
+              <p>It is an iterator, not a list. Harmless in a <code>for</code> loop, but it bites if you hold onto it and iterate twice — which happens the moment you try to loop over chunks once to embed and again to log.</p>
+            </div>
+
+            <div class="tagrow"><span>chunking</span> <span>metadata</span> <span>citations</span> <span>ingestion</span> <span>enumerate</span></div>
+          </div>
+        </details>
+      </li>
+
+  </ul>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="ai-rag.html">← RAG</a>    <a href="ai.html">All AI tracks</a>    <a href="interview.html">Interview questions →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="ai.html">← AI</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>
