@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 12 snippets</span></h2>
+  <h2>Snippets <span class="count">— 13 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -869,6 +869,86 @@ sum(list, [])   0.697s     <span class="bad">×66 slower</span></code></pre>
           <ul>
             <li><a href="#practise">Snippet 11 — group a list by a key</a> — unpacking where the two halves genuinely differ</li>
             <li><a href="python-stdlib.html">Python → itertools &amp; functools</a> · <a href="python-core.html">Python → Comprehensions</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>13 &mdash; sum each inner list</h3>
+      <p>Walk the rows, keep a running total per row, append it. It works &mdash; but the accumulator is named <code>sum</code>, which is the exact builtin that would have replaced the whole inner loop.</p>
+<pre><code>nums = [
+    [1, 2, 3],
+    [4, 5],
+    [6, 7, 8, 9]
+]
+res = []
+for i in nums:
+    sum = 0
+    for j in i:
+        sum = sum + j
+    res.append(sum)
+
+print(res)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>[6, 9, 30]   <span class="ok">&#10003;</span></code></pre>
+
+      <div class="worked">
+        <h4><code>sum = 0</code> deletes the tool you needed</h4>
+        <p><code>sum</code> is a builtin. Assigning to it replaces it for the rest of the module &mdash; not just inside the loop:</p>
+<pre><code>for i in nums:
+    sum = 0          <span class="bad">&larr; builtin sum is gone from here on</span>
+    ...
+
+print(sum(nums[0]))
+<span class="bad">TypeError: 'int' object is not callable</span></code></pre>
+        <p style="margin-top:8px;">Python is not confused &mdash; <code>sum</code> really is <code>30</code> by then, and you cannot call <code>30</code>. The irony is the point: the builtin this code shadows is the one that does this job in one call.</p>
+
+        <h5>Same answer, builtin intact</h5>
+<pre><code>res = [sum(row) for row in nums]
+
+<span class="ok">[6, 9, 30]</span></code></pre>
+        <p style="margin-top:8px;">And it is faster &mdash; <code>sum</code> loops in C, the manual version loops in Python. Measured on 1,000 rows of 100 ints:</p>
+<pre><code>manual loop   0.774 ms
+[sum(row) …]  0.184 ms     <span class="ok">&times;4.2 faster</span></code></pre>
+
+        <h5>Names that say what the thing is</h5>
+<pre><code>for i in nums:        <span class="bad">i reads as an index &mdash; it is a row (a list)</span>
+    for j in i:       <span class="bad">j reads as an index &mdash; it is a number</span>
+
+for row in nums:      <span class="ok">now the code says what it holds</span>
+    for n in row:</code></pre>
+        <p style="margin-top:8px;"><code>i</code> and <code>j</code> are a convention for <em>indices</em> (<code>for i in range(len(x))</code>). Using them for the items themselves is the one place they mislead.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Row totals vs grand total</h5>
+<pre><code>[sum(row) for row in nums]              &rarr; [6, 9, 30]     per row
+sum(sum(row) for row in nums)           &rarr; 45             everything
+sum(itertools.chain.from_iterable(nums)) &rarr; 45            same, one pass</code></pre>
+          <p style="margin-top:8px;">Interviewers often ask for one and then the other. Knowing both is the whole answer.</p>
+
+          <h5>Empty rows are already handled</h5>
+<pre><code>[[1,2], [], [3]]  &rarr;  [3, 0, 3]</code></pre>
+          <p style="margin-top:8px;"><code>sum([])</code> is <code>0</code>, and the manual loop starts at <code>0</code> too &mdash; both give the same thing. No special case needed.</p>
+
+          <h5><code>sum</code> is numbers only</h5>
+<pre><code>sum(["a", "b"])
+<span class="bad">TypeError: unsupported operand type(s) for +: 'int' and 'str'</span>
+
+"".join(["a", "b"])   &rarr;  <span class="ok">"ab"</span></code></pre>
+          <p style="margin-top:8px;">It starts from <code>0</code>, so the first <code>+</code> is <code>0 + "a"</code>. Strings concatenate with <code>join</code>, not <code>sum</code>.</p>
+
+          <h5>The shadowing pattern, again</h5>
+          <p>This is the same bug shape as <code>class sum</code> in snippet 04, <code>max = i</code> in snippet 08, and <code>dict = {}</code> in snippet 07. Nothing warns you &mdash; the name is simply gone until the module ends. Reaching for <code>total</code>, <code>best</code>, <code>result</code>, <code>counts</code> costs nothing and keeps the builtin.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 12 &mdash; flatten a list of pairs</a> &mdash; the other way to walk a list of lists</li>
+            <li><a href="#practise">Snippet 10 &mdash; highest marks</a> &mdash; accumulating one answer instead of one per row</li>
+            <li><a href="python-core.html">Python &rarr; Comprehensions</a> &middot; <a href="python-stdlib.html">Python &rarr; itertools &amp; functools</a></li>
           </ul>
         </div>
       </details>
