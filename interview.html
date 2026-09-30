@@ -70,7 +70,7 @@
 <main>
 
 <section class="wrap" id="python">
-  <h2>Python <span class="count">— 5 questions</span> <a href="python.html" style="font-weight:400;font-size:13px;text-transform:none;letter-spacing:0;">— track →</a></h2>
+  <h2>Python <span class="count">— 6 questions</span> <a href="python.html" style="font-weight:400;font-size:13px;text-transform:none;letter-spacing:0;">— track →</a></h2>
 
   <!-- Add questions here. Copy this block:
 
@@ -565,6 +565,77 @@ hash(t)  →  TypeError: unhashable type: 'list'</code></pre>
           <p style="margin-top:8px;">The rule of thumb: <strong>a tuple is a record with fields; a list is a sequence of the same kind of thing.</strong> <code>(name, age, city)</code> is a tuple even though it never changes size; <code>[user1, user2, user3]</code> is a list even if you never append to it. If the tuple has more than three fields, reach for a <code>NamedTuple</code> or <code>@dataclass</code> so the positions have names.</p>
 
           <div class="tagrow"><span>Python</span><span>data structures</span><span>immutability</span><span>hashing</span></div>
+        </div>
+      </details>
+    </li>
+
+    <li>
+      <details>
+        <summary>Reverse the words in a string — and what <code>[::-1]</code> really does <span class="asked-at">Unknown</span></summary>
+        <div class="answer">
+          <p>Target: <code>"I love Python"</code> → <code>"Python love I"</code>.</p>
+
+          <div class="worked">
+            <h4>The two obvious attempts — and why neither is the answer</h4>
+<pre><code>s = "I love Python"
+
+s[::-1]          →  <span class="bad">'nohtyP evol I'</span>      reversed the <em>characters</em>
+s.split()[::-1]  →  <span class="bad">['Python', 'love', 'I']</span>   a <em>list</em>, not a string</code></pre>
+            <p style="margin-top:8px;">Both are close and both are wrong, in different ways:</p>
+            <ul>
+              <li><strong><code>[::-1]</code> on a string</strong> reverses characters — the words end up backwards too.</li>
+              <li><strong><code>[::-1]</code> on a list</strong> reverses elements, which <em>is</em> right — but you are left holding a list.</li>
+            </ul>
+
+            <h5>The missing step is <code>join</code></h5>
+<pre><code>" ".join(s.split()[::-1])   →  <span class="ok">'Python love I'</span></code></pre>
+            <p style="margin-top:8px;">Three operations, each doing one job: <code>split()</code> → list of words, <code>[::-1]</code> → reverse the list, <code>" ".join()</code> → back to a string.</p>
+          </div>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">The slice, properly</h5>
+          <p><code>s[start:stop:step]</code> — a negative step walks backwards, and omitting start and stop means "the whole thing":</p>
+<pre><code>s = "I love Python"
+
+s[::-1]   →  'nohtyP evol I'    every char, backwards
+s[::2]    →  'Ilv yhn'          every 2nd char
+s[2:]     →  'love Python'      from index 2
+s[:6]     →  'I love'           up to index 6
+s[-6:]    →  'Python'           last 6
+s[::-2]   →  'nhy vlI'          backwards, every 2nd</code></pre>
+          <p style="margin-top:8px;">It works on <strong>any sequence</strong> — string, list, tuple — and always returns the same type it was given. That is the whole reason the two attempts above differ: same syntax, different input type.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">Three ways to reverse, and how they differ</h5>
+<pre><code>" ".join(s.split()[::-1])          →  'Python love I'   slice: new list
+" ".join(reversed(s.split()))      →  'Python love I'   iterator, lazy
+
+words = s.split()
+words.reverse()                    →  <span class="bad">returns None</span>  — in place
+" ".join(words)                    →  'Python love I'</code></pre>
+          <p style="margin-top:8px;"><code>list.reverse()</code> mutates and returns <code>None</code>, so <code>s.split().reverse()</code> gives you <code>None</code>, not a list. Same trap as <code>list.sort()</code> versus <code>sorted()</code>.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">The follow-up: messy whitespace</h5>
+<pre><code>"  I   love   Python  "
+
+.split()     →  ['I', 'love', 'Python']
+                <span class="ok">collapses runs of spaces, strips the ends</span>
+
+.split(" ")  →  ['', '', 'I', '', '', 'love', '', '', 'Python', '', '']
+                <span class="bad">keeps every single gap</span></code></pre>
+          <p style="margin-top:8px;"><strong><code>split()</code> with no argument is not the same as <code>split(" ")</code>.</strong> The no-argument form treats any run of whitespace as one separator and drops leading and trailing blanks — which is exactly what you want here, and why <code>" ".join(s.split()[::-1])</code> handles the messy input correctly with no extra code.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">One more thing</h5>
+<pre><code>input = "I love Python"     # <span class="bad">shadows the builtin</span>
+input("type: ")  →  TypeError: 'str' object is not callable</code></pre>
+          <p style="margin-top:8px;">Same family of mistake as naming something <code>list</code>, <code>dict</code> or <code>sum</code>.</p>
+
+          <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">Practise</h5>
+          <ul>
+            <li><a href="https://leetcode.com/problems/reverse-words-in-a-string/">Reverse Words in a String</a> — this exact problem, with the whitespace edge cases</li>
+            <li><a href="https://leetcode.com/problems/reverse-string/">Reverse String</a> — in place, O(1) space</li>
+            <li><a href="https://leetcode.com/problems/reverse-words-in-a-string-iii/">Reverse Words in a String III</a> — reverse each word, keep the order</li>
+          </ul>
+
+          <div class="tagrow"><span>Python</span><span>strings</span><span>slicing</span><span>split/join</span></div>
         </div>
       </details>
     </li>
