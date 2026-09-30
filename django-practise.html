@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 11 snippets</span></h2>
+  <h2>Snippets <span class="count">— 12 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -803,6 +803,72 @@ groupby(sorted(pairs, key=role), …) →  <span class="ok">{'Developer': ['John
           <ul>
             <li><a href="#practise">Snippet 07 — parse a key=value string</a> — the same split-and-build shape</li>
             <li><a href="python-stdlib.html">Python → collections</a> — <code>defaultdict</code>, <code>Counter</code></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>12 — flatten a list of pairs</h3>
+      <p>Unpack each inner list into two names, append both. It works — but the unpacking quietly assumes every inner list has exactly two items.</p>
+<pre><code>nums = [[1, 2], [3, 4], [5, 6]]
+x = []
+
+for key, value in nums:
+    x.append(key)
+    x.append(value)
+
+print(x)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>[1, 2, 3, 4, 5, 6]   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>What <code>for key, value in nums</code> is really doing</h4>
+<pre><code>[1, 2]  →  key=1, value=2
+[3, 4]  →  key=3, value=4
+[5, 6]  →  key=5, value=6</code></pre>
+        <p style="margin-top:8px;">Python unpacks each inner list into two names in one step — the same tuple unpacking as <code>k, v = pair</code>, written into the <code>for</code>.</p>
+
+        <h5>Which means it only works for pairs</h5>
+<pre><code>[[1,2], [3]]       →  <span class="bad">ValueError: not enough values to unpack (expected 2, got 1)</span>
+[[1,2], [3,4,5]]   →  <span class="bad">ValueError: too many values to unpack (expected 2, got 3)</span></code></pre>
+        <p style="margin-top:8px;">If the job is "flatten", that restriction is accidental — nothing about flattening requires pairs. It shows up the first time the data is ragged.</p>
+
+        <h5>The general version</h5>
+<pre><code>x = [n for pair in nums for n in pair]</code></pre>
+        <p style="margin-top:8px;">Reads in the same order you would write the loops — outer first, then inner. Works on any shape:</p>
+<pre><code>[[1,2,3], [4], [5,6]]
+  comprehension →  <span class="ok">[1, 2, 3, 4, 5, 6]</span>
+  for k, v in … →  <span class="bad">ValueError</span></code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Four ways, all giving <code>[1, 2, 3, 4, 5, 6]</code></h5>
+<pre><code>[n for pair in nums for n in pair]              comprehension  <span class="ok">← default</span>
+list(itertools.chain(*nums))                   unpacks the outer list
+list(itertools.chain.from_iterable(nums))      no unpacking, works on generators
+sum(nums, [])                                  <span class="bad">works, but do not</span></code></pre>
+
+          <h5>Why not <code>sum(nums, [])</code></h5>
+          <p>It builds a brand-new list on every addition, so it is O(n²). Measured on 2,000 pairs:</p>
+<pre><code>comprehension   0.011s
+sum(list, [])   0.697s     <span class="bad">×66 slower</span></code></pre>
+          <p style="margin-top:8px;">Fine on six items, a real problem on sixty thousand. It is the classic "clever one-liner that does not scale".</p>
+
+          <h5>It only flattens ONE level</h5>
+<pre><code>[[1, [2, 3]], [4, [5, 6]]]
+  →  [1, [2, 3], 4, [5, 6]]   <span class="bad">inner lists survive</span></code></pre>
+          <p style="margin-top:8px;">Arbitrary depth needs recursion. Worth saying out loud if asked to "flatten a nested list" — the first question is <em>how deep</em>.</p>
+
+          <h5>When the pair unpacking is the right choice</h5>
+          <p>Not here, but it is exactly right when the two items <em>mean</em> something different — <code>for name, role in pairs</code>. The names document the data. Using <code>key, value</code> for numbers being flattened is a small mismatch: they are not keys and values, just items.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 11 — group a list by a key</a> — unpacking where the two halves genuinely differ</li>
+            <li><a href="python-stdlib.html">Python → itertools &amp; functools</a> · <a href="python-core.html">Python → Comprehensions</a></li>
           </ul>
         </div>
       </details>
