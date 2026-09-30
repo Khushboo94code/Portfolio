@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 7 snippets</span></h2>
+  <h2>Snippets <span class="count">— 8 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -529,6 +529,85 @@ dict(parse_qsl("name=John&age=25&city=Delhi"))
             <li><strong>Every value is a string.</strong> <code>'25'</code>, not <code>25</code> — convert explicitly if you need a number.</li>
             <li><strong>Duplicate keys silently overwrite.</strong> <code>"a=1,a=2"</code> gives <code>{'a': '2'}</code>; the first is gone.</li>
             <li>Related: <a href="interview.html#python">Interview → Convert a string into a list of tuples</a> — the same split-and-restructure pattern.</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>08 — find the longest word</h3>
+      <p>Split into words, track the longest. It printed the right answer — but the logic is wrong, and the test input hid it.</p>
+<pre><code>input = "Django is a powerful framework"
+x = input.split()
+max = 0
+for i in range(len(x)):
+    if len(x[i]) > max:
+        max = i              # <span class="bad">assigns the INDEX, not the length</span>
+        result = x[i]
+print(result)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>framework   <span class="ok">✓ correct — by coincidence</span></code></pre>
+
+      <div class="worked">
+        <h4>The bug, and why this input hides it</h4>
+        <p><code>max</code> is meant to hold the longest <em>length</em> seen so far. <code>max = i</code> stores the <em>position</em> instead, so from then on you are comparing a word length against an array index — two unrelated numbers.</p>
+        <p style="margin-top:8px;">It survives here because the words happen to get longer towards the end:</p>
+<pre><code>['Django', 'is', 'a', 'powerful', 'framework']
+lengths   6      2    1      8           9        ← increasing at the end</code></pre>
+        <p style="margin-top:8px;">Change the input and it breaks immediately — tested:</p>
+<pre><code>input                              theirs        correct
+'Django is a powerful framework'   'framework'   'framework'   <span class="ok">✓</span>
+'aaaa b c'                         'b'           'aaaa'        <span class="bad">✗</span>
+'elephant a b c d'                 'a'           'elephant'    <span class="bad">✗</span>
+'hello worldwide hi'               'hi'          'worldwide'   <span class="bad">✗</span>
+'one two three four'               'four'        'three'       <span class="bad">✗</span></code></pre>
+        <p style="margin-top:8px;"><strong>Four out of five wrong.</strong> Traced on <code>'aaaa b c'</code>:</p>
+<pre><code>i=0  len=4 > max=0  →  max = <span class="bad">0</span> (the index), result = 'aaaa'
+i=1  len=1 > max=0  →  max = <span class="bad">1</span> (the index), result = <span class="bad">'b'</span>   ← overwritten
+i=2  len=1 > max=1? no</code></pre>
+        <p style="margin-top:8px;">Because <code>max</code> was reset to <code>0</code>, a one-letter word beat it.</p>
+
+        <h5>The one-character fix</h5>
+<pre><code>max = len(x[i])      # not max = i</code></pre>
+
+        <h5>Cleaner — track the word, not an index</h5>
+<pre><code>words = text.split()
+best = ""
+for word in words:
+    if len(word) &gt; len(best):
+        best = word</code></pre>
+        <p style="margin-top:8px;">No index, no second variable to keep in step, no way for them to disagree. Most off-by-one bugs disappear when you stop iterating by index.</p>
+
+        <h5>And the one-liner</h5>
+<pre><code>max(words, key=len)                  →  'framework'
+sorted(words, key=len)[-1]           →  'framework'
+max(words, key=len, default=None)    →  None on empty input</code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Two shadowed builtins here</h5>
+          <ul>
+            <li><code>input = "..."</code> breaks <code>input()</code></li>
+            <li><code>max = 0</code> breaks <code>max()</code> — which is the very function that solves this problem in one line</li>
+          </ul>
+          <p style="margin-top:8px;">Third time this has come up: <code>dict</code> in snippet 07, <code>sum</code> in snippet 04, now <code>max</code> and <code>input</code>. Worth making a habit of.</p>
+
+          <h5>The real lesson</h5>
+          <p>A passing test proved nothing here. One input, one correct answer, and a logic error underneath. <strong>Pick test cases that could expose the bug</strong> — longest word first, all words the same length, a single word, an empty string.</p>
+<pre><code>"".split()                          →  []      loop never runs, <code>result</code> is undefined
+max([], key=len)                    →  ValueError
+max([], key=len, default=None)      →  None</code></pre>
+          <p style="margin-top:8px;">The original crashes with <code>NameError</code> on empty input, because <code>result</code> is only assigned inside the <code>if</code>.</p>
+
+          <h5>Ties</h5>
+          <p><code>&gt;</code> keeps the <strong>first</strong> longest word; <code>&gt;=</code> would keep the last. <code>max()</code> keeps the first. Say which you intend if asked.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="interview.html#python">Interview → Reverse the words in a string</a> — same split-and-process shape</li>
+            <li><a href="python-core.html">Python → Comprehensions &amp; iteration</a> — iterating values instead of indices</li>
           </ul>
         </div>
       </details>
