@@ -463,12 +463,13 @@ Serializer update       →  <span class="bad">NotImplementedError: `update()` m
       <p>Split on the outer separator, then split each pair on <code>=</code>, then assign. A common warm-up, and the shape of every config, query-string and header parser.</p>
 <pre><code>s = "name=John,age=25,city=Delhi"
 
-dict = {}
+result = {}
+
 for i in s.split(","):
     k, v = i.split("=")
-    dict[k] = v
+    result[k] = v
 
-print(dict)</code></pre>
+print(result)</code></pre>
       <p style="margin-top:8px;"><strong>Output</strong></p>
 <pre><code>{'name': 'John', 'age': '25', 'city': 'Delhi'}</code></pre>
 
@@ -481,10 +482,11 @@ print(dict)</code></pre>
 'city=Delhi'.split("=")→  ['city', 'Delhi']</code></pre>
         <p style="margin-top:8px;"><code>k, v = i.split("=")</code> is tuple unpacking — it requires <strong>exactly two</strong> parts, which is where this breaks.</p>
 
-        <h5>One problem to fix: <code>dict</code> shadows the builtin</h5>
+        <h5>Why it is <code>result</code> and not <code>dict</code></h5>
+        <p>My first version named the accumulator <code>dict</code>, which shadows the builtin and breaks it for the rest of the scope:</p>
 <pre><code>dict = {}          # the name now points at your dict
 dict(a=1)          →  <span class="bad">TypeError: 'dict' object is not callable</span></code></pre>
-        <p style="margin-top:8px;">Same trap as <code>class sum</code> in snippet 04. Call it <code>result</code> or <code>data</code>.</p>
+        <p style="margin-top:8px;">Same trap as <code>class sum</code> in snippet 04, and as <code>input</code> or <code>list</code>. <code>result</code> costs nothing and avoids it.</p>
 
         <h5>The one-line version</h5>
 <pre><code>result = {k: v for k, v in (p.split("=") for p in s.split(","))}
