@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 10 snippets</span></h2>
+  <h2>Snippets <span class="count">— 11 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -724,6 +724,85 @@ print(student)  →  <span class="bad">NameError: name 'student' is not defined<
           <ul>
             <li><a href="#practise">Snippet 08 — find the longest word</a> — the same pattern, with the bug</li>
             <li><a href="python-stdlib.html">Python → collections</a> — <code>Counter.most_common()</code> for the same job on counts</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>11 — group a list by a key</h3>
+      <p>Split each entry, then collect names under their role. The <code>if/else</code> exists to create the list the first time a role appears.</p>
+<pre><code>employees = [
+    "John:Developer",
+    "Alice:Manager",
+    "Bob:Developer",
+    "David:Manager",
+    "Sam:Tester"
+]
+
+res = {}
+for emp in employees:
+    key, value = emp.split(":")
+    if value in res:
+        res[value].append(key)
+    else:
+        res[value] = [key]
+
+print(res)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>{'Developer': ['John', 'Bob'],
+ 'Manager':   ['Alice', 'David'],
+ 'Tester':    ['Sam']}   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>What the <code>if/else</code> is protecting against</h4>
+        <p>Drop it and the very first employee crashes — you cannot append to a list that does not exist yet:</p>
+<pre><code>res[value].append(key)      # no check
+  →  <span class="bad">KeyError: 'Developer'</span></code></pre>
+        <p style="margin-top:8px;">That "create it if missing, otherwise append" shape is so common Python has two shortcuts for it.</p>
+
+        <h5>defaultdict — the idiomatic version</h5>
+<pre><code>from collections import defaultdict
+
+res = defaultdict(list)
+for emp in employees:
+    key, value = emp.split(":")
+    res[value].append(key)      # <span class="ok">no check needed</span></code></pre>
+        <p style="margin-top:8px;">A missing key auto-creates an empty list, so the branch disappears. Wrap in <code>dict(res)</code> at the end if you want a plain dict back.</p>
+
+        <h5>setdefault — same idea, no import</h5>
+<pre><code>res.setdefault(value, []).append(key)</code></pre>
+        <p style="margin-top:8px;">Returns the existing list, or inserts <code>[]</code> and returns that. One line, works on an ordinary dict.</p>
+        <p style="margin-top:8px;">All three produce identical output — verified.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Order is preserved, twice over</h5>
+<pre><code>keys, in order first seen :  ['Developer', 'Manager', 'Tester']
+Developer’s list           :  ['John', 'Bob']   <span class="ok">input order kept</span></code></pre>
+          <p style="margin-top:8px;">Dicts have kept insertion order since Python 3.7, so grouping does not scramble anything.</p>
+
+          <h5>The <code>groupby</code> trap</h5>
+          <p><code>itertools.groupby</code> looks like the right tool and <strong>is not</strong>, unless you sort first:</p>
+<pre><code>groupby(pairs, key=role)            →  <span class="bad">{'Developer': ['Bob'], 'Manager': ['David'], 'Tester': ['Sam']}</span>
+groupby(sorted(pairs, key=role), …) →  <span class="ok">{'Developer': ['John','Bob'], …}</span></code></pre>
+          <p style="margin-top:8px;">It groups <strong>consecutive runs</strong>, not equal values. Unsorted input silently loses data — note John and Alice vanished above, with no error. The dict approach needs no sort and is O(n) rather than O(n log n).</p>
+
+          <h5>Malformed input</h5>
+<pre><code>"NoColon".split(":")  →  <span class="bad">ValueError: not enough values to unpack (expected 2, got 1)</span>
+"A:B:C".split(":")    →  <span class="bad">ValueError: too many values to unpack (expected 2, got 3)</span>
+"A:B:C".split(":", 1) →  <span class="ok">['A', 'B:C']</span></code></pre>
+          <p style="margin-top:8px;">Same lesson as snippet 07: <code>maxsplit=1</code> plus a guard makes it survive real data.</p>
+
+          <h5>Inverting instead of grouping</h5>
+          <p>If each key mapped to exactly one value you would write <code>res[value] = key</code> — but that <em>overwrites</em> duplicates. The list is what makes it a grouping rather than an inversion, and that distinction is the point of the exercise.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 07 — parse a key=value string</a> — the same split-and-build shape</li>
+            <li><a href="python-stdlib.html">Python → collections</a> — <code>defaultdict</code>, <code>Counter</code></li>
           </ul>
         </div>
       </details>
