@@ -125,6 +125,39 @@ result = [
 ]</code></pre>
           <p style="margin-top:10px;"><code>[^)]*</code> means "everything up to the next closing bracket", so each match is one group’s contents.</p>
 
+
+          <div class="worked">
+            <h4>What <code>tuple()</code> actually does</h4>
+            <p><code>tuple(x)</code> converts <strong>any iterable</strong> into a tuple. That is the function doing the work in the solution above — <code>tuple(value.strip() for value in values)</code> feeds it a generator.</p>
+<pre><code>tuple(["principal", "interest"])  →  ('principal', 'interest')
+tuple([1, 2, 3])                  →  (1, 2, 3)
+tuple(range(4))                   →  (0, 1, 2, 3)
+tuple({1, 2, 3})                  →  (1, 2, 3)
+tuple()                           →  ()</code></pre>
+
+            <h5>The gotcha: a string is an iterable of characters</h5>
+<pre><code>tuple("hello")      →  <span class="bad">('h', 'e', 'l', 'l', 'o')</span>
+tuple("principal")  →  <span class="bad">('p','r','i','n','c','i','p','a','l')</span></code></pre>
+            <p style="margin-top:8px;">It does not wrap the string — it iterates it. To get a one-element tuple containing the whole string you need a comma: <code>("hello",)</code>.</p>
+
+            <h5>Why that matters for this problem</h5>
+<pre><code>x = ["principal,interest", "overdue,test"]
+
+tuple(x)  →  ('principal,interest', 'overdue,test')
+             <span class="bad">2 elements — each whole string, nothing split</span></code></pre>
+            <p style="margin-top:8px;">Converting the <em>list</em> gives you a tuple of two strings, which is not the target. The splitting has to happen per item first:</p>
+<pre><code>[tuple(s.split(",")) for s in x]
+  →  <span class="ok">[('principal', 'interest'), ('overdue', 'test')]</span></code></pre>
+            <p style="margin-top:8px;">So <code>tuple()</code> changes the <em>container</em>, never the contents. Splitting is <code>str.split</code>; <code>tuple()</code> only decides what holds the result.</p>
+
+            <h5>Two more worth knowing</h5>
+<pre><code>tuple(5)                   →  <span class="bad">TypeError: 'int' object is not iterable</span>
+
+tuple({"a": 1, "b": 2})    →  ('a', 'b')          <span class="lbl-s">keys only</span>
+tuple({"a":1,"b":2}.items()) →  (('a', 1), ('b', 2))  <span class="lbl-s">pairs</span></code></pre>
+            <p style="margin-top:8px;">A dict iterates over its <strong>keys</strong>, so <code>tuple(d)</code> silently drops the values — use <code>.items()</code> when you want both.</p>
+          </div>
+
           <h5 style="margin-top:16px;font-size:13px;color:var(--accent);">Follow-up worth expecting</h5>
           <p><em>"What if the input is <code>"(a, b) (c, d)"</code> — with a space between the groups?"</em></p>
           <p>Approach 1 <span class="bad">breaks</span>, because <code>")("</code> no longer matches and nothing gets separated:</p>
