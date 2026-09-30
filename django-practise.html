@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 6 snippets</span></h2>
+  <h2>Snippets <span class="count">— 7 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -453,6 +453,80 @@ Serializer update       →  <span class="bad">NotImplementedError: `update()` m
           <ul>
             <li><a href="interview.html#django">Interview → Serializer vs ModelSerializer</a> — the full version with generated validators</li>
             <li><a href="django-api.html">Django → APIs with DRF</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>07 — parse a key=value string into a dict</h3>
+      <p>Split on the outer separator, then split each pair on <code>=</code>, then assign. A common warm-up, and the shape of every config, query-string and header parser.</p>
+<pre><code>s = "name=John,age=25,city=Delhi"
+
+dict = {}
+for i in s.split(","):
+    k, v = i.split("=")
+    dict[k] = v
+
+print(dict)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>{'name': 'John', 'age': '25', 'city': 'Delhi'}</code></pre>
+
+      <div class="worked">
+        <h4>Step by step</h4>
+<pre><code>s.split(",")           →  ['name=John', 'age=25', 'city=Delhi']
+
+'name=John'.split("=") →  ['name', 'John']
+'age=25'.split("=")    →  ['age', '25']
+'city=Delhi'.split("=")→  ['city', 'Delhi']</code></pre>
+        <p style="margin-top:8px;"><code>k, v = i.split("=")</code> is tuple unpacking — it requires <strong>exactly two</strong> parts, which is where this breaks.</p>
+
+        <h5>One problem to fix: <code>dict</code> shadows the builtin</h5>
+<pre><code>dict = {}          # the name now points at your dict
+dict(a=1)          →  <span class="bad">TypeError: 'dict' object is not callable</span></code></pre>
+        <p style="margin-top:8px;">Same trap as <code>class sum</code> in snippet 04. Call it <code>result</code> or <code>data</code>.</p>
+
+        <h5>The one-line version</h5>
+<pre><code>result = {k: v for k, v in (p.split("=") for p in s.split(","))}
+  →  {'name': 'John', 'age': '25', 'city': 'Delhi'}</code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>What breaks it — tested</h5>
+<pre><code>"name=John,age"       →  <span class="bad">ValueError: not enough values to unpack (expected 2, got 1)</span>
+"name=John,,age=25"   →  <span class="bad">ValueError: not enough values to unpack (expected 2, got 1)</span>
+"a=1=2"               →  <span class="bad">ValueError: too many values to unpack (expected 2, got 3)</span></code></pre>
+          <p style="margin-top:8px;">Three different malformed inputs, three crashes. Real input — a config file, a header, user data — will contain all three eventually.</p>
+
+          <h5>The robust version</h5>
+<pre><code>def parse(s):
+    out = {}
+    for pair in s.split(","):
+        if "=" not in pair:
+            continue                    # skip junk instead of crashing
+        k, v = pair.split("=", <span class="ok">1</span>)         # maxsplit=1
+        out[k.strip()] = v.strip()      # tolerate spaces
+    return out</code></pre>
+<pre><code>"name=John,age=25,city=Delhi"  →  {'name': 'John', 'age': '25', 'city': 'Delhi'}
+"name=John,age"                →  {'name': 'John'}          <span class="ok">skipped</span>
+"a=1=2"                        →  {'a': '1=2'}              <span class="ok">value kept whole</span>
+" name = John , age = 25 "     →  {'name': 'John', 'age': '25'}  <span class="ok">trimmed</span></code></pre>
+          <p style="margin-top:8px;"><strong><code>split("=", 1)</code> is the important change.</strong> It splits on the <em>first</em> <code>=</code> only, so a value containing <code>=</code> — a base64 string, a password, a query — survives intact instead of raising.</p>
+
+          <h5>The stdlib already does this</h5>
+<pre><code>from urllib.parse import parse_qsl
+
+dict(parse_qsl("name=John&age=25&city=Delhi"))
+  →  {'name': 'John', 'age': '25', 'city': 'Delhi'}</code></pre>
+          <p style="margin-top:8px;">For query strings specifically, use it — it handles URL encoding, repeated keys and blanks. Write the loop when the format is your own; reach for <code>parse_qsl</code>, <code>configparser</code> or <code>json</code> when it is a standard one.</p>
+
+          <h5>Worth noticing</h5>
+          <ul>
+            <li><strong>Every value is a string.</strong> <code>'25'</code>, not <code>25</code> — convert explicitly if you need a number.</li>
+            <li><strong>Duplicate keys silently overwrite.</strong> <code>"a=1,a=2"</code> gives <code>{'a': '2'}</code>; the first is gone.</li>
+            <li>Related: <a href="interview.html#python">Interview → Convert a string into a list of tuples</a> — the same split-and-restructure pattern.</li>
           </ul>
         </div>
       </details>
