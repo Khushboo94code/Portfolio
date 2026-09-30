@@ -730,8 +730,9 @@ pre code {
   text-align: center;
 }
 
-/* company badge on an interview question */
-.qa .asked-at {
+/* badge: company on an interview question, topic on a practise snippet */
+.qa .asked-at,
+.timeline h3 .asked-at {
   flex: none;
   align-self: center;
   margin-left: 8px;
@@ -743,4 +744,11 @@ pre code {
   background: var(--accent-bg);
   color: var(--accent);
   white-space: nowrap;
+}
+/* inside an h3 the badge is inline, not a flex child */
+.timeline h3 .asked-at {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
 }

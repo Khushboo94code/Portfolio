@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 13 snippets</span></h2>
+  <h2>Snippets <span class="count">— 17 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -949,6 +949,317 @@ sum(itertools.chain.from_iterable(nums)) → 45            same, one pass</code>
             <li><a href="#practise">Snippet 12 — flatten a list of pairs</a> — the other way to walk a list of lists</li>
             <li><a href="#practise">Snippet 10 — highest marks</a> — accumulating one answer instead of one per row</li>
             <li><a href="python-core.html">Python → Comprehensions</a> · <a href="python-stdlib.html">Python → itertools &amp; functools</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>14 — try / except, and why a bare <code>except</code> is the wrong default <span class="asked-at">exception handling</span></h3>
+      <p>Divide by zero, catch it, keep going. It works — but <code>except:</code> with nothing after it catches <em>everything</em>, including the things you never wanted to catch.</p>
+<pre><code>a = 10
+b = 0
+try:
+    print(a / b)
+except:
+    print("something is wrong")</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>something is wrong   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>What a bare <code>except</code> also swallows</h4>
+<pre><code>except:              catches ZeroDivisionError   <span class="ok">wanted</span>
+                     catches NameError           <span class="bad">a typo you will never find</span>
+                     catches KeyboardInterrupt   <span class="bad">Ctrl-C stops working</span>
+                     catches SystemExit          <span class="bad">the process refuses to exit</span></code></pre>
+        <p style="margin-top:8px;">The real cost is not the exotic ones — it is that a misspelled variable inside the <code>try</code> now prints "something is wrong" instead of telling you the name is undefined. The bug hides behind your own error message.</p>
+
+        <h5>Name the error you expect</h5>
+<pre><code>try:
+    print(a / b)
+except ZeroDivisionError:
+    print("b cannot be zero")</code></pre>
+        <p style="margin-top:8px;">Now anything <em>else</em> going wrong still crashes loudly — which is what you want, because you did not plan for it.</p>
+
+        <h5>Keep the message</h5>
+<pre><code>except ZeroDivisionError as e:
+    print("failed:", e)
+
+failed: division by zero</code></pre>
+        <p style="margin-top:8px;"><code>"something is wrong"</code> tells you nothing at 2am. The exception already carries a precise message — print it.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>If you genuinely must catch everything</h5>
+<pre><code>except Exception:          <span class="ok">everything normal, but NOT Ctrl-C / SystemExit</span>
+except:                    <span class="bad">literally everything</span></code></pre>
+          <p style="margin-top:8px;"><code>KeyboardInterrupt</code> and <code>SystemExit</code> inherit from <code>BaseException</code>, not <code>Exception</code> — which is exactly why that split exists.</p>
+
+          <h5>Only wrap the line that can fail</h5>
+<pre><code>try:
+    value = a / b          <span class="ok">one risky line</span>
+except ZeroDivisionError:
+    value = 0
+print(value)               <span class="ok">outside — cannot be swallowed</span></code></pre>
+          <p style="margin-top:8px;">A large <code>try</code> block quietly protects lines you never meant to protect.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 15 — catching a specific KeyError</a></li>
+            <li><a href="python-core.html">Python → Exceptions</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>15 — catching a specific <code>KeyError</code> <span class="asked-at">exception handling</span></h3>
+      <p>A missing dictionary key raises <code>KeyError</code>. Naming the exception is exactly right here — this is the improvement snippet 14 was asking for.</p>
+<pre><code>user = {
+    "name": "John",
+    "age": 25
+}
+
+try:
+    print(user["city"])
+except KeyError:
+    print("key not found")</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>key not found   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>For a missing key there is usually a shorter way</h4>
+<pre><code>user.get("city")              →  <span class="ok">None</span>
+user.get("city", "unknown")   →  <span class="ok">"unknown"</span></code></pre>
+        <p style="margin-top:8px;">No <code>try</code> at all. <code>.get()</code> is the right tool when a missing key is <em>expected</em> — an optional field, a config default.</p>
+
+        <h5>So when is <code>try / except KeyError</code> the right call?</h5>
+<pre><code>user["city"]        the key MUST be there — absence is a real error
+user.get("city")    the key MIGHT be there — absence is normal</code></pre>
+        <p style="margin-top:8px;">Use <code>[]</code> plus <code>except KeyError</code> when a missing key means something genuinely went wrong and you want to react to it. Use <code>.get()</code> when it does not. The choice is about meaning, not about avoiding exceptions.</p>
+
+        <h5>The error already names the key</h5>
+<pre><code>except KeyError as e:
+    print("missing field:", e)
+
+missing field: 'city'</code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Related lookups, related errors</h5>
+<pre><code>user["city"]        missing key    →  KeyError
+items[10]           bad index      →  IndexError
+int("abc")          bad value      →  ValueError
+None.strip()        wrong type     →  AttributeError</code></pre>
+          <p style="margin-top:8px;">Each is a different failure, so each deserves a different <code>except</code>. That is the whole argument against the bare one.</p>
+
+          <h5><code>setdefault</code> when you also want to store it</h5>
+<pre><code>user.setdefault("city", "unknown")   returns it AND writes it into the dict</code></pre>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 11 — group a list by a key</a> — <code>setdefault</code> / <code>defaultdict</code> in use</li>
+            <li><a href="python-stdlib.html">Python → collections</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>16 — raising your own exception <span class="asked-at">exception handling</span> </h3>
+      <p>Raise an error when the withdrawal is bigger than the balance. The <code>raise</code> is right — but nothing catches it, and the brief also asked for non-numeric amounts to be handled.</p>
+<pre><code>def amount(balance, withdrawal_amount):
+    if withdrawal_amount > balance:
+        raise Exception("Insufficient balance")
+    amount_left = balance - withdrawal_amount
+    return amount_left
+
+print(amount(10000, 3000))
+print(amount(1000, 5000))</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>7000                                    <span class="ok">✓ first call</span>
+Traceback (most recent call last):
+  ...
+<span class="bad">Exception: Insufficient balance</span>        ← second call kills the program</code></pre>
+
+      <div class="worked">
+        <h4>Raising is only half of it</h4>
+        <p>The function correctly refuses the withdrawal. But an uncaught exception ends the process — the second <code>print</code> never runs, and anything after it never runs either. Raising says <em>"I will not do this"</em>; someone still has to decide what happens next.</p>
+<pre><code>try:
+    print(amount(1000, 5000))
+except ValueError as e:
+    print("Withdrawal refused:", e)
+
+Withdrawal refused: Insufficient balance   <span class="ok">program continues</span></code></pre>
+
+        <h5>The missing requirement: non-numeric amounts</h5>
+<pre><code>amount(1000, "abc")
+<span class="bad">TypeError: '>' not supported between instances of 'str' and 'int'</span></code></pre>
+        <p style="margin-top:8px;">The comparison blows up before any of your checks run, so the caller gets Python's message instead of yours. Check the type first:</p>
+<pre><code>def amount(balance, withdrawal_amount):
+    if isinstance(withdrawal_amount, bool) or not isinstance(withdrawal_amount, (int, float)):
+        raise TypeError("Amount must be a number")
+    if withdrawal_amount &lt;= 0:
+        raise ValueError("Amount must be positive")
+    if withdrawal_amount &gt; balance:
+        raise ValueError("Insufficient balance")
+    return balance - withdrawal_amount</code></pre>
+
+        <h5><code>raise Exception(...)</code> is too broad</h5>
+<pre><code>raise Exception("Insufficient balance")   <span class="bad">only catchable as except Exception</span>
+raise ValueError("Insufficient balance")  <span class="ok">a caller can catch just this</span></code></pre>
+        <p style="margin-top:8px;">Catching bare <code>Exception</code> is the same mistake as the bare <code>except</code> in snippet 14, one level up. Give the error a type so a caller can be selective about it.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Why <code>isinstance(x, bool)</code> is checked separately</h5>
+<pre><code>isinstance(True, int)   →  <span class="bad">True</span>   bool subclasses int in Python
+True + 1                →  2
+amount(1000, True)      →  999   <span class="bad">withdrew one rupee</span></code></pre>
+          <p style="margin-top:8px;">Almost never what you meant, and it passes every numeric check silently.</p>
+
+          <h5>Picking the built-in error type</h5>
+<pre><code>ValueError       right type, unusable value      "Insufficient balance"
+TypeError        wrong type entirely             a string where a number goes
+KeyError         missing dict key
+PermissionError  not allowed to do it</code></pre>
+          <p style="margin-top:8px;">Reach for a built-in before writing your own. A custom class earns its place once callers need to catch <em>your</em> errors specifically:</p>
+<pre><code>class InsufficientBalance(ValueError):
+    pass</code></pre>
+          <p style="margin-top:8px;">Subclassing <code>ValueError</code> means old code catching <code>ValueError</code> keeps working.</p>
+
+          <h5>Status</h5>
+          <p>Marked <em>still unclear</em> — the version above adds the type check and a <code>try</code> at the call site, both of which the brief asked for and the original does not have.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 17 — the same pattern at full size</a></li>
+            <li><a href="python-core.html">Python → Exceptions</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>17 — employee leave management <span class="asked-at">exception handling</span> </h3>
+      <p>Six rules: reject unknown employees, non-numeric days, zero or negative days and over-drawn leave; otherwise deduct and return the balance. The checks are all correct — but catching the errors <em>inside</em> the function cancels out the <code>raise</code>, and rule 2 is not implemented.</p>
+<pre><code>employees = {"John": 10, "Alice": 5, "Bob": 8}
+
+def apply_leave(employees, employee_name, days):
+    try:
+        if employee_name not in employees:
+            raise ValueError("Employee not found")
+
+        if days &lt;= 0:
+            raise ValueError("Invalid leave days")
+
+        if days &gt; employees[employee_name]:
+            raise ValueError("Insufficient leave balance")
+
+        employees[employee_name] = employees[employee_name] - days
+        return employees[employee_name]
+
+    except ValueError as e:
+        print(e)
+
+leave_left = apply_leave(employees, "John", 3)
+print("Leave left:", leave_left)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>Leave left: 7   <span class="ok">✓ the happy path is correct</span></code></pre>
+
+      <div class="worked">
+        <h4>The failure paths are where it breaks</h4>
+<pre><code>apply_leave(employees, "Zara", 2)
+  prints  Employee not found
+  returns <span class="bad">None</span>        →  "Leave left: None"
+
+apply_leave(employees, "Alice", 99)
+  prints  Insufficient leave balance
+  returns <span class="bad">None</span>        →  "Leave left: None"</code></pre>
+        <p style="margin-top:8px;">A function that hits <code>except</code> and only prints falls off the end, and falling off the end returns <code>None</code>. So <code>"Leave left: None"</code> reads like a successful call for an employee with no leave — the caller has no way to tell the difference between <em>refused</em> and <em>zero</em>.</p>
+
+        <h5>Raising and catching in the same function cancel out</h5>
+<pre><code>raise ValueError("Employee not found")   ← says "I refuse, caller decide"
+except ValueError as e: print(e)         ← "never mind, I handled it"</code></pre>
+        <p style="margin-top:8px;">Rule 1 says <em>raise</em> an exception. Wrapped in its own <code>try</code>, nothing ever escapes the function, so from outside it never raises at all. <strong>Raise in the function, catch at the caller</strong> — that separation is the entire point of exceptions.</p>
+
+        <h5>Rule 2 is missing, and it crashes</h5>
+<pre><code>apply_leave(employees, "Bob", "three")
+<span class="bad">TypeError: '&lt;=' not supported between instances of 'str' and 'int'</span></code></pre>
+        <p style="margin-top:8px;">A <code>TypeError</code> is not a <code>ValueError</code>, so <code>except ValueError</code> does not catch it — the program dies on exactly the input the brief told you to handle. The comparison fails before any check runs, so the type has to be tested first.</p>
+
+        <h5>The version that satisfies all six rules</h5>
+<pre><code>def apply_leave(employees, employee_name, days):
+    if employee_name not in employees:
+        raise ValueError("Employee not found")
+
+    if isinstance(days, bool) or not isinstance(days, (int, float)):
+        raise TypeError("Days must be a number")
+
+    if days &lt;= 0:
+        raise ValueError("Invalid leave days")
+
+    if days &gt; employees[employee_name]:
+        raise ValueError("Insufficient leave balance")
+
+    employees[employee_name] -= days
+    return employees[employee_name]
+
+
+<span class="ok"># the caller decides what a failure means</span>
+try:
+    left = apply_leave(employees, "John", 3)
+    print("Leave left:", left)
+except TypeError:
+    print("Days must be a number")
+except ValueError as e:
+    print("Could not apply leave:", e)</code></pre>
+        <p style="margin-top:8px;">No <code>try</code> inside the function at all. It either returns a real number or raises — never <code>None</code>.</p>
+
+        <h5>Every case, run</h5>
+<pre><code>("John",  3)        →  Leave left: 7                                <span class="ok">✓</span>
+("Zara",  2)        →  Could not apply leave: Employee not found
+("John",  0)        →  Could not apply leave: Invalid leave days
+("John", -5)        →  Could not apply leave: Invalid leave days
+("Alice", 99)       →  Could not apply leave: Insufficient leave balance
+("Bob",  "three")   →  Days must be a number                        <span class="ok">rule 2, no crash</span>
+("Bob",  True)      →  Days must be a number
+("Bob",  None)      →  Days must be a number
+("Bob",  2.5)       →  Leave left: 5.5                              <span class="ok">half days work</span></code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>One thing the original gets right</h5>
+          <p>The deduction is the <em>last</em> statement. Every check runs before the dictionary is touched, so a refused request leaves the balance untouched — Alice still has 5 after asking for 99. Validate first, mutate last: get that order wrong and a failed call silently corrupts your data.</p>
+
+          <h5><code>True</code> is a number to Python</h5>
+<pre><code>isinstance(True, int)          →  <span class="bad">True</span>
+apply_leave(emp, "Bob", True)  →  deducts 1 day   <span class="bad">without the bool check</span></code></pre>
+
+          <h5>Mutating the caller's dictionary</h5>
+<pre><code>employees[employee_name] -= days</code></pre>
+          <p style="margin-top:8px;">The dict is changed in place, so the caller's copy changes too — correct here, since the brief says to deduct. Worth saying out loud in an interview: it means the function has a side effect, and a side effect plus a returned value is two jobs. The alternative is returning a new dict and leaving the original alone.</p>
+
+          <h5>Why not just return an error string?</h5>
+<pre><code>return "Employee not found"    <span class="bad">caller must remember to check</span>
+raise ValueError(...)          <span class="ok">caller cannot ignore it by accident</span></code></pre>
+          <p style="margin-top:8px;">A returned error is easy to drop on the floor — which is exactly what <code>"Leave left: None"</code> is. An exception stops the program until someone deals with it.</p>
+
+          <h5>Status</h5>
+          <p>Marked <em>still unclear</em> — the rewrite above is what the six rules actually describe.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 16 — the same shape, smaller</a> · <a href="#practise">Snippet 14 — naming the exception</a></li>
+            <li><a href="python-core.html">Python → Exceptions</a> · <a href="interview.html">Interview questions</a></li>
           </ul>
         </div>
       </details>
