@@ -77,7 +77,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 19 snippets</span></h2>
+  <h2>Snippets <span class="count">— 20 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -1491,6 +1491,100 @@ C.count → 0         c.count → 1           <span class="ok">class untouched</
             <li><a href="#practise">Snippet 18 — public, protected and private</a> — the same class, access levels</li>
             <li><a href="#practise">Snippet 02 — <code>__init__</code> and instance attributes</a></li>
             <li><a href="oop-python.html">OOP → Python Mechanics</a> · <a href="python-core.html">Python → Mutability &amp; references</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>20 — the getter, and why Python usually does not need one <span class="asked-at">oop</span> </h3>
+      <p>A mangled attribute plus a method to read it — the Java shape, written in Python. It runs, but the getter is not buying what it looks like it is buying.</p>
+<pre><code>class Account:
+    def __init__(self, balance):
+        self.__balance = balance
+
+    def get_balance(self):
+        return self.__balance
+
+
+a = Account(5000)
+
+print(a.get_balance())</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>5000   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4>What the getter actually provides</h4>
+<pre><code>returns the value unchanged     <span class="bad">no transformation</span>
+runs no validation              <span class="bad">Account(-5000) is accepted</span>
+has no matching setter          <span class="bad">yet the value can still be changed</span></code></pre>
+        <p style="margin-top:8px;">All three, measured:</p>
+<pre><code>Account(-5000).get_balance()   →  <span class="bad">-5000</span>        __init__ never checked
+
+a._Account__balance = -999
+a.get_balance()                →  <span class="bad">-999</span>         no setter, changed anyway</code></pre>
+        <p style="margin-top:8px;">The <code>__</code> is name mangling, not privacy (snippet 18) — so the balance is neither validated nor read-only. The getter is a layer of ceremony around a plain attribute read.</p>
+
+        <h5>The Python version of the same class</h5>
+<pre><code>class Account:
+    def __init__(self, balance):
+        self.balance = balance
+
+a.balance   →  <span class="ok">5000</span></code></pre>
+        <p style="margin-top:8px;">Shorter, and gives up nothing — because of what comes next.</p>
+
+        <h5>The real argument: adding a rule later costs zero callers</h5>
+        <p>In Java you write getters up front, since switching a public field to a method later breaks every caller. In Python a <code>@property</code> keeps the attribute syntax, so the rule can arrive on the day you need it:</p>
+<pre><code>class Account:
+    def __init__(self, balance):
+        self.balance = balance          <span class="ok">goes through the setter too</span>
+
+    @property
+    def balance(self):
+        return self._balance
+
+    @balance.setter
+    def balance(self, v):
+        if not isinstance(v, (int, float)) or isinstance(v, bool):
+            raise TypeError("balance must be a number")
+        if v &lt; 0:
+            raise ValueError("balance cannot be negative")
+        self._balance = v</code></pre>
+<pre><code>a.balance          →  <span class="ok">5000</span>          identical syntax, callers untouched
+a.balance = -1     →  <span class="bad">ValueError: balance cannot be negative</span>
+a.balance = "abc"  →  <span class="bad">TypeError: balance must be a number</span>
+Account(-5000)     →  <span class="bad">ValueError: balance cannot be negative</span>   <span class="ok">__init__ validated too</span></code></pre>
+        <p style="margin-top:8px;">That last line is the part the getter version cannot do. Assigning in <code>__init__</code> runs the setter, so the object cannot be born invalid — the whole point of encapsulation, and it arrived without a single <code>get_</code> method.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>If you genuinely want read-only</h5>
+<pre><code>class Account:
+    def __init__(self, balance): self._balance = balance
+
+    @property
+    def balance(self): return self._balance    <span class="ok">getter only, no setter</span>
+
+a.balance      →  5000
+a.balance = 1  →  <span class="bad">AttributeError: property 'balance' of 'Account' object has no setter</span></code></pre>
+          <p style="margin-top:8px;">A property with no setter is enforced. <code>__balance</code> with no <code>set_balance</code> is not — as the <code>-999</code> above showed.</p>
+
+          <h5>When a <code>get_</code> method IS right</h5>
+<pre><code>account.balance              <span class="ok">cheap attribute read</span>
+account.get_statement()      <span class="ok">hits the database — looks expensive, is expensive</span>
+account.calculate_interest() <span class="ok">computes; the name says so</span></code></pre>
+          <p style="margin-top:8px;">Attribute syntax sets an expectation of “this is cheap”. If the work is slow, does I/O, or can fail, a method is the honest signature. A property hiding a network call is a trap for the next reader.</p>
+
+          <h5>In an interview</h5>
+          <p>“Python does not use getters and setters; it uses <code>@property</code>, because attribute access and method access are interchangeable to the caller.” Then the follow-up worth having ready: <em>and <code>__</code> is name mangling, not access control</em> — see snippet 18.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 18 — public, protected and private</a> — why <code>__balance</code> is not private</li>
+            <li><a href="#practise">Snippet 19 — class vs instance variables</a> · <a href="#practise">Snippet 17 — validate first, mutate last</a></li>
+            <li><a href="oop-python.html">OOP → Python Mechanics</a> — <code>@property</code> in the roadmap</li>
           </ul>
         </div>
       </details>
