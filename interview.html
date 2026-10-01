@@ -65,7 +65,7 @@
     track that covers it in depth.
   </p>
 
-  <div class="pillnav"><a href="#python">Python</a> <a href="#django">Django &amp; DRF</a> <a href="#dbms">DBMS &amp; SQL</a> <a href="#systemdesign">System Design</a> <a href="#dsa">DSA</a> <a href="#fundamentals">OS, Networking &amp; Concurrency</a> <a href="#ai">AI &amp; LLM</a> <a href="#devops">Docker, AWS &amp; Deployment</a> <a href="#behavioural">Behavioural &amp; HR</a></div>
+  <div class="pillnav"><a href="#python">Python</a> <a href="#oop">OOP</a> <a href="#django">Django &amp; DRF</a> <a href="#dbms">DBMS &amp; SQL</a> <a href="#systemdesign">System Design</a> <a href="#dsa">DSA</a> <a href="#fundamentals">OS, Networking &amp; Concurrency</a> <a href="#ai">AI &amp; LLM</a> <a href="#devops">Docker, AWS &amp; Deployment</a> <a href="#behavioural">Behavioural &amp; HR</a></div>
 </header>
 
 <main>
@@ -643,6 +643,74 @@ input("type: ")  →  TypeError: 'str' object is not callable</code></pre>
 
   </ul>
 
+</section>
+
+<section class="wrap" id="oop">
+  <h2>OOP <span class="count">— 1 question</span> <a href="oop.html" style="font-weight:400;font-size:13px;text-transform:none;letter-spacing:0;">— track →</a></h2>
+
+  <ul class="qa">
+
+      <li>
+        <details>
+          <summary>What is encapsulation? <span class="asked-at">Practise</span></summary>
+          <div class="answer">
+            <p>Restricting direct access to an object's internal data and exposing controlled ways to change it, so the class can enforce its own rules. The data and the logic that is allowed to touch it live together — which means every caller gets the validation for free instead of each one remembering to check.</p>
+
+<pre><code>class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance
+
+    def deposit(self, amount):
+        if amount &gt; 0:
+            self.__balance += amount</code></pre>
+
+<pre><code>account.__balance = -5000   <span class="bad">✗ direct modification</span>
+account.deposit(1000)       <span class="ok">✓ controlled modification</span></code></pre>
+
+            <p>The deposit path is the whole idea: the amount is checked before the balance moves, so the account can never hold a value the class did not approve.</p>
+
+            <p><strong>The follow-up to be ready for: Python does not actually enforce this.</strong></p>
+
+            <p>That first line does not fail — but it also does not do what it looks like. Run outside the class, <code>account.__balance = -5000</code> is <em>not</em> mangled, so it creates a brand-new attribute and leaves the balance alone:</p>
+<pre><code>account = BankAccount(1000)
+account.__balance = -5000
+
+account.get_balance()  →  <span class="ok">1000</span>    balance untouched
+vars(account)          →  {'_BankAccount__balance': 1000, <span class="bad">'__balance': -5000</span>}</code></pre>
+            <p>Two attributes now, one of them junk that nothing reads. The line that genuinely bypasses the class is the mangled name:</p>
+<pre><code>account._BankAccount__balance = -5000
+
+account.get_balance()  →  <span class="bad">-5000</span></code></pre>
+            <p>So <code>__</code> is <strong>name mangling, not access control</strong>. Encapsulation in Python is a convention the language helps you keep, not a wall it builds for you — and saying that out loud is usually what the interviewer is checking for.</p>
+
+            <p><strong>Two things worth fixing in the example</strong></p>
+<pre><code>acc.deposit(-500)   →  returns None, balance unchanged, <span class="bad">no error</span>
+acc.deposit("abc")  →  <span class="bad">TypeError: '&gt;' not supported between 'str' and 'int'</span></code></pre>
+            <p>A rejected deposit should say so rather than silently doing nothing, and a non-numeric amount should fail with your message, not Python's:</p>
+<pre><code>def deposit(self, amount):
+    if not isinstance(amount, (int, float)) or isinstance(amount, bool):
+        raise TypeError("amount must be a number")
+    if amount &lt;= 0:
+        raise ValueError("deposit must be positive")
+    self.__balance += amount</code></pre>
+
+            <p><strong>And the more idiomatic version</strong> — a property enforces the rule while keeping plain attribute syntax, and validates in <code>__init__</code> too, so the object cannot be born invalid:</p>
+<pre><code>@property
+def balance(self): return self._balance
+
+@balance.setter
+def balance(self, v):
+    if v &lt; 0: raise ValueError("balance cannot be negative")
+    self._balance = v
+
+BankAccount(-5000)  →  <span class="bad">ValueError: balance cannot be negative</span></code></pre>
+
+            <div class="tagrow"><span>oop</span> <span>encapsulation</span> <span>name mangling</span> <span>property</span></div>
+          </div>
+        </details>
+      </li>
+
+  </ul>
 </section>
 
 <section class="wrap" id="django">
