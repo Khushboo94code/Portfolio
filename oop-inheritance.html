@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inheritance & Polymorphism — OOP — Khushboo</title>
+<meta name="description" content="super(), the MRO, overriding, abstract base classes and duck typing — the half of OOP that goes wrong quietly.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="oop.html" class="here">OOP</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="oop.html">← OOP</a>
+  <h1>Inheritance &amp; Polymorphism</h1>
+  <p>super(), the MRO, overriding, abstract base classes and duck typing — the half of OOP that goes wrong quietly.</p>
+
+  <div class="pillnav"><a href="oop-fundamentals.html">Fundamentals</a> <a href="oop-python.html">Python Mechanics</a> <a href="oop-inheritance.html" style="border-color:var(--accent);color:var(--accent);">Inheritance &amp; Polymorphism</a> <a href="oop-dunder.html">Dunder Methods</a> <a href="oop-design.html">Using It Well</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="topics">
+  <h2>Inheritance &amp; Polymorphism <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3><code>super()</code> and cooperative inheritance</h3>
+      <p><code>super()</code> does not mean “my parent” — it means “the next class in the MRO”, which is why it works with multiple inheritance and why hard-coding <code>Parent.__init__(self)</code> breaks it. A subclass that forgets to call it ends up with a half-initialised object.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/functions.html#super">Python — super()</a></li>
+            <li><a href="https://rhettinger.wordpress.com/2011/05/26/super-considered-super/">Raymond Hettinger — super() considered super</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Skip the <code>super().__init__()</code> call and find which attribute goes missing.</li>
+            <li>Build a diamond and print the MRO to see which class <code>super()</code> picks.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 03</a> — inheritance and <code>super()</code></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>MRO and the diamond problem</h3>
+      <p>When a class has several parents, Python linearises them with C3 and walks that order left to right, depth-first but never visiting a class before its children. <code>Class.__mro__</code> prints the answer, which is faster than reasoning about it.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/howto/mro.html">Python — method resolution order</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Multiple_inheritance">Wikipedia — multiple inheritance &amp; the diamond problem</a></li>
+            <li><a href="https://www.python.org/download/releases/2.3/mro/">Michele Simionato — The Python 2.3 MRO</a> — where C3 entered Python</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build a diamond where two parents define the same method and predict the winner before printing <code>__mro__</code>.</li>
+            <li>Construct a hierarchy Python refuses to linearise and read the <code>TypeError</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a small repo printing MROs for several shapes would make this stick.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Method overriding — and why there is no overloading</h3>
+      <p>A subclass redefining a method with the same name replaces it. Python has no overloading by argument count or type: defining the same name twice simply keeps the last definition, so the same effect comes from default arguments, <code>*args</code>, or dispatching on type inside one function.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#inheritance">Python — overriding</a></li>
+            <li><a href="https://docs.python.org/3/library/functools.html#functools.singledispatch">Python — functools.singledispatch</a> — the closest thing to real overloading</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define two methods with one name and confirm only the second survives.</li>
+            <li>Rewrite them as one method with a default argument.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippets 04 &amp; 05</a> — both, with the bug that proves it</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Abstract base classes</h3>
+      <p><code>abc.ABC</code> plus <code>@abstractmethod</code> makes a class impossible to instantiate until every abstract method is implemented, turning “you forgot to write this” from a runtime <code>AttributeError</code> into an error at construction time.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/abc.html">Python — abc</a></li>
+            <li><a href="https://docs.python.org/3/library/collections.abc.html">Python — collections.abc</a> — the ABCs already shipped</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make an ABC with one abstract method and try to instantiate it.</li>
+            <li>Register an unrelated class with <code>.register()</code> and check <code>isinstance</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — pairs naturally with the <code>Notifier</code> exercise in Fundamentals.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Duck typing and protocols</h3>
+      <p>If it has the method, it works — no base class required. <code>typing.Protocol</code> adds static checking to that idea, so a type checker can verify “anything with <code>.read()</code>” without forcing every implementation to inherit from you.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/glossary.html#term-duck-typing">Python glossary — duck typing</a></li>
+            <li><a href="https://peps.python.org/pep-0544/">PEP 544 — Protocols (structural subtyping)</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a function taking “anything with <code>.read()</code>” and pass it a file and a <code>StringIO</code>.</li>
+            <li>Describe that contract with a <code>Protocol</code> and run a type checker over it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>Mixins and multiple inheritance</h3>
+      <p>A mixin is a small class that adds one capability and is never instantiated alone — <code>TimestampMixin</code>, <code>SerialisableMixin</code>. It is the one use of multiple inheritance that stays readable, because each mixin owns a narrow, non-overlapping slice of behaviour.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/howto/mro.html">Python — MRO</a> — mixin order is MRO order</li>
+            <li><a href="https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/">Django — class-based view mixins</a> — mixins at production scale</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write two mixins and swap their order to change which one wins.</li>
+            <li>Find a mixin in Django's source and trace what it contributes.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — Django's generic views are the best worked example to read.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="oop-python.html">← Python Mechanics</a>    <a href="oop-dunder.html">Dunder Methods →</a>    <a href="oop.html">All OOP tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="oop.html">← OOP</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

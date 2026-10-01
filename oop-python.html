@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Mechanics — OOP — Khushboo</title>
+<meta name="description" content="How Python actually spells OOP — attributes, the three method kinds, access levels, properties and dataclasses.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="oop.html" class="here">OOP</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="oop.html">← OOP</a>
+  <h1>Python Mechanics</h1>
+  <p>How Python actually spells OOP — attributes, the three method kinds, access levels, properties and dataclasses.</p>
+
+  <div class="pillnav"><a href="oop-fundamentals.html">Fundamentals</a> <a href="oop-python.html" style="border-color:var(--accent);color:var(--accent);">Python Mechanics</a> <a href="oop-inheritance.html">Inheritance &amp; Polymorphism</a> <a href="oop-dunder.html">Dunder Methods</a> <a href="oop-design.html">Using It Well</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="topics">
+  <h2>Python Mechanics <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3><code>__init__</code>, instance vs class attributes</h3>
+      <p><code>__init__</code> runs after the object exists and fills it in — it is an initialiser, not a constructor. Anything assigned on <code>self</code> belongs to that one object; anything assigned in the class body is shared by every instance, which is a quiet bug when the shared thing is mutable.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#class-and-instance-variables">Python — class and instance variables</a></li>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#object.__init__">Python — object.__init__</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Give a class a mutable class attribute, append to it from two instances, and watch them share.</li>
+            <li>Fix it by moving the list into <code>__init__</code>.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 02</a> — instance attributes</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Instance, class and static methods</h3>
+      <p>Three method kinds, split by what they need. An instance method needs the object (<code>self</code>); a <code>@classmethod</code> needs the class (<code>cls</code>) and is the normal way to write alternative constructors; a <code>@staticmethod</code> needs neither and is really just a function that lives in the class for tidiness.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/functions.html#classmethod">Python — classmethod</a></li>
+            <li><a href="https://docs.python.org/3/library/functions.html#staticmethod">Python — staticmethod</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write <code>User.from_json(data)</code> as a classmethod and compare it to a plain function.</li>
+            <li>Subclass the class and confirm <code>cls</code> is the subclass, not the parent.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 01</a> — <code>classmethod</code>, run</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Public, protected and private</h3>
+      <p>Python has no access keywords. One underscore is a convention meaning “internal, do not rely on this”; two underscores trigger name mangling to <code>_ClassName__attr</code>, which prevents accidental collisions in subclasses but hides nothing — the value is still reachable if you spell it out.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#private-variables">Python — private variables</a></li>
+            <li><a href="https://peps.python.org/pep-0008/#designing-for-inheritance">PEP 8 — designing for inheritance</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Mangle an attribute, then reach it from outside via <code>_Class__attr</code>.</li>
+            <li>Make a subclass try to read a parent's <code>__</code> attribute and read the error.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 18</a> — all three levels, measured</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3><code>@property</code> — computed and validated attributes</h3>
+      <p>The actual answer to “where are the getters and setters”. A property keeps the attribute syntax callers already use while running code on access or assignment, so validation can be added to a live class without changing a single call site.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/functions.html#property">Python — property</a></li>
+            <li><a href="https://docs.python.org/3/howto/descriptor.html">Python — descriptor HowTo</a> — what a property is underneath</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add a setter that rejects negative values and confirm old calling code is untouched.</li>
+            <li>Make a read-only property and read the error when you assign to it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — the validated <code>Account</code> from <a href="django-practise.html">Practise → snippet 18</a> would make a good first commit.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3><code>@dataclass</code> — removing the boilerplate</h3>
+      <p>For classes that mostly hold data, <code>@dataclass</code> generates <code>__init__</code>, <code>__repr__</code> and <code>__eq__</code> from the annotations. <code>frozen=True</code> makes instances immutable and hashable. The trap is a mutable default — use <code>field(default_factory=list)</code>, never <code>= []</code>.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/dataclasses.html">Python — dataclasses</a></li>
+            <li><a href="https://peps.python.org/pep-0557/">PEP 557 — Data Classes</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Rewrite a hand-written class as a dataclass and count the lines removed.</li>
+            <li>Try <code>= []</code> as a default and read the error Python raises.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3><code>__slots__</code> and object memory</h3>
+      <p>By default every instance carries a <code>__dict__</code>, which is flexible and not free. <code>__slots__</code> fixes the attribute set and drops the dict, cutting memory noticeably when you hold millions of small objects — and blocking the attribute typo that would otherwise silently create a new field.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#slots">Python — __slots__</a></li>
+            <li><a href="https://docs.python.org/3/library/sys.html#sys.getsizeof">Python — sys.getsizeof</a> — measure it yourself</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Build 100k objects with and without <code>__slots__</code> and compare memory.</li>
+            <li>Assign an undeclared attribute on a slotted class and read the error.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — a measured benchmark would be a strong portfolio piece.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="oop-fundamentals.html">← Fundamentals</a>    <a href="oop-inheritance.html">Inheritance &amp; Polymorphism →</a>    <a href="oop.html">All OOP tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="oop.html">← OOP</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

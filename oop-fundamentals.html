@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentals — OOP — Khushboo</title>
+<meta name="description" content="The four pillars, and what each one is actually for — written so that the answer to “what is polymorphism” is a sentence about code, not a definition.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="oop.html" class="here">OOP</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="oop.html">← OOP</a>
+  <h1>Fundamentals</h1>
+  <p>The four pillars, and what each one is actually for — written so that the answer to “what is polymorphism” is a sentence about code, not a definition.</p>
+
+  <div class="pillnav"><a href="oop-fundamentals.html" style="border-color:var(--accent);color:var(--accent);">Fundamentals</a> <a href="oop-python.html">Python Mechanics</a> <a href="oop-inheritance.html">Inheritance &amp; Polymorphism</a> <a href="oop-dunder.html">Dunder Methods</a> <a href="oop-design.html">Using It Well</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="topics">
+  <h2>Fundamentals <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3>Classes, objects and <code>self</code></h3>
+      <p>A class is the blueprint, an object is one thing built from it. <code>self</code> is not magic — Python passes the object in as the first argument, which is why every method declares it and why <code>Employee.greet(e1)</code> and <code>e1.greet()</code> are the same call.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html">Python — Classes</a> — the official walkthrough</li>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#the-standard-type-hierarchy">Python — standard type hierarchy</a> — what an object actually is</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Call a method both ways — <code>obj.method()</code> and <code>Class.method(obj)</code> — and confirm they match.</li>
+            <li>Add an attribute to one instance only, then check it is missing from a second instance.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a> — the pillars worked through in Python</li>
+            <li><a href="django-practise.html">Practise → snippet 02</a> — <code>__init__</code> and instance attributes</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Encapsulation</h3>
+      <p>Bundling data with the methods that are allowed to change it, so a class can protect its own invariants. Python enforces none of this with keywords — it uses naming conventions plus <code>@property</code> when a rule genuinely has to hold.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#private-variables">Python — private variables and name mangling</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)">Wikipedia — Encapsulation</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a class whose balance can never go negative, and prove it from outside.</li>
+            <li>Rename an internal attribute and confirm no caller had to change.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 18</a> — public, protected and private, measured</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Abstraction</h3>
+      <p>Exposing what something does and hiding how. A caller should be able to use <code>send(message)</code> without knowing whether it is SMS, email or a queue underneath — which is what makes the implementation replaceable later.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/abc.html">Python — abc, abstract base classes</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Abstraction_(computer_science)">Wikipedia — Abstraction</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define an abstract <code>Notifier</code> with two implementations, and swap them without touching the caller.</li>
+            <li>Try to instantiate the abstract class and read the error you get.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — the <code>Notifier</code> exercise above would be a good first commit to <a href="https://github.com/Khushboo94code/OOP">OOP</a>.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>Inheritance</h3>
+      <p>One class taking another's attributes and methods, to express "is-a". Useful and badly overused: it is the tightest coupling in OOP, because a subclass depends on its parent's internals, not just its interface.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#inheritance">Python — inheritance</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle">Wikipedia — Liskov substitution</a> — the test for whether inheritance is honest</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a subclass that breaks substitutability, then explain why it compiles anyway.</li>
+            <li>Replace a two-level hierarchy with composition and compare the two.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippet 03</a> — inheritance and <code>super()</code></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>Polymorphism</h3>
+      <p>The same call doing the right thing for different types. Python gets most of this from duck typing — if the object has the method, it works — rather than from a shared base class, which is why <code>len()</code> works on anything that implements <code>__len__</code>.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/glossary.html#term-duck-typing">Python glossary — duck typing</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">Wikipedia — Polymorphism</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write one function that handles three unrelated classes with no common parent.</li>
+            <li>Implement <code>__len__</code> on your own class and call <code>len()</code> on it.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="https://github.com/Khushboo94code/OOP">OOP</a></li>
+            <li><a href="django-practise.html">Practise → snippets 04 &amp; 05</a> — overriding, and why Python has no overloading</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>Composition over inheritance</h3>
+      <p>Preferring "has-a" to "is-a". A <code>Car</code> that <em>has</em> an <code>Engine</code> can swap engines at runtime; a <code>Car</code> that <em>is</em> an <code>Engine</code> cannot. Deep hierarchies are the single most common reason a codebase becomes rigid.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Composition_over_inheritance">Wikipedia — Composition over inheritance</a></li>
+            <li><a href="https://refactoring.guru/design-patterns/what-is-pattern">Refactoring Guru — patterns primer</a> — nearly every pattern is composition in disguise</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Take a three-level hierarchy and flatten it to one class plus two collaborators.</li>
+            <li>Find a place in your own code where a subclass exists only to change one value.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — worth a side-by-side repo: the same feature built both ways.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="oop-python.html">Python Mechanics →</a>    <a href="oop.html">All OOP tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="oop.html">← OOP</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

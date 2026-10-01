@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using It Well — OOP — Khushboo</title>
+<meta name="description" content="When a class is the wrong tool, how to choose between dict, NamedTuple and dataclass, and the smells that show it went wrong.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="oop.html" class="here">OOP</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="oop.html">← OOP</a>
+  <h1>Using It Well</h1>
+  <p>When a class is the wrong tool, how to choose between dict, NamedTuple and dataclass, and the smells that show it went wrong.</p>
+
+  <div class="pillnav"><a href="oop-fundamentals.html">Fundamentals</a> <a href="oop-python.html">Python Mechanics</a> <a href="oop-inheritance.html">Inheritance &amp; Polymorphism</a> <a href="oop-dunder.html">Dunder Methods</a> <a href="oop-design.html" style="border-color:var(--accent);color:var(--accent);">Using It Well</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="topics">
+  <h2>Using It Well <span class="count">— 5 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="doing">
+      <h3>When a class is the wrong tool</h3>
+      <p>A class with one method and no state is a function. A class whose <code>__init__</code> takes everything and whose methods only read it is a function with extra steps. The test is whether there is state that several methods genuinely share and protect — if not, write the function.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=o9pEzgHorH0">Jack Diederich — Stop Writing Classes</a> (PyCon 2012)</li>
+            <li><a href="https://peps.python.org/pep-0020/">PEP 20 — The Zen of Python</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Find a class in your code with one method and collapse it to a function.</li>
+            <li>Count how many of your classes have more than two methods that touch the same attribute.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>dict, NamedTuple, dataclass or class?</h3>
+      <p>Four ways to hold data, in increasing order of commitment: a <code>dict</code> for genuinely dynamic keys, <code>NamedTuple</code> for a small immutable record, <code>@dataclass</code> for a record with behaviour, a full class when invariants need defending. Reaching for the last one first is the usual mistake.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">Python — NamedTuple</a></li>
+            <li><a href="https://docs.python.org/3/library/dataclasses.html">Python — dataclasses</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Model the same record all four ways and compare the line counts.</li>
+            <li>Pick the one that makes an invalid record impossible to construct.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>Encapsulation in practice — invariants</h3>
+      <p>The real job of a class is holding a rule true for its whole life: a rectangle's sides stay positive, an order's total always matches its lines. Validate in <code>__init__</code> and in every setter, and the rest of the codebase can stop checking.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/library/functions.html#property">Python — property</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Class_invariant">Wikipedia — class invariant</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Name the invariant of a class you have written, out loud, then check the code enforces it.</li>
+            <li>Find a caller that validates something the class should have guaranteed.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="django-practise.html">Practise → snippet 17</a> — validate first, mutate last</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>OOP smells</h3>
+      <p>God class — one class doing everything, usually named <code>Manager</code> or <code>Utils</code>. Deep hierarchies — four levels to find where a method is defined. Anaemic model — all getters and setters, with the logic sitting elsewhere. Each is a hint that behaviour and data drifted apart.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://refactoring.guru/refactoring/smells">Refactoring Guru — code smells</a></li>
+            <li><a href="https://martinfowler.com/bliki/AnemicDomainModel.html">Martin Fowler — Anemic Domain Model</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Find your largest class and list its responsibilities — stop when you reach three.</li>
+            <li>Find a getter that no caller uses and delete it.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>SOLID and design patterns</h3>
+      <p>Both live in the LLD track, because that is where they get used rather than recited — <a href="lld.html">LLD → SOLID principles</a> and the creational, structural and behavioural pattern pages. Come back here only for the OOP mechanics they are built on.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="lld.html">LLD — SOLID and design patterns</a> — the full track</li>
+            <li><a href="https://refactoring.guru/design-patterns/what-is-pattern">Refactoring Guru — what is a pattern</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Pick one pattern and name the OOP feature it depends on.</li>
+            <li>Explain Dependency Inversion using only composition.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">See the LLD track.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="oop-dunder.html">← Dunder Methods</a>    <a href="oop.html">All OOP tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="oop.html">← OOP</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>

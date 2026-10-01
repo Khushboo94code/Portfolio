@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dunder Methods — OOP — Khushboo</title>
+<meta name="description" content="The protocols that let your own class behave like a built-in type — repr, equality, operators, iteration and with-blocks.">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">KHUSHBOO</a>
+    <ul>
+      <li><a href="ai.html">AI</a></li>
+      <li><a href="system-design.html">System Design</a></li>
+      <li><a href="os.html">OS</a></li>
+      <li><a href="networking.html">Networking</a></li>
+      <li><a href="dbms.html">DBMS</a></li>
+      <li><a href="redis.html">Redis</a></li>
+      <li><a href="dsa.html">DSA</a></li>
+      <li><a href="python.html">Python</a></li>
+      <li><a href="oop.html" class="here">OOP</a></li>
+      <li><a href="concurrency.html">Concurrency</a></li>
+      <li><a href="django.html">Django</a></li>
+      <li><a href="docker.html">Docker</a></li>
+      <li><a href="aws.html">AWS</a></li>
+      <li><a href="deployment.html">Deploy</a></li>
+      <li><a href="git.html">Git</a></li>
+      <li><a href="interview.html">Interview</a></li>
+      <li><a href="misc.html">Misc</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-head wrap">
+  <a class="back" href="oop.html">← OOP</a>
+  <h1>Dunder Methods</h1>
+  <p>The protocols that let your own class behave like a built-in type — repr, equality, operators, iteration and with-blocks.</p>
+
+  <div class="pillnav"><a href="oop-fundamentals.html">Fundamentals</a> <a href="oop-python.html">Python Mechanics</a> <a href="oop-inheritance.html">Inheritance &amp; Polymorphism</a> <a href="oop-dunder.html" style="border-color:var(--accent);color:var(--accent);">Dunder Methods</a> <a href="oop-design.html">Using It Well</a></div>
+
+  <div class="legend" style="margin-top:22px;">
+    <span><i class="dot done"></i> Revised</span>
+    <span><i class="dot doing"></i> Learning now</span>
+    <span><i class="dot next"></i> Not started</span>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" id="topics">
+  <h2>Dunder Methods <span class="count">— 6 topics</span></h2>
+
+  <ol class="timeline">
+
+    <li class="done">
+      <h3><code>__repr__</code> vs <code>__str__</code></h3>
+      <p><code>__repr__</code> is for you — unambiguous, ideally something you could paste back into Python. <code>__str__</code> is for the user. Define <code>__repr__</code> first: <code>print()</code> falls back to it, and without one every debug session shows <code>&lt;object at 0x7f…&gt;</code>, which tells you nothing.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#object.__repr__">Python — object.__repr__</a></li>
+            <li><a href="https://docs.python.org/3/library/functions.html#repr">Python — repr()</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Add <code>__repr__</code> to a class and print a list of them — note the list uses repr, not str.</li>
+            <li>Define only <code>__str__</code> and see what the list still shows.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="django-practise.html">Practise → snippet 18</a> — the default repr, and replacing it</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3><code>__eq__</code> and <code>__hash__</code> together</h3>
+      <p>Define <code>__eq__</code> and Python sets <code>__hash__</code> to <code>None</code>, making your objects unhashable — no sets, no dict keys. Equal objects must hash equal, so the two have to be written as a pair, over the same fields. <code>@dataclass(frozen=True)</code> does both correctly for free.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#object.__hash__">Python — object.__hash__</a></li>
+            <li><a href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass">Python — dataclass eq and frozen</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define <code>__eq__</code> alone, then put the object in a set and read the error.</li>
+            <li>Hash on a mutable field, mutate it, and watch the object get lost in a dict.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet — the mutate-after-hashing demo is worth committing; it surprises most people.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>Operator overloading</h3>
+      <p><code>a + b</code> calls <code>a.__add__(b)</code>, and returns <code>NotImplemented</code> rather than raising so Python can try <code>b.__radd__(a)</code> before giving up. Worth doing for genuine value types — money, vectors, durations — and a liability everywhere else.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#emulating-numeric-types">Python — emulating numeric types</a></li>
+            <li><a href="https://docs.python.org/3/library/operator.html">Python — operator module</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a <code>Money</code> class that adds but refuses to add two different currencies.</li>
+            <li>Return <code>NotImplemented</code> for an unsupported type and see what error the user gets.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="doing">
+      <h3>The iterator protocol</h3>
+      <p><code>__iter__</code> returns an iterator and <code>__next__</code> produces values until it raises <code>StopIteration</code> — that is literally all a <code>for</code> loop does. Implementing <code>__iter__</code> as a generator gets you both for one line, which is almost always the right move.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/classes.html#iterators">Python — iterators</a></li>
+            <li><a href="https://docs.python.org/3/glossary.html#term-generator">Python glossary — generator</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Make a class iterable with a generator <code>__iter__</code>, then loop it twice and check it still works.</li>
+            <li>Return <code>self</code> from <code>__iter__</code> instead, and find out why the second loop is empty.</li>
+          </ul>
+          <h5>My code</h5>
+          <ul class="mine">
+            <li><a href="ai-questions.html">AI → Questions</a> — <code>enumerate</code> as a single-pass iterator</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3>The context manager protocol</h3>
+      <p><code>__enter__</code> and <code>__exit__</code> are what <code>with</code> calls. <code>__exit__</code> runs even when the block raises, which is why <code>with</code> is the correct way to guarantee cleanup — and returning <code>True</code> from it swallows the exception, which is almost never what you want.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#context-managers">Python — context managers</a></li>
+            <li><a href="https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager">Python — contextlib.contextmanager</a></li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Write a timer context manager, then rewrite it with <code>@contextmanager</code>.</li>
+            <li>Raise inside the block and confirm <code>__exit__</code> still runs.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+    <li class="next">
+      <h3><code>__len__</code>, <code>__getitem__</code>, <code>__contains__</code></h3>
+      <p>Implement these and your class starts behaving like a built-in container — <code>len(x)</code>, <code>x[0]</code>, <code>for i in x</code>, <code>y in x</code>. <code>__getitem__</code> alone gets you iteration for free, which is the oldest trick in the data model.</p>
+      <details>
+        <summary>Resources</summary>
+        <div class="reslist">
+          <h5>Learn</h5>
+          <ul>
+            <li><a href="https://docs.python.org/3/reference/datamodel.html#emulating-container-types">Python — emulating container types</a></li>
+            <li><a href="https://docs.python.org/3/library/collections.abc.html">Python — collections.abc</a> — inherit the rest for free</li>
+          </ul>
+          <h5>Practice</h5>
+          <ul>
+            <li>Define only <code>__getitem__</code> and confirm a <code>for</code> loop works without <code>__iter__</code>.</li>
+            <li>Add <code>__contains__</code> and measure whether <code>in</code> got faster.</li>
+          </ul>
+          <h5>My code</h5>
+          <p class="none">Nothing yet.</p>
+        </div>
+      </details>
+    </li>
+
+  </ol>
+</section>
+
+<section class="wrap">
+  <h2>Keep going</h2>
+  <div class="links">
+    <a href="oop-inheritance.html">← Inheritance &amp; Polymorphism</a>    <a href="oop-design.html">Using It Well →</a>    <a href="oop.html">All OOP tracks</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="oop.html">← OOP</a> · © 2026 Khushboo
+  </div>
+</footer>
+
+</body>
+</html>
