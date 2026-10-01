@@ -77,7 +77,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 18 snippets</span></h2>
+  <h2>Snippets <span class="count">— 19 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -1383,6 +1383,114 @@ class Employee:    <span class="ok">PEP 8 — classes are CapWords</span></code>
             <li><a href="#practise">Snippet 02 — <code>__init__</code> and instance attributes</a> · <a href="#practise">Snippet 03 — inheritance and <code>super()</code></a></li>
             <li><a href="lld.html">LLD → OOP fundamentals</a> — encapsulation as a design idea, not a keyword</li>
             <li><a href="python-core.html">Python → Classes</a> · <a href="python-advanced.html">Python → Descriptors &amp; properties</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>19 — class variables vs instance variables <span class="asked-at">oop</span> </h3>
+      <p>Snippet 18 with one line added: <code>company_name</code> sits in the class body, not on <code>self</code>. All three ways of reading it give the same answer — and that hides where it actually lives.</p>
+<pre><code>class employee:
+  company_name = 'abc'                      <span class="ok">← class variable, one copy</span>
+
+  def __init__(self, emp_name, emp_department):
+    self._emp_name = emp_name               <span class="ok">← instance variables, one per object</span>
+    self.emp_department = emp_department
+
+class manager(employee):
+  pass
+
+e1 = manager('khushboo', 'tecops')
+print(e1)
+print(e1._emp_name)
+print(e1.emp_department)
+print(e1.company_name)
+print(employee.company_name)
+print(manager.company_name)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>&lt;__main__.manager object at 0x101055fd0&gt;
+khushboo
+tecops
+abc      <span class="ok">via the instance</span>
+abc      <span class="ok">via the class</span>
+abc      <span class="ok">via the subclass — inherited, not copied</span></code></pre>
+
+      <div class="worked">
+        <h4>Three reads, one object</h4>
+<pre><code>vars(e1)        →  {'_emp_name': 'khushboo', 'emp_department': 'tecops'}
+vars(manager)   →  {}                         <span class="bad">nothing of its own</span>
+vars(employee)  →  {'company_name': 'abc'}    <span class="ok">it lives here</span></code></pre>
+        <p style="margin-top:8px;">Attribute lookup walks <strong>instance → class → base classes</strong> and stops at the first hit. <code>e1.company_name</code> finds nothing on <code>e1</code>, nothing on <code>manager</code>, then finds it on <code>employee</code>. Nothing was copied anywhere — all three names point at one string.</p>
+
+        <h5>Writing through the instance does not write to the class</h5>
+<pre><code>e1.company_name = 'xyz'
+
+e1.company_name        →  <span class="ok">'xyz'</span>
+e2.company_name        →  <span class="bad">'abc'</span>   another instance is unaffected
+employee.company_name  →  <span class="bad">'abc'</span>   the class never changed
+vars(e1)               →  {'name': …, 'company_name': 'xyz'}</code></pre>
+        <p style="margin-top:8px;">The assignment created a <em>new instance attribute</em> that shadows the class one. This is the single most common surprise with class variables: reading goes up the chain, writing always lands on the object you wrote to. <code>del e1.company_name</code> removes the shadow and <code>'abc'</code> reappears.</p>
+
+        <h5>Writing through the class changes everyone</h5>
+<pre><code>employee.company_name = 'newco'
+
+e1 → newco     e2 → newco     manager → newco</code></pre>
+        <p style="margin-top:8px;">And a subclass can take its own copy without touching the parent:</p>
+<pre><code>manager.company_name = 'mgmt-co'
+
+manager  → <span class="ok">mgmt-co</span>
+employee → <span class="ok">newco</span>      parent untouched
+e1       → <span class="ok">mgmt-co</span>    because e1 is a manager</code></pre>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>The trap: a <em>mutable</em> class variable is genuinely shared</h5>
+<pre><code>class Team:
+    members = []                       <span class="bad">one list for the entire class</span>
+    def add(self, who): self.members.append(who)
+
+a = Team('alpha'); b = Team('beta')
+a.add('khushboo')
+b.add('asha')
+
+a.members  →  <span class="bad">['khushboo', 'asha']</span>
+b.members  →  <span class="bad">['khushboo', 'asha']</span>
+a.members is b.members is Team.members  →  <span class="bad">True</span></code></pre>
+          <p style="margin-top:8px;">A string is immutable, so <code>company_name</code> never shows this. A list is not — <code>.append()</code> mutates the one shared object instead of rebinding, so every instance sees it. The fix is to create it per object:</p>
+<pre><code>def __init__(self, name):
+    self.name = name
+    self.members = []       <span class="ok">a2 → ['khushboo']   b2 → ['asha']</span></code></pre>
+          <p style="margin-top:8px;"><strong>Rule of thumb:</strong> a class variable is safe when it is a constant — a string, a number, a tuple. The moment it is a list, dict or set, move it into <code>__init__</code>.</p>
+
+          <h5><code>+=</code> behaves differently depending on the type</h5>
+<pre><code>class C:
+    nums  = [1]
+    count = 0
+
+c.nums  += [2]      in-place extend  →  mutates the <span class="bad">class</span> list
+c.count += 1        rebind           →  creates an <span class="ok">instance</span> attribute
+
+C.nums  → [1, 2]    c.nums  → [1, 2]      <span class="bad">class changed</span>
+C.count → 0         c.count → 1           <span class="ok">class untouched</span></code></pre>
+          <p style="margin-top:8px;">Same operator, same syntax, opposite outcome — because <code>+=</code> on a list calls <code>__iadd__</code> and mutates, while on an int it can only rebind. Worth knowing before you debug it at 2am.</p>
+
+          <h5>When class variables are the right tool</h5>
+<pre><code>class Order:
+    TAX_RATE   = 0.18          <span class="ok">a constant every order shares</span>
+    STATUSES   = ("new", "paid", "shipped")
+    order_count = 0            <span class="ok">a counter, updated via the CLASS</span>
+
+    def __init__(self):
+        Order.order_count += 1     <span class="ok">Order., not self. — self. would shadow</span></code></pre>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 18 — public, protected and private</a> — the same class, access levels</li>
+            <li><a href="#practise">Snippet 02 — <code>__init__</code> and instance attributes</a></li>
+            <li><a href="oop-python.html">OOP → Python Mechanics</a> · <a href="python-core.html">Python → Mutability &amp; references</a></li>
           </ul>
         </div>
       </details>
