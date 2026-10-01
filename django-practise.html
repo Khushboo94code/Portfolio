@@ -76,7 +76,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 17 snippets</span></h2>
+  <h2>Snippets <span class="count">— 18 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -1260,6 +1260,128 @@ raise ValueError(...)          <span class="ok">caller cannot ignore it by accid
           <ul>
             <li><a href="#practise">Snippet 16 — the same shape, smaller</a> · <a href="#practise">Snippet 14 — naming the exception</a></li>
             <li><a href="python-core.html">Python → Exceptions</a> · <a href="interview.html">Interview questions</a></li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>18 — public, protected and private <span class="asked-at">oop</span> </h3>
+      <p>Python has no <code>public</code>, <code>private</code> or <code>protected</code> keywords. It has two naming conventions and one piece of actual machinery — and this snippet shows the gap between them.</p>
+<pre><code>class employee:
+  def __init__(self, emp_name, emp_department):
+    self._emp_name = emp_name
+    self.emp_department = emp_department
+
+class manager(employee):
+  pass
+
+e1 = manager('khushboo', 'tecops')
+print(e1)
+print(e1._emp_name)
+print(e1.emp_department)</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>&lt;__main__.manager object at 0x104d95fd0&gt;
+khushboo      <span class="bad">← the "protected" one printed from outside, no complaint</span>
+tecops</code></pre>
+
+      <div class="worked">
+        <h4>The three levels</h4>
+<pre><code>self.emp_department     public      use it anywhere
+self._emp_name          protected   <span class="bad">convention only — nothing stops you</span>
+self.__salary           private     name-mangled, <span class="bad">still not sealed</span></code></pre>
+        <p style="margin-top:8px;">Your own last two lines are the proof: <code>e1._emp_name</code> printed happily. The underscore is a message to the next developer — <em>"this is internal, do not rely on it"</em> — not a lock. Python's phrasing for this is "we are all consenting adults here".</p>
+
+        <h5>What the double underscore actually does</h5>
+<pre><code>class Employee:
+    def __init__(self, name, dept):
+        self.name     = name
+        self._dept    = dept
+        self.__salary = 50000
+
+e = Employee("khushboo", "techops")
+
+e.name       →  <span class="ok">'khushboo'</span>
+e._dept      →  <span class="ok">'techops'</span>   works anyway
+e.__salary   →  <span class="bad">AttributeError: 'Employee' object has no attribute '__salary'</span></code></pre>
+        <p style="margin-top:8px;">Looks private — until you see what is really stored:</p>
+<pre><code>vars(e)  →  ['name', '_dept', '_Employee__salary']
+
+e._Employee__salary  →  <span class="bad">50000</span></code></pre>
+        <p style="margin-top:8px;">Python renamed it to <code>_ClassName__attr</code>. That is <strong>name mangling</strong>, not access control. Nothing is hidden; the label just changed.</p>
+
+        <h5>So why does <code>__</code> exist at all?</h5>
+        <p>To stop a subclass <em>accidentally overwriting</em> a parent's attribute — a name collision, not an intruder:</p>
+<pre><code>class Base:
+    def __init__(self):
+        self.__state = "base state"    # becomes _Base__state
+        self._open   = "base open"
+
+class Child(Base):
+    def __init__(self):
+        super().__init__()
+        self.__state = "child state"   # becomes _Child__state — its own slot
+        self._open   = "child open"    # SAME slot — parent's value is gone
+
+c = Child()
+Base still sees:  ('base state', <span class="bad">'child open'</span>)
+all slots:        ['_Base__state', '_open', '_Child__state']</code></pre>
+        <p style="margin-top:8px;">The <code>__</code> attribute survived the subclass; the <code>_</code> one was silently clobbered. That is the entire reason to reach for <code>__</code> — and it only matters when you are writing a base class others will inherit from.</p>
+
+        <h5>The cost: your own subclass cannot read it</h5>
+<pre><code>class Manager(Employee):
+    def show(self): return self.__code     # Python looks for _Manager__code
+
+<span class="bad">AttributeError: 'Manager' object has no attribute '_Manager__code'</span></code></pre>
+        <p style="margin-top:8px;">Mangling uses the class the code is <em>written in</em>, not the object's class — so <code>Manager</code> asks for <code>_Manager__code</code> while the value sits in <code>_Employee__code</code>. If subclasses should see it, use one underscore. This is precisely why <code>_</code> is the common choice and <code>__</code> is rare.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5><code>print(e1)</code> and that memory address</h5>
+<pre><code>&lt;__main__.manager object at 0x104d95fd0&gt;</code></pre>
+          <p>Not an error — just the default <code>__repr__</code>, which has nothing useful to say. Give the class one:</p>
+<pre><code>def __repr__(self):
+    return f"Manager({self._emp_name!r}, {self.emp_department!r})"
+
+print(e1)  →  <span class="ok">Manager('khushboo', 'tecops')</span></code></pre>
+          <p style="margin-top:8px;">Worth doing on any class you will debug, which is all of them. <code>__repr__</code> is for you; <code>__str__</code> is for the user.</p>
+
+          <h5>Real access control: <code>property</code></h5>
+          <p>If you want a rule enforced rather than suggested, a property is the tool — the attribute stays public, the <em>rule</em> runs on assignment:</p>
+<pre><code>class Account:
+    def __init__(self, balance): self._balance = balance
+
+    @property
+    def balance(self): return self._balance
+
+    @balance.setter
+    def balance(self, v):
+        if v &lt; 0: raise ValueError("balance cannot be negative")
+        self._balance = v
+
+a.balance        →  <span class="ok">100</span>
+a.balance = 250  →  <span class="ok">250</span>
+a.balance = -5   →  <span class="bad">ValueError: balance cannot be negative</span></code></pre>
+          <p style="margin-top:8px;">Callers still write <code>a.balance</code>. You added validation without changing a single line that uses the class — which is why Python has no getters and setters by default.</p>
+
+          <h5>Compared to Java and C++</h5>
+<pre><code>Java/C++   private   compiler refuses to compile
+Python     __attr    renamed; reachable if you insist
+Python     _attr     documentation, enforced by nobody</code></pre>
+          <p style="margin-top:8px;">Say this plainly in an interview. "Python has no true private" is the correct answer, and explaining <em>mangling vs enforcement</em> is what separates it from a memorised one.</p>
+
+          <h5>Naming</h5>
+<pre><code>class employee:    <span class="bad">reads like a variable</span>
+class Employee:    <span class="ok">PEP 8 — classes are CapWords</span></code></pre>
+          <p style="margin-top:8px;">Same for <code>manager</code> → <code>Manager</code>. It is cosmetic, but every Python codebase follows it, so breaking it is noticeable.</p>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 02 — <code>__init__</code> and instance attributes</a> · <a href="#practise">Snippet 03 — inheritance and <code>super()</code></a></li>
+            <li><a href="lld.html">LLD → OOP fundamentals</a> — encapsulation as a design idea, not a keyword</li>
+            <li><a href="python-core.html">Python → Classes</a> · <a href="python-advanced.html">Python → Descriptors &amp; properties</a></li>
           </ul>
         </div>
       </details>
