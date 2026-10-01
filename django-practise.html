@@ -77,7 +77,7 @@
 <main>
 
 <section class="wrap" id="practise">
-  <h2>Snippets <span class="count">— 20 snippets</span></h2>
+  <h2>Snippets <span class="count">— 21 snippets</span></h2>
 
   <ol class="timeline">
 
@@ -1585,6 +1585,112 @@ account.calculate_interest() <span class="ok">computes; the name says so</span><
             <li><a href="#practise">Snippet 18 — public, protected and private</a> — why <code>__balance</code> is not private</li>
             <li><a href="#practise">Snippet 19 — class vs instance variables</a> · <a href="#practise">Snippet 17 — validate first, mutate last</a></li>
             <li><a href="oop-python.html">OOP → Python Mechanics</a> — <code>@property</code> in the roadmap</li>
+          </ul>
+        </div>
+      </details>
+    </li>
+
+    <li class="done">
+      <h3>21 — writing a decorator <span class="asked-at">decorators</span> </h3>
+      <p>A function that takes a function and returns a replacement. The output is exactly what you predicted — and the three things this version cannot do are the three things every real decorator has to handle.</p>
+<pre><code>def mydecorator(func):
+  def wrapper():
+    print("before function")
+    func()
+    print("after function")
+  return wrapper
+
+@mydecorator
+def greet():
+   print("hello khushboo")
+
+greet()</code></pre>
+      <p style="margin-top:8px;"><strong>Output</strong></p>
+<pre><code>before function
+hello khushboo
+after function   <span class="ok">✓</span></code></pre>
+
+      <div class="worked">
+        <h4><code>@</code> is only shorthand</h4>
+<pre><code>@mydecorator
+def greet(): ...
+
+<span class="ok">is exactly</span>
+
+def greet(): ...
+greet = mydecorator(greet)</code></pre>
+        <p style="margin-top:8px;">The name <code>greet</code> now points at <code>wrapper</code>. Nothing was inserted into the original function — it was replaced by one that calls it. Once that sentence is comfortable, <code>@property</code>, <code>@staticmethod</code>, <code>@login_required</code> and Celery's <code>@task</code> all stop being magic.</p>
+
+        <h5>1. <code>wrapper()</code> takes no arguments, so neither can the function</h5>
+<pre><code>@mydecorator
+def greet_name(name):
+    print("hello", name)
+
+greet_name("khushboo")
+<span class="bad">TypeError: mydecorator.&lt;locals&gt;.wrapper() takes 0 positional arguments but 1 was given</span></code></pre>
+        <p style="margin-top:8px;">The decorator works on <code>greet()</code> only because <code>greet()</code> happens to take nothing. One argument and it breaks.</p>
+
+        <h5>2. the return value is thrown away</h5>
+<pre><code>@mydecorator
+def add():
+    return 2 + 2
+
+add()  →  <span class="bad">None</span>      wrapper calls func() but never returns it</code></pre>
+        <p style="margin-top:8px;">Invisible on a function that prints. Fatal on a Django view, which must return a response.</p>
+
+        <h5>3. the function loses its identity</h5>
+<pre><code>greet.__name__  →  <span class="bad">'wrapper'</span>
+greet.__doc__   →  <span class="bad">None</span></code></pre>
+        <p style="margin-top:8px;">Because <code>greet</code> really <em>is</em> <code>wrapper</code> now. Tracebacks, logs and anything that introspects by name all say <code>wrapper</code> — and if every decorated view reports the same name, debugging gets painful fast.</p>
+
+        <h5>The version that fixes all three</h5>
+<pre><code>import functools
+
+def mydecorator(func):
+    @functools.wraps(func)                 <span class="ok">3 — copies name, doc, signature</span>
+    def wrapper(*args, **kwargs):          <span class="ok">1 — accepts anything</span>
+        print("before function")
+        result = func(*args, **kwargs)
+        print("after function")
+        return result                      <span class="ok">2 — hands the value back</span>
+    return wrapper</code></pre>
+<pre><code>greet2("khushboo")  →  prints, then returns <span class="ok">'done'</span>
+greet2.__name__     →  <span class="ok">'greet2'</span>
+greet2.__doc__      →  <span class="ok">'Say hello.'</span></code></pre>
+        <p style="margin-top:8px;"><code>*args, **kwargs</code> + <code>return</code> + <code>functools.wraps</code> is the boilerplate. Write it from muscle memory and every decorator after this is just the two <code>print</code> lines changed.</p>
+      </div>
+
+      <details>
+        <summary>Notes</summary>
+        <div class="reslist">
+          <h5>Where this goes next</h5>
+          <p>Django's <code>@login_required</code> is this exact shape with an auth check in the middle — written up with the request flow in <a href="django-core.html">Django → View decorators</a>.</p>
+
+          <h5>A decorator that takes arguments needs a third layer</h5>
+<pre><code>@retry(times=3)
+def fetch(): ...
+
+def retry(times):            <span class="ok">takes the argument</span>
+    def decorator(func):     <span class="ok">takes the function</span>
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            ...
+        return wrapper
+    return decorator</code></pre>
+          <p style="margin-top:8px;"><code>@retry(times=3)</code> calls <code>retry(3)</code> first, and decorates with whatever that returns. Three nested functions looks odd until you see it is just "return a decorator".</p>
+
+          <h5>Decorators you already use</h5>
+<pre><code>@property           snippet 20
+@classmethod        snippet 01
+@staticmethod
+@login_required     Django
+@shared_task        Celery</code></pre>
+
+          <h5>Related</h5>
+          <ul>
+            <li><a href="#practise">Snippet 01 — <code>classmethod</code></a> · <a href="#practise">Snippet 20 — <code>@property</code></a></li>
+            <li><a href="python-intermediate.html">Python → Decorators</a> · <a href="django-core.html">Django → View decorators</a></li>
+            <li><a href="interview.html#python">Interview → what is a decorator</a></li>
           </ul>
         </div>
       </details>
